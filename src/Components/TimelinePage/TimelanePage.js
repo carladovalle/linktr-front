@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import styled from "styled-components"
 import PostCard from "./PostCard"
 import {getPost} from "../../services/linktrAPI"
+import SubmitBox from "../MainPage/SubmitBox"
 
 export default function TimelinePage(){
 
@@ -28,6 +29,7 @@ export default function TimelinePage(){
         <Container> 
             <div className="content">
                 <h1>timeline</h1>
+                <SubmitBox/>
                 {posts.length === 0 ? <h6>{message}</h6>
                 :
                 posts.map((item, index) => <PostCard

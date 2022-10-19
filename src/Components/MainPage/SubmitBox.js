@@ -81,6 +81,7 @@ const BoxStyle = styled.div`
 	padding: 18px;
 	display: flex;
 	justify-content: space-between;
+	margin-bottom: 29px;
 
 	img {
 		width: 50px;
