@@ -56,6 +56,7 @@ const Container = styled.div`
     }
 
     h1{
+        font-family: 'Oswald', sans-serif;
         font-style: normal;
         font-weight: 700;
         font-size: 43px;
