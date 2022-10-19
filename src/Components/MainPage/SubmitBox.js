@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 export default function SubmitBox() {
 	const [postContent, setPostContent] = useState({});
+	const [isPublished, setIsPublished] = useState(false);
 
 	function handleForm(e) {
 		setPostContent({
@@ -13,6 +14,9 @@ export default function SubmitBox() {
 
 	function sendForm(e) {
 		e.preventDefault();
+		if (isPublished) return;
+		setIsPublished(true);
+		//ENVIAR PRO BACK
 		console.log(postContent);
 	}
 
@@ -23,20 +27,24 @@ export default function SubmitBox() {
 				alt="profile"
 			/>
 
-			<PostForm onSubmit={sendForm}>
+			<PostForm isPublished={isPublished} onSubmit={sendForm}>
 				<h2>What are you going to share today?</h2>
 				<input
 					type="text"
 					name="link"
 					placeholder="http://..."
 					onChange={handleForm}
+					value={postContent.link ? postContent.link : ''}
 					required
+					disabled={isPublished ? true : false}
 				></input>
 				<textarea
 					type="text"
 					name="content"
 					placeholder="Awesome article about #javascript"
 					onChange={handleForm}
+					value={postContent.content ? postContent.content : ''}
+					disabled={isPublished ? true : false}
 				></textarea>
 				<button>Publish</button>
 			</PostForm>
@@ -52,6 +60,7 @@ const BoxStyle = styled.div`
 	padding: 18px;
 	display: flex;
 	justify-content: space-between;
+
 
 	img {
 		width: 50px;
@@ -86,6 +95,7 @@ const PostForm = styled.form`
 		border: none;
 		border-radius: 5px;
 		outline: none;
+		opacity: ${(props) => (props.isPublished ? '0.5' : '1')};
 
 		&::placeholder {
 			font-size: 15px;
@@ -108,5 +118,6 @@ const PostForm = styled.form`
 		color: #ffffff;
 		font-size: 14px;
 		font-weight: 700;
+		opacity: ${(props) => (props.isPublished ? '0.5' : '1')};
 	}
 `;
