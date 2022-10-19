@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useState } from 'react';
 import styled from 'styled-components';
 
@@ -6,6 +7,7 @@ export default function SubmitBox() {
 	const [isPublished, setIsPublished] = useState(false);
 	const tokenMockUp = 'Token Mock-up';
 	const userIdMockUp = 'userId Mock-up';
+	const config = { headers: { Authorization: tokenMockUp } };
 
 	function handleForm(e) {
 		setPostContent({
@@ -14,7 +16,7 @@ export default function SubmitBox() {
 		});
 	}
 
-	function sendForm(e) {
+	async function sendForm(e) {
 		e.preventDefault();
 		if (isPublished) return;
 		setIsPublished(true);
@@ -24,6 +26,7 @@ export default function SubmitBox() {
 		};
 
 		try {
+			await axios.post('/posts/publish', postWithUser, config);
 		} catch (error) {
 			alert(
 				'There was an error publishing your link.\nPlease, review the link field and then try again.'
