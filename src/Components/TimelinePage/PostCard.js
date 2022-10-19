@@ -1,6 +1,11 @@
 import styled from "styled-components"
+import notImage from "../../Common/404.jpeg"
 
-export default function PostCard({userImg, name, text, urlInfos}){    
+export default function PostCard({userImg, name, text, urlInfos}){
+
+    if(!urlInfos.image){
+        urlInfos.image = notImage 
+    }
 
     return(
         <Container>
@@ -14,7 +19,7 @@ export default function PostCard({userImg, name, text, urlInfos}){
                         <h3>{urlInfos.description}</h3>
                         <p>{urlInfos.url}</p>
                     </div>
-                    <img src={urlInfos.img} alt=""/>
+                    <img src={urlInfos.image} alt=""/>
                 </LinkCard>
             </span>
         </Container>
