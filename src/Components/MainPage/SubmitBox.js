@@ -4,6 +4,8 @@ import styled from 'styled-components';
 export default function SubmitBox() {
 	const [postContent, setPostContent] = useState({});
 	const [isPublished, setIsPublished] = useState(false);
+	const tokenMockUp = 'Token Mock-up';
+	const userIdMockUp = 'userId Mock-up';
 
 	function handleForm(e) {
 		setPostContent({
@@ -16,6 +18,18 @@ export default function SubmitBox() {
 		e.preventDefault();
 		if (isPublished) return;
 		setIsPublished(true);
+		const postWithUser = {
+			...postContent,
+			userId: userIdMockUp,
+		};
+
+		try {
+		} catch (error) {
+			alert(
+				'There was an error publishing your link.\nPlease, review the link field and then try again.'
+			);
+			setIsPublished(false);
+		}
 		//ENVIAR PRO BACK
 		console.log(postContent);
 	}
@@ -60,7 +74,6 @@ const BoxStyle = styled.div`
 	padding: 18px;
 	display: flex;
 	justify-content: space-between;
-
 
 	img {
 		width: 50px;
