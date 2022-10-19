@@ -1,6 +1,21 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 
 export default function SubmitBox() {
+	const [postContent, setPostContent] = useState({});
+
+	function handleForm(e) {
+		setPostContent({
+			...postContent,
+			[e.target.name]: e.target.value,
+		});
+	}
+
+	function sendForm(e) {
+		e.preventDefault();
+		console.log(postContent);
+	}
+
 	return (
 		<BoxStyle>
 			<img
@@ -8,13 +23,20 @@ export default function SubmitBox() {
 				alt="profile"
 			/>
 
-			<PostForm>
+			<PostForm onSubmit={sendForm}>
 				<h2>What are you going to share today?</h2>
-				<input type="text" name="link" placeholder="http://..."></input>
+				<input
+					type="text"
+					name="link"
+					placeholder="http://..."
+					onChange={handleForm}
+					required
+				></input>
 				<textarea
 					type="text"
 					name="content"
 					placeholder="Awesome article about #javascript"
+					onChange={handleForm}
 				></textarea>
 				<button>Publish</button>
 			</PostForm>
