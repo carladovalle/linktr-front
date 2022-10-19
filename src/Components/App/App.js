@@ -1,5 +1,6 @@
 import { GlobalStyle, Reset } from '../../Common/globalStyle';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import MainPage from '../MainPage/MainPage.js';
 
 export default function App() {
 	return (
@@ -7,9 +8,9 @@ export default function App() {
 			<Reset />
 			<GlobalStyle />
 			<BrowserRouter>
-			<Routes>
-				<Route  />
-			</Routes>
+				<Routes>
+					<Route path="/main" element={<MainPage />} />
+				</Routes>
 			</BrowserRouter>
 		</>
 	);
