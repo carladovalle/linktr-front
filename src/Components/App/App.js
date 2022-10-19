@@ -1,8 +1,16 @@
+import { GlobalStyle, Reset } from '../../Common/globalStyle';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 export default function App() {
 	return (
 		<>
-			<h1>Test</h1>
+			<Reset />
+			<GlobalStyle />
+			<BrowserRouter>
+			<Routes>
+				<Route  />
+			</Routes>
+			</BrowserRouter>
 		</>
 	);
 }
