@@ -26,15 +26,15 @@ export default function SubmitBox() {
 		};
 
 		try {
-			await axios.post('/posts/publish', postWithUser, config);
+			//await axios.post('/posts/publish', postWithUser, config);
+			setPostContent({});
+			setIsPublished(false);
 		} catch (error) {
 			alert(
 				'There was an error publishing your link.\nPlease, review the link field and then try again.'
 			);
 			setIsPublished(false);
 		}
-		//ENVIAR PRO BACK
-		console.log(postContent);
 	}
 
 	return (
@@ -63,7 +63,11 @@ export default function SubmitBox() {
 					value={postContent.content ? postContent.content : ''}
 					disabled={isPublished ? true : false}
 				></textarea>
-				<button>Publish</button>
+				{isPublished ? (
+					<button>Publishing...</button>
+				) : (
+					<button>Publish</button>
+				)}
 			</PostForm>
 		</BoxStyle>
 	);

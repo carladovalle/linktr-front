@@ -4,14 +4,28 @@ import SubmitBox from './SubmitBox';
 
 export default function MainPage() {
 	return (
-		<Wrapper>
+		<>
 			<TopMenu />
-			<SubmitBox />
-		</Wrapper>
+			<Wrapper>
+				<h1>timeline</h1>
+				<SubmitBox />
+			</Wrapper>
+		</>
 	);
 }
 
 const Wrapper = styled.main`
-	margin-top: 200px;
-	margin-left: 100px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 125px;
+
+	h1 {
+		width: 611px;
+		font-family: 'Oswald', sans-serif;
+		font-size: 43px;
+		font-weight: 700;
+		color: #ffffff;
+		margin-bottom: 43px;
+	}
 `;
