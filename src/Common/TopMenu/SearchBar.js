@@ -1,18 +1,49 @@
 import styled from 'styled-components';
 import { AiOutlineSearch } from 'react-icons/ai';
+import { useState } from 'react';
 
 export default function SearchBar() {
+	const searchResult = [
+		{
+			name: 'João Carlos',
+			image:
+				'https://f.i.uol.com.br/fotografia/2021/02/18/1613671083602eaaabe3537_1613671083_3x2_md.jpg',
+		},
+		{
+			name: 'Jéssica da Silva',
+			image:
+				'https://thypix.com/wp-content/uploads/2021/07/naruto-pictures-for-drawing-20-700x563.jpg',
+		},
+	];
+
 	return (
 		<BarStyle>
 			<input
 				type="text"
 				name="searchUser"
 				placeholder="Search for people"
-				//onChange={handleSearch}
+				onChange={handleSearch}
 			></input>
 			<AiOutlineSearch />
-			<div></div>
+			<UsersContainer>
+				{searchResult.length === 0 ? (
+					<span>Sorry, there are no results for this search.</span>
+				) : (
+					searchResult.map(({ name, image }, index) => (
+						<UserFound name={name} image={image} key={index} />
+					))
+				)}
+			</UsersContainer>
 		</BarStyle>
+	);
+}
+
+function UserFound({ name, image }) {
+	return (
+		<UserLine>
+			<img src={image} alt="" />
+			<p>{name}</p>
+		</UserLine>
 	);
 }
 
@@ -25,6 +56,7 @@ const BarStyle = styled.nav`
 	justify-content: space-between;
 	align-items: center;
 	padding: 15px;
+	position: relative;
 
 	input {
 		width: 90%;
@@ -51,5 +83,55 @@ const BarStyle = styled.nav`
 		top: 82px;
 		left: 0;
 		right: 0;
+	}
+`;
+
+const UsersContainer = styled.section`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 16px;
+	z-index: -1;
+	width: 100%;
+	height: auto;
+	padding: 60px 0 23px 0;
+	background-color: #e7e7e7;
+	border-radius: 8px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	box-shadow: 0 8px 10px 0 rgba(255, 255, 255, 0.2);
+
+	span {
+		font-size: 20px;
+		font-weight: 300;
+		color: #707070;
+	}
+`;
+
+const UserLine = styled.div`
+	height: 40px;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	padding: 0 17px;
+	gap: 12px;
+
+	img {
+		width: 39px;
+		height: 39px;
+		object-fit: cover;
+		border-radius: 50px;
+	}
+
+	p {
+		font-size: 19px;
+		color: #515151;
+	}
+
+	&:hover {
+		background-color: #c6c6c6;
+		cursor: pointer;
 	}
 `;
