@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import styled from "styled-components"
 import PostCard from "./PostCard"
-import {getPost} from "../../services/linktrAPI"
+import {getPost, getLikes} from "../../services/linktrAPI"
 import SubmitBox from "../MainPage/SubmitBox"
 
 export default function TimelinePage(){
@@ -9,25 +9,60 @@ export default function TimelinePage(){
     const [posts, setPosts] = useState([])
     const [message, setMessage] = useState("Loading...")
 
-    useEffect(() => {
+    /* useEffect(() => {
 
-        const promise = getPost()
-        promise.then(res => {
-            setPosts(res.data)
-            if(posts.length < 1){
+        const promise1 = getPost();
+        const promise2 = getLikes();
+        let postsNoLike;
+        let likes;
+        let postsLike;
+
+        promise1.then(res => {
+            postsNoLike = res.data;
+            if (postsNoLike.length < 1) {
                 setMessage("There are no post yet")
             }
-        })
-
-        promise.catch(err =>{
+        }).catch(err =>{
             setMessage("An error occured while trying to fetch the posts, please refresh the page")
         })
-    }, [])
+
+        promise2.then(res => {
+            likes = res.data;
+        }).catch(err => console.log("likes not available"))
+
+        for (let i = 0; i < postsNoLike.length; i++) {
+            for (let j = 0; j < likes.length; i++) {
+                if (postsNoLike[i].id === likes[j].postId) {
+                    postsLike.push({...postsNoLike[i], liked: true});
+                    break; 
+                }
+            }
+
+            postsLike.push({...postsNoLike[i], liked: false});
+        }
+
+        setPosts(postsLike);
+
+    }, []) */
 
 
     return(
-        <Container> 
+        <Container>
+
             <div className="content">
+                <h1>timeline</h1>
+                <SubmitBox/>
+                <PostCard
+                userImg = {"https://4.bp.blogspot.com/--iaQcNPXVmI/WHeUvUL5iEI/AAAAAAAAtGQ/VbP4Cbv0cLcyAsblx7Qu1aCRWcgGGD0IQCEw/s1600/1280_viktor_krum_harry_potter_warner_bros.jpg"}
+                name = {"Ronaldo"}
+                text = {"Olha que legalll"}
+                //urlInfos = {item.urlInfos}
+                />
+                
+            </div>
+
+
+            {/* <div className="content">
                 <h1>timeline</h1>
                 <SubmitBox/>
                 {posts.length === 0 ? <h6>{message}</h6>
@@ -40,7 +75,7 @@ export default function TimelinePage(){
                 urlInfos = {item.urlInfos}
                 />)}
                 
-            </div>
+            </div> */}
         </Container>
     )
 }

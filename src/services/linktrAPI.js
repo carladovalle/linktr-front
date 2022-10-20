@@ -15,9 +15,15 @@ function createHeaders() {
 
 function getPost() {
     const promise = axios.get(`${BASE_URL}/posts`)
-    return promise
+    return promise;
+}
+
+function getLikes() {
+    const promise = axios.get(`${BASE_URL}/likes`)
+    return promise;
 }
 
 export {
-    getPost
+    getPost,
+    getLikes
 }

@@ -1,21 +1,31 @@
-import styled from "styled-components"
+import styled from "styled-components";
+import { AiTwotoneHeart, AiOutlineHeart } from "react-icons/ai";
+import { IconContext } from "react-icons";
 
 export default function PostCard({userImg, name, text, urlInfos}){    
 
+    let liked = true;
+    const teste = liked ? "red" : "white";
     return(
         <Container>
-            <img src={userImg} alt="profile-img"/>
+            <span>
+                <img src={userImg} alt="profile-img"/>
+                <IconContext.Provider value={{ className: "likeIcon", color: teste }}>
+                    {liked ? < AiTwotoneHeart /> : < AiOutlineHeart />}
+                </IconContext.Provider>
+            </span>
+            
             <span className="infos">
                 <h4>{name}</h4>
                 <h5>{text}</h5>
-                <LinkCard onClick={() => window.open(urlInfos.url)}>
+                {/* <LinkCard onClick={() => window.open(urlInfos.url)}>
                     <div>
                         <h2>{urlInfos.title}</h2>
                         <h3>{urlInfos.description}</h3>
                         <p>{urlInfos.url}</p>
                     </div>
                     <img src={urlInfos.img} alt=""/>
-                </LinkCard>
+                </LinkCard> */}
             </span>
         </Container>
     )
@@ -38,6 +48,11 @@ const Container = styled.div`
         height: 50px;
         border-radius: 50%;
         object-fit: cover;
+    }
+
+    .likeIcon {
+        font-size: 20px;
+        margin-top: 19px;
     }
 
     .infos{
