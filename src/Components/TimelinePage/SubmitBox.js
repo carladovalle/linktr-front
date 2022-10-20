@@ -98,6 +98,18 @@ const BoxStyle = styled.div`
 		border-radius: 50px;
 		object-fit: cover;
 	}
+
+	@media (max-width: 675px) {
+		width: 100%;
+		height: 164px;
+		border-radius: 0;
+		justify-content: center;
+		padding: 10px 15px;
+
+		img {
+			display: none;
+		}
+	}
 `;
 
 const PostForm = styled.form`
@@ -149,5 +161,20 @@ const PostForm = styled.form`
 		font-size: 14px;
 		font-weight: 700;
 		opacity: ${(props) => (props.isPublished ? '0.5' : '1')};
+	}
+
+	@media (max-width: 675px) {
+		width: 100%;
+		justify-content: center;
+		margin: 0;
+
+		h2 {
+			font-size: 17px;
+			text-align: center;
+		}
+
+		textarea {
+			height: 47px;
+		}
 	}
 `;
