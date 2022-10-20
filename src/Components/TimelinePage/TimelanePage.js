@@ -9,7 +9,7 @@ export default function TimelinePage(){
     const [posts, setPosts] = useState([])
     const [message, setMessage] = useState("Loading...")
 
-    /* useEffect(() => {
+    useEffect(() => {
 
         const promise1 = getPost();
         const promise2 = getLikes();
@@ -43,7 +43,7 @@ export default function TimelinePage(){
 
         setPosts(postsLike);
 
-    }, []) */
+    }, [])
 
 
     return(
@@ -52,30 +52,18 @@ export default function TimelinePage(){
             <div className="content">
                 <h1>timeline</h1>
                 <SubmitBox/>
-                <PostCard
-                userImg = {"https://4.bp.blogspot.com/--iaQcNPXVmI/WHeUvUL5iEI/AAAAAAAAtGQ/VbP4Cbv0cLcyAsblx7Qu1aCRWcgGGD0IQCEw/s1600/1280_viktor_krum_harry_potter_warner_bros.jpg"}
-                name = {"Ronaldo"}
-                text = {"Olha que legalll"}
-                //urlInfos = {item.urlInfos}
-                />
-                
-            </div>
-
-
-            {/* <div className="content">
-                <h1>timeline</h1>
-                <SubmitBox/>
                 {posts.length === 0 ? <h6>{message}</h6>
                 :
                 posts.map((item, index) => <PostCard
                 key = {index}
+                id = {item.id}
                 userImg = {item.image}
                 name = {item.name}
                 text = {item.text}
                 urlInfos = {item.urlInfos}
                 />)}
                 
-            </div> */}
+            </div>
         </Container>
     )
 }

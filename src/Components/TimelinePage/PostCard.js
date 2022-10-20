@@ -1,17 +1,29 @@
 import styled from "styled-components";
 import { AiTwotoneHeart, AiOutlineHeart } from "react-icons/ai";
 import { IconContext } from "react-icons";
+import { addLike, removeLike } from "../../services/linktrAPI.js";
 
-export default function PostCard({userImg, name, text, urlInfos}){    
+export default function PostCard({id, userImg, name, text, urlInfos, liked}){
+    
+    function like () {
 
-    let liked = true;
-    const teste = liked ? "red" : "white";
+        const postId = id;
+        const userId = ;
+
+        if (liked) {
+            removeLike(postId, userId);
+        } else {
+            addLike(postId, userId);
+        }
+    }
+
+    const likeIconColor = liked ? "red" : "white";
     return(
         <Container>
             <span>
                 <img src={userImg} alt="profile-img"/>
-                <IconContext.Provider value={{ className: "likeIcon", color: teste }}>
-                    {liked ? < AiTwotoneHeart /> : < AiOutlineHeart />}
+                <IconContext.Provider value={{ className: "likeIcon", color: likeIconColor }} onClick={() => like()}>
+                    {liked ? < AiTwotoneHeart /> : < AiOutlineHeart />} 
                 </IconContext.Provider>
             </span>
             
