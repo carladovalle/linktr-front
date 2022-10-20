@@ -17,6 +17,7 @@ export default function SearchBar() {
 	// 			'https://thypix.com/wp-content/uploads/2021/07/naruto-pictures-for-drawing-20-700x563.jpg',
 	// 	},
 	// ];
+
 	const [searchResult, setSearchResult] = useState([]);
 	const [userSearched, setUserSearched] = useState('');
 	const [isSearching, setIsSearching] = useState(false);
@@ -41,6 +42,15 @@ export default function SearchBar() {
 			setSearchResult([]);
 		}
 	}, [userSearched, isSearching]);
+
+	// PARA USAR COM OS DADOS MOCKADOS
+	// if (userSearched.length >= 3 && !isSearching) {
+	// 	setIsSearching(true);
+	// }
+
+	// if (userSearched.length < 3 && isSearching) {
+	// 	setIsSearching(false);
+	// }
 
 	return (
 		<BarStyle>
