@@ -7,13 +7,18 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked}){
     
     function like () {
 
+        //const token = localStorage
         const postId = id;
-        const userId = ;
+        const config = { headers: { "Authorization": `Bearer ${token}` } };
 
         if (liked) {
-            removeLike(postId, userId);
+            const promise = removeLike(postId, config);
+            promise.then(res => console.log("disliked"))
+            .catch(err => console.log("dislike not available"))
         } else {
-            addLike(postId, userId);
+            const promise = addLike(postId, config);
+            promise.then(res => console.log("liked"))
+            .catch(err => console.log("like not available"))
         }
     }
 
@@ -30,14 +35,14 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked}){
             <span className="infos">
                 <h4>{name}</h4>
                 <h5>{text}</h5>
-                {/* <LinkCard onClick={() => window.open(urlInfos.url)}>
+                <LinkCard onClick={() => window.open(urlInfos.url)}>
                     <div>
                         <h2>{urlInfos.title}</h2>
                         <h3>{urlInfos.description}</h3>
                         <p>{urlInfos.url}</p>
                     </div>
                     <img src={urlInfos.img} alt=""/>
-                </LinkCard> */}
+                </LinkCard>
             </span>
         </Container>
     )

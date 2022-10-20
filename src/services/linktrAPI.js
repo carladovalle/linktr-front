@@ -23,12 +23,14 @@ function getLikes() {
     return promise;
 }
 
-function addLike(postId, userId) {
-    const promise = axios.post(`${BASE_URL}/likes`, { postId, userId })
+function addLike(postId, config) {
+    const promise = axios.post(`${BASE_URL}/likes`, postId, config)
+    return promise
 }
 
-function removeLike(postId, userId) {
-    const promise = axios.delete(`${BASE_URL}/likes`, { postId, userId })
+function removeLike(postId, config) {
+    const promise = axios.delete(`${BASE_URL}/likes`, postId, config)
+    return promise
 }
 
 export {
