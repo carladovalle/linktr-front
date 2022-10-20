@@ -18,8 +18,8 @@ function getPost() {
     return promise;
 }
 
-function getLikes() {
-    const promise = axios.get(`${BASE_URL}/likes`)
+function getLikes(config) {
+    const promise = axios.get(`${BASE_URL}/likes`, config)
     return promise;
 }
 

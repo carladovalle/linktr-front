@@ -8,11 +8,13 @@ export default function TimelinePage(){
 
     const [posts, setPosts] = useState([])
     const [message, setMessage] = useState("Loading...")
+    const token = "come from localStorage";
+    const config = { headers: { "Authorization": `Bearer ${token}` } };
 
     useEffect(() => {
 
         const promise1 = getPost();
-        const promise2 = getLikes();
+        const promise2 = getLikes(config);
         let postsNoLike;
         let likes;
         let postsLike;

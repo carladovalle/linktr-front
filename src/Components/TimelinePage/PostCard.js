@@ -7,7 +7,7 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked}){
     
     function like () {
 
-        //const token = localStorage
+        const token = "come from localStorage";
         const postId = id;
         const config = { headers: { "Authorization": `Bearer ${token}` } };
 
