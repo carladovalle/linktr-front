@@ -1,20 +1,19 @@
 import axios from 'axios';
-// const BASE_URL = process.env.REACT_APP_API_BASE_URL;
-const BASE_URL = 'http://localhost:4000';
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+// const BASE_URL = 'http://localhost:4000';
 
 function createHeaders() {
-	// const auth = JSON.parse(localStorage.getItem(''));
 	// const config = {
 	// 	headers: {
-	// 		Authorization: `Bearer ${auth.token}`,
+	// 		Authorization: `Bearer 6c933abc-5f18-4c39-a7fe-b5c2e5075ac6`,
 	// 	},
 	// };
+	const auth = JSON.parse(localStorage.getItem(''));
 	const config = {
 		headers: {
-			Authorization: `Bearer 6c933abc-5f18-4c39-a7fe-b5c2e5075ac6`,
+			Authorization: `Bearer ${auth.token}`,
 		},
 	};
-
 	return config;
 }
 
