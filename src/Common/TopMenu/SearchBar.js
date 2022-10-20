@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { AiOutlineSearch } from 'react-icons/ai';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { searchUsers } from '../../services/linktrAPI';
 
 export default function SearchBar() {
@@ -25,20 +25,22 @@ export default function SearchBar() {
 		setUserSearched(e.target.value);
 	}
 
-	if (userSearched.length >= 3 && !isSearching) {
-		const promise = searchUsers(userSearched);
-		promise
-			.then((res) => {
-				setSearchResult(res.data);
-				setIsSearching(true);
-			})
-			.catch((err) => alert(err.response.data));
-	}
+	useEffect(() => {
+		if (userSearched.length >= 3 && !isSearching) {
+			const promise = searchUsers(userSearched);
+			promise
+				.then((res) => {
+					setSearchResult(res.data);
+					setIsSearching(true);
+				})
+				.catch((err) => alert(err.response.data));
+		}
 
-	if (userSearched.length < 3 && isSearching) {
-		setIsSearching(false);
-		setSearchResult([]);
-	}
+		if (userSearched.length < 3 && isSearching) {
+			setIsSearching(false);
+			setSearchResult([]);
+		}
+	}, [userSearched, isSearching]);
 
 	return (
 		<BarStyle>
