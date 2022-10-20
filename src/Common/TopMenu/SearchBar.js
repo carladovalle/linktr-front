@@ -16,6 +16,21 @@ export default function SearchBar() {
 		},
 	];
 
+	const [userSearched, setUserSearched] = useState('');
+	const [isSearching, setIsSearching] = useState(false);
+
+	function handleSearch(e) {
+		setUserSearched(e.target.value);
+	}
+
+	if (userSearched.length >= 3 && !isSearching) {
+		setIsSearching(true);
+	}
+
+	if (userSearched.length < 3 && isSearching) {
+		setIsSearching(false);
+	}
+
 	return (
 		<BarStyle>
 			<input
@@ -25,7 +40,7 @@ export default function SearchBar() {
 				onChange={handleSearch}
 			></input>
 			<AiOutlineSearch />
-			<UsersContainer>
+			<UsersContainer isSearching={isSearching}>
 				{searchResult.length === 0 ? (
 					<span>Sorry, there are no results for this search.</span>
 				) : (
@@ -87,7 +102,7 @@ const BarStyle = styled.nav`
 `;
 
 const UsersContainer = styled.section`
-	display: flex;
+	display: ${(props) => (props.isSearching ? 'flex' : 'none')};
 	flex-direction: column;
 	align-items: center;
 	gap: 16px;
