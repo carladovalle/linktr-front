@@ -52,7 +52,7 @@ const GlobalStyle = createGlobalStyle`
 
   body{
     font-family: 'Lato', sans-serif;
-    background-color: #333333;
+    background-color: #333333;  
   }
 `;
 
