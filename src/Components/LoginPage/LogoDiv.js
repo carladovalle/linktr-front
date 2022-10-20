@@ -36,4 +36,24 @@ const DesktopDiv = styled.div`
         color: #FFFFFF;
         margin-bottom: 20px;
     }
+
+    @media (max-width: 635px){
+        height:20%;
+
+        h1{
+            text-align:center;
+            margin-top: 10px;
+            font-size:76px;
+            margin-bottom: 10px;
+        }
+
+        p{
+            font-size:23px;
+            margin-bottom: 10px;
+        }
+
+        div{
+            margin-bottom:20px;
+        }
+    }
 `
