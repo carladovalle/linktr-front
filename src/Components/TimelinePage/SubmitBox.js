@@ -1,13 +1,10 @@
-import axios from 'axios';
 import { useState } from 'react';
 import styled from 'styled-components';
+import { getPost, publishPost } from '../../services/linktrAPI';
 
-export default function SubmitBox() {
+export default function SubmitBox({ setPosts, posts, setMessage }) {
 	const [postContent, setPostContent] = useState({});
 	const [isPublished, setIsPublished] = useState(false);
-	const tokenMockUp = 'Token Mock-up';
-	const userIdMockUp = 'userId Mock-up';
-	const config = { headers: { Authorization: tokenMockUp } };
 
 	function handleForm(e) {
 		setPostContent({
@@ -20,21 +17,33 @@ export default function SubmitBox() {
 		e.preventDefault();
 		if (isPublished) return;
 		setIsPublished(true);
-		const postWithUser = {
-			...postContent,
-			userId: userIdMockUp,
-		};
 
-		try {
-			//await axios.post('/posts/publish', postWithUser, config);
+		const promise = publishPost(postContent);
+		promise.then(() => {
+			setPosts([]);
+			setMessage('Loading...');
 			setPostContent({});
 			setIsPublished(false);
-		} catch (error) {
+			const postsListPromise = getPost();
+			postsListPromise
+				.then((res) => {
+					if (posts.length < 1) {
+						setMessage('There are no post yet');
+					}
+					setPosts(res.data);
+				})
+				.catch(() => {
+					setMessage(
+						'An error occured while trying to fetch the posts, please refresh the page'
+					);
+				});
+		});
+		promise.catch(() => {
 			alert(
 				'There was an error publishing your link.\nPlease, review the link field and then try again.'
 			);
 			setIsPublished(false);
-		}
+		});
 	}
 
 	return (
@@ -89,6 +98,18 @@ const BoxStyle = styled.div`
 		border-radius: 50px;
 		object-fit: cover;
 	}
+
+	@media (max-width: 675px) {
+		width: 100%;
+		height: 164px;
+		border-radius: 0;
+		justify-content: center;
+		padding: 10px 15px;
+
+		img {
+			display: none;
+		}
+	}
 `;
 
 const PostForm = styled.form`
@@ -140,5 +161,20 @@ const PostForm = styled.form`
 		font-size: 14px;
 		font-weight: 700;
 		opacity: ${(props) => (props.isPublished ? '0.5' : '1')};
+	}
+
+	@media (max-width: 675px) {
+		width: 100%;
+		justify-content: center;
+		margin: 0;
+
+		h2 {
+			font-size: 17px;
+			text-align: center;
+		}
+
+		textarea {
+			height: 47px;
+		}
 	}
 `;
