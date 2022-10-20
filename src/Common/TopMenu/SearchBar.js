@@ -1,21 +1,23 @@
 import styled from 'styled-components';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { useState } from 'react';
+import { searchUsers } from '../../services/linktrAPI';
 
 export default function SearchBar() {
-	const searchResult = [
-		{
-			name: 'João Carlos',
-			image:
-				'https://f.i.uol.com.br/fotografia/2021/02/18/1613671083602eaaabe3537_1613671083_3x2_md.jpg',
-		},
-		{
-			name: 'Jéssica da Silva',
-			image:
-				'https://thypix.com/wp-content/uploads/2021/07/naruto-pictures-for-drawing-20-700x563.jpg',
-		},
-	];
-
+	// DADOS MOCKADOS
+	// const searchResult = [
+	// 	{
+	// 		name: 'João Carlos',
+	// 		image:
+	// 			'https://f.i.uol.com.br/fotografia/2021/02/18/1613671083602eaaabe3537_1613671083_3x2_md.jpg',
+	// 	},
+	// 	{
+	// 		name: 'Jéssica da Silva',
+	// 		image:
+	// 			'https://thypix.com/wp-content/uploads/2021/07/naruto-pictures-for-drawing-20-700x563.jpg',
+	// 	},
+	// ];
+	const [searchResult, setSearchResult] = useState([]);
 	const [userSearched, setUserSearched] = useState('');
 	const [isSearching, setIsSearching] = useState(false);
 
@@ -24,11 +26,18 @@ export default function SearchBar() {
 	}
 
 	if (userSearched.length >= 3 && !isSearching) {
-		setIsSearching(true);
+		const promise = searchUsers(userSearched);
+		promise
+			.then((res) => {
+				setSearchResult(res.data);
+				setIsSearching(true);
+			})
+			.catch((err) => alert(err.response.data));
 	}
 
 	if (userSearched.length < 3 && isSearching) {
 		setIsSearching(false);
+		setSearchResult([]);
 	}
 
 	return (

@@ -28,4 +28,10 @@ function publishPost(body) {
 	return promise;
 }
 
-export { getPost, publishPost };
+function searchUsers(params) {
+	const config = createHeaders();
+	const promise = axios.get(`${BASE_URL}/users/search/${params}`, config);
+	return promise;
+}
+
+export { getPost, publishPost, searchUsers };
