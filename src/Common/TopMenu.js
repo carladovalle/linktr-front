@@ -35,7 +35,7 @@ const MenuStyle = styled.header`
 		color: #ffffff;
 	}
 
-	> div {
+	 div {
 		display: flex;
 		align-items: center;
 		gap: 15px;

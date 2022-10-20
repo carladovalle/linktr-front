@@ -18,6 +18,19 @@ function getPost() {
     return promise
 }
 
+function getHashtagPost(hashtag) {
+    const promise = axios.get(`${BASE_URL}/posts/{hashtag}`)
+    return promise
+}
+
+function getHashtags() {
+    const promise = axios.get(`${BASE_URL}/hashtags`)
+    return promise
+}
+
+
 export {
-    getPost
+    getPost,
+    getHashtagPost,
+    getHashtags
 }

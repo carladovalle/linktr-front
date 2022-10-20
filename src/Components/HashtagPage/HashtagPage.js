@@ -1,19 +1,19 @@
+import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import styled from "styled-components"
-import PostCard from "./PostCard"
-import {getPost} from "../../services/linktrAPI"
-import SubmitBox from "../MainPage/SubmitBox"
+import PostCard from "../TimelinePage/PostCard"
+import {getHashtagPost} from "../../services/linktrAPI"
 import TopMenu from "../../Common/TopMenu"
-import HashtagList from "./HashtagsList"
+import HashtagList from "../TimelinePage/HashtagsList"
 
-export default function TimelinePage(){
-
+export default function HashTagPage(){
+    const { hashtag } = useParams()
     const [posts, setPosts] = useState([])
     const [message, setMessage] = useState("Loading...")
 
     useEffect(() => {
 
-        const promise = getPost()
+        const promise = getHashtagPost()
         promise.then(res => {
             setPosts(res.data)
             if(posts.length < 1){
@@ -25,15 +25,13 @@ export default function TimelinePage(){
             setMessage("An error occured while trying to fetch the posts, please refresh the page")
         })
     }, [])
-
-
+    
     return(
         <>
         <TopMenu/>
         <Container> 
             <div className="content">
-                <h1>timeline</h1>
-                <SubmitBox/>
+                <h1>#{hashtag}</h1>
                 {posts.length === 0 ? <h6>{message}</h6>
                 :
                 posts.map((item, index) => <PostCard
@@ -48,7 +46,6 @@ export default function TimelinePage(){
             <HashtagList/>
         </Container>
         </>
-        
     )
 }
 
