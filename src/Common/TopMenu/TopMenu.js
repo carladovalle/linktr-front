@@ -1,20 +1,45 @@
 import styled from 'styled-components';
-import { IoChevronDownOutline } from 'react-icons/io5';
+import { IoChevronDownOutline, IoChevronUpOutline } from 'react-icons/io5';
 import SearchBar from './SearchBar';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function TopMenu() {
+	const navigate = useNavigate();
+	const [isClicked, setIsClicked] = useState(false);
+
+	function openLogoutField() {
+		setIsClicked(!isClicked);
+	}
+
 	return (
-		<MenuStyle>
-			<h1>linkr</h1>
-			<SearchBar />
-			<div>
-				<IoChevronDownOutline />
-				<img
-					src="https://sempreupdate.com.br/wp-content/uploads/2019/02/qual-a-diferenca-entre-programador-e-desenvolvedor.jpg"
-					alt="profile"
-				/>
-			</div>
-		</MenuStyle>
+		<>
+			<MenuStyle>
+				<h1>linkr</h1>
+				<SearchBar />
+				<div>
+					{isClicked ? (
+						<IoChevronUpOutline onClick={openLogoutField} />
+					) : (
+						<IoChevronDownOutline onClick={openLogoutField} />
+					)}
+					<img
+						src="https://sempreupdate.com.br/wp-content/uploads/2019/02/qual-a-diferenca-entre-programador-e-desenvolvedor.jpg"
+						alt="profile"
+					/>
+				</div>
+			</MenuStyle>
+			<LogoutField isClicked={isClicked}>
+				<span
+					onClick={() => {
+						localStorage.clear();
+						navigate('/');
+					}}
+				>
+					Logout
+				</span>
+			</LogoutField>
+		</>
 	);
 }
 
@@ -55,4 +80,21 @@ const MenuStyle = styled.header`
 			object-fit: cover;
 		}
 	}
+`;
+
+const LogoutField = styled.div`
+	width: 120px;
+	height: 47px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-bottom-left-radius: 20px;
+	position: absolute;
+	top: ${(props) => (props.isClicked ? '72px' : '0px')};
+	right: 0;
+	background-color: #171717;
+	color: #ffffff;
+	font-size: 17px;
+	font-weight: 700;
+	transition: all 0.3s ease-out;
 `;
