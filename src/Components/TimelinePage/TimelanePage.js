@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import PostCard from './PostCard';
 import { getPost } from '../../services/linktrAPI';
 import SubmitBox from './SubmitBox';
-import TopMenu from '../../Common/TopMenu.js';
+import TopMenu from '../../Common/TopMenu/TopMenu.js';
 
 export default function TimelinePage() {
 	const [posts, setPosts] = useState([]);
@@ -60,7 +60,7 @@ const Container = styled.div`
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	margin-top: 78px;
+	margin-top: 125px;
 	width: 100vw;
 
 	.content {
@@ -88,6 +88,8 @@ const Container = styled.div`
 	}
 
 	@media (max-width: 675px) {
+		margin-top: 146px;
+
 		.content {
 			width: 100%;
 		}
