@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 import { IoChevronDownOutline } from 'react-icons/io5';
+import { AiOutlineSearch } from 'react-icons/ai';
 
 export default function TopMenu() {
 	return (
 		<MenuStyle>
 			<h1>linkr</h1>
+			<SearchBar />
 			<div>
 				<IoChevronDownOutline />
 				<img
@@ -13,6 +15,20 @@ export default function TopMenu() {
 				/>
 			</div>
 		</MenuStyle>
+	);
+}
+
+function SearchBar() {
+	return (
+		<BarStyle>
+			<input
+				type="text"
+				name="searchUser"
+				placeholder="Search for people"
+				//onChange={handleSearch}
+			></input>
+			<AiOutlineSearch />
+		</BarStyle>
 	);
 }
 
@@ -51,5 +67,34 @@ const MenuStyle = styled.header`
 			border-radius: 50px;
 			object-fit: cover;
 		}
+	}
+`;
+
+const BarStyle = styled.nav`
+	width: 563px;
+	height: 45px;
+	background-color: #ffffff;
+	border-radius: 8px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 15px;
+
+	input {
+		width: 90%;
+		height: 40px;
+		border: none;
+		outline: none;
+		font-size: 19px;
+
+		&::placeholder {
+			color: #c6c6c6;
+			font-size: 19px;
+		}
+	}
+
+	svg {
+		color: #c6c6c6;
+		font-size: 26px;
 	}
 `;
