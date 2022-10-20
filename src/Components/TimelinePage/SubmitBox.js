@@ -1,13 +1,10 @@
-import axios from 'axios';
 import { useState } from 'react';
 import styled from 'styled-components';
+import { getPost, publishPost } from '../../services/linktrAPI';
 
-export default function SubmitBox() {
+export default function SubmitBox({ setPosts, posts, setMessage }) {
 	const [postContent, setPostContent] = useState({});
 	const [isPublished, setIsPublished] = useState(false);
-	const tokenMockUp = 'Token Mock-up';
-	const userIdMockUp = 'userId Mock-up';
-	const config = { headers: { Authorization: tokenMockUp } };
 
 	function handleForm(e) {
 		setPostContent({
@@ -20,21 +17,33 @@ export default function SubmitBox() {
 		e.preventDefault();
 		if (isPublished) return;
 		setIsPublished(true);
-		const postWithUser = {
-			...postContent,
-			userId: userIdMockUp,
-		};
 
-		try {
-			//await axios.post('/posts/publish', postWithUser, config);
+		const promise = publishPost(postContent);
+		promise.then(() => {
+			setPosts([]);
+			setMessage('Loading...');
 			setPostContent({});
 			setIsPublished(false);
-		} catch (error) {
+			const postsListPromise = getPost();
+			postsListPromise
+				.then((res) => {
+					if (posts.length < 1) {
+						setMessage('There are no post yet');
+					}
+					setPosts(res.data);
+				})
+				.catch(() => {
+					setMessage(
+						'An error occured while trying to fetch the posts, please refresh the page'
+					);
+				});
+		});
+		promise.catch(() => {
 			alert(
 				'There was an error publishing your link.\nPlease, review the link field and then try again.'
 			);
 			setIsPublished(false);
-		}
+		});
 	}
 
 	return (
