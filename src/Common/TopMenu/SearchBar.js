@@ -2,22 +2,9 @@ import styled from 'styled-components';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { useEffect, useState } from 'react';
 import { searchUsers } from '../../services/linktrAPI';
+import { DebounceInput } from 'react-debounce-input';
 
 export default function SearchBar() {
-	// DADOS MOCKADOS
-	// const searchResult = [
-	// 	{
-	// 		name: 'João Carlos',
-	// 		image:
-	// 			'https://f.i.uol.com.br/fotografia/2021/02/18/1613671083602eaaabe3537_1613671083_3x2_md.jpg',
-	// 	},
-	// 	{
-	// 		name: 'Jéssica da Silva',
-	// 		image:
-	// 			'https://thypix.com/wp-content/uploads/2021/07/naruto-pictures-for-drawing-20-700x563.jpg',
-	// 	},
-	// ];
-
 	const [searchResult, setSearchResult] = useState([]);
 	const [userSearched, setUserSearched] = useState('');
 	const [isSearching, setIsSearching] = useState(false);
@@ -27,7 +14,7 @@ export default function SearchBar() {
 	}
 
 	useEffect(() => {
-		if (userSearched.length >= 3 && !isSearching) {
+		if (userSearched.length >= 3) {
 			const promise = searchUsers(userSearched);
 			promise
 				.then((res) => {
@@ -37,29 +24,20 @@ export default function SearchBar() {
 				.catch((err) => alert(err.response.data));
 		}
 
-		if (userSearched.length < 3 && isSearching) {
+		if (userSearched.length < 3) {
 			setIsSearching(false);
 			setSearchResult([]);
 		}
 	}, [userSearched, isSearching]);
 
-	// PARA USAR COM OS DADOS MOCKADOS
-	// if (userSearched.length >= 3 && !isSearching) {
-	// 	setIsSearching(true);
-	// }
-
-	// if (userSearched.length < 3 && isSearching) {
-	// 	setIsSearching(false);
-	// }
-
 	return (
 		<BarStyle>
-			<input
-				type="text"
-				name="searchUser"
+			<DebounceInput
+				minLength={3}
+				debounceTimeout={700}
 				placeholder="Search for people"
 				onChange={handleSearch}
-			></input>
+			></DebounceInput>
 			<AiOutlineSearch />
 			<UsersContainer isSearching={isSearching}>
 				{searchResult.length === 0 ? (
