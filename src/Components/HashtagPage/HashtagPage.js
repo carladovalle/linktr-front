@@ -12,7 +12,7 @@ export default function HashTagPage() {
 	const [message, setMessage] = useState('Loading...');
 
 	useEffect(() => {
-		const promise = getHashtagPost();
+		const promise = getHashtagPost(hashtag);
 		promise.then((res) => {
 			setPosts(res.data);
 			if (posts.length < 1) {
