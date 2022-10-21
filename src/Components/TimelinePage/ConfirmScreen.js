@@ -1,16 +1,19 @@
 import styled from "styled-components";
+import { useState } from "react";
+import { ThreeDots } from 'react-loader-spinner';
 
-export default function ConfirmScreen({setShow, deletePost, posts}) {
+export default function ConfirmScreen({setShow, deletePost, posts, isLoading}) {
 
     return(
         <>
+            {isLoading ? <Container><ThreeDots color="#FFFFFF" size="40" /></Container> :
             <Container>
-                <Text> Are you sure you want <br /> to delete this post?</Text>
-                <Buttons>
-                    <ButtonRecuse onClick={() => setShow(false)}>No, go back</ButtonRecuse>
-                    <ButtonAccept onClick={() => deletePost(posts.id)}>Yes, delete it</ButtonAccept>
-                </Buttons>
-            </Container>
+                    <Text> Are you sure you want <br /> to delete this post?</Text>
+                    <Buttons>
+                        <ButtonRecuse onClick={() => setShow(false)}>No, go back</ButtonRecuse>
+                        <ButtonAccept onClick={() => deletePost(posts.id)}>Yes, delete it</ButtonAccept>
+                    </Buttons>
+            </Container>}
             <OpacityBackground />
         </>
     );

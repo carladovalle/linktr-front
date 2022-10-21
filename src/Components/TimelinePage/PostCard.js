@@ -10,6 +10,7 @@ import ConfirmScreen from "./ConfirmScreen.js";
 export default function PostCard({id, userImg, name, text, urlInfos, liked, rerender, setRerender, posts}){
     
     const [showConfirmScreen, setShowConfirmScreen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     function like () {
 
@@ -34,6 +35,7 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
 
     function deletePosts () {
 
+        setIsLoading(true);
         const token = localStorage.getItem("token");
         const postId = id;
         const config = { headers: { "Authorization": `Bearer ${token}` } };
@@ -43,8 +45,9 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
         promise.then(() => {
             window.location.reload();
         }).catch(() => {
+            setIsLoading(false);
             setShowConfirmScreen(false);
-            alert("Could not delete post.");
+            alert("Could not delete post.")
         });
 
     } 
@@ -57,6 +60,7 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
                         posts={posts} 
                         deletePost={deletePosts}
                         setShow={setShowConfirmScreen}
+                        isLoading={isLoading}
                     />
                 )}
             <span className="leftSide">

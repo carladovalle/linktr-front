@@ -89,6 +89,7 @@ export default function TimelinePage() {
 								rerender={rerender}
 								setRerender={setRerender}
 								posts={posts}
+								setMessage={setMessage}
 							/>
 						))
 					)}
