@@ -1,23 +1,19 @@
 import axios from 'axios';
-// const BASE_URL = process.env.REACT_APP_API_BASE_URL;
-const BASE_URL = 'http://localhost:4000';
+ const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 function createHeaders() {
-	const config = {
-		headers: {
-			Authorization: `Bearer 6c933abc-5f18-4c39-a7fe-b5c2e5075ac6`,
-		},
-	};
-	// const auth = JSON.parse(localStorage.getItem(''));
-	// const config = {
-	// 	headers: {
-	// 		Authorization: `Bearer ${auth.token}`,
-	// 	},
-	// };
-	return config;
+    const auth = JSON.parse(localStorage.getItem("token"))
+    const config = {
+        headers: {
+            Authorization: `Bearer ${auth}`
+        }
+    };
+
+    return config;
 }
 
 function getPost() {
+    const config = createHeaders();
     const promise = axios.get(`${BASE_URL}/posts`)
     return promise;
 }
@@ -49,9 +45,24 @@ function removeLike(postId, config) {
     return promise
 }
 
+function getHashtagPost(hashtag) {
+    const config = createHeaders();
+    const promise = axios.get(`${BASE_URL}/posts/${hashtag}`)
+    return promise
+}
+
+function getHashtags() {
+    const config = createHeaders();
+    const promise = axios.get(`${BASE_URL}/hashtags`)
+    return promise
+}
+
+
 export {
     getPost,
     publishPost,
+    getHashtagPost,
+    getHashtags,
 	searchUsers,
     getLikes,
     addLike,

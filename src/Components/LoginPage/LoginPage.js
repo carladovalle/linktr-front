@@ -18,9 +18,11 @@ export default function LoginPage() {
 
     function sendForm(event) {
         event.preventDefault()
-        axios.post('http://localhost:4000/sign-in', form)
+        const url = process.env.REACT_APP_API_BASE_URL
+        axios.post(`${url}/sign-in`, form)
             .then((response) => {
-                localStorage.setItem("token", response.data.token);
+                const loginSerialized = JSON.stringify(response.data.token);
+                localStorage.setItem("token", loginSerialized);
                 navigate("/timeline")
             })
             .catch((error) => {
@@ -39,7 +41,7 @@ export default function LoginPage() {
             <FormDiv>
                 <form onSubmit={sendForm}>
                     <input name='email' type='text' placeholder='E-mail' onChange={handleForm} />
-                    <input name='password' type='text' placeholder='Password' onChange={handleForm} />
+                    <input name='password' type='password' placeholder='Password' onChange={handleForm} />
                     <button name='login' type='submit' disabled={isButtonDisabled}>log in</button>
                     <Link to="/sign-up"><p>First time ? Create an account!</p></Link>
                 </form>
