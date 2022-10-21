@@ -1,12 +1,16 @@
 import styled from "styled-components";
+import { useState } from "react";
 import { AiTwotoneHeart, AiOutlineHeart } from "react-icons/ai";
 import { BiEditAlt } from 'react-icons/bi';
 import { AiFillDelete } from 'react-icons/ai';
 import { IconContext } from "react-icons";
 import { addLike, removeLike, deletePost } from "../../services/linktrAPI.js";
+import ConfirmScreen from "./ConfirmScreen.js";
 
-export default function PostCard({id, userImg, name, text, urlInfos, liked, rerender, setRerender}){
+export default function PostCard({id, userImg, name, text, urlInfos, liked, rerender, setRerender, posts}){
     
+    const [showConfirmScreen, setShowConfirmScreen] = useState(false);
+
     function like () {
 
         const token = localStorage.getItem("token");
@@ -24,6 +28,10 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
         }
     }
 
+    function screenToDelete(){
+        setShowConfirmScreen(true);
+    }
+
     function deletePosts () {
 
         const token = localStorage.getItem("token");
@@ -35,7 +43,8 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
         promise.then(() => {
             window.location.reload();
         }).catch(() => {
-            console.log("error");
+            setShowConfirmScreen(false);
+            alert("Could not delete post.");
         });
 
     } 
@@ -43,6 +52,13 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
     const likeIconColor = liked ? "red" : "white";
     return(
         <Container>
+                    {showConfirmScreen && (
+                    <ConfirmScreen 
+                        posts={posts} 
+                        deletePost={deletePosts}
+                        setShow={setShowConfirmScreen}
+                    />
+                )}
             <span className="leftSide">
                 <img src={userImg} alt="profile-img"/>
                 <IconContext.Provider value={{ className: "likeIcon", color: likeIconColor}}>
@@ -56,7 +72,7 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
                         <div className="actions">
                             <BiEditAlt />
                             <div className="space">
-                                <AiFillDelete onClick={() => deletePosts()}/>
+                                <AiFillDelete onClick={() => screenToDelete()}/>
                             </div>
                         </div>
                 </div>

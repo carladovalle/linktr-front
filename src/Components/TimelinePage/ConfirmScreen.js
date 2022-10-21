@@ -1,14 +1,14 @@
 import styled from "styled-components";
 
-export default function ConfirmScreen() {
+export default function ConfirmScreen({setShow, deletePost, posts}) {
 
     return(
         <>
             <Container>
-                <Text>Are you sure you want <br/> to delete this post?</Text>
+                <Text> Are you sure you want <br /> to delete this post?</Text>
                 <Buttons>
-                    <ButtonRecuse>No, go back</ButtonRecuse>
-                    <ButtonAccept>Yes, delete it</ButtonAccept>
+                    <ButtonRecuse onClick={() => setShow(false)}>No, go back</ButtonRecuse>
+                    <ButtonAccept onClick={() => deletePost(posts.id)}>Yes, delete it</ButtonAccept>
                 </Buttons>
             </Container>
             <OpacityBackground />
