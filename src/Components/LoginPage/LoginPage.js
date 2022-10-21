@@ -20,6 +20,7 @@ export default function LoginPage() {
         event.preventDefault()
         axios.post('http://localhost:4000/sign-in', form)
             .then((response) => {
+                localStorage.setItem("token", response.data.token);
                 navigate("/timeline")
             })
             .catch((error) => {

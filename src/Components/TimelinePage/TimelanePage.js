@@ -1,58 +1,90 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PostCard from './PostCard';
-import { getPost } from '../../services/linktrAPI';
+import {getPost, getLikes} from "../../services/linktrAPI";
 import SubmitBox from './SubmitBox';
 import TopMenu from '../../Common/TopMenu/TopMenu.js';
 
 export default function TimelinePage() {
 	const [posts, setPosts] = useState([]);
 	const [message, setMessage] = useState('Loading...');
+    const [rerender, setRerender] = useState(false)
 
 	useEffect(() => {
-		const promise = getPost();
-		promise.then((res) => {
-			setPosts(res.data);
-			if (posts.length < 1) {
-				setMessage('There are no post yet');
-			}
-		});
 
-		promise.catch((err) => {
-			setMessage(
-				'An error occured while trying to fetch the posts, please refresh the page'
-			);
-		});
-	}, []);
+        const token = localStorage.getItem("token");
+        const config = { headers: { "Authorization": `Bearer ${token}` } };
+        const promise1 = getPost();
+        const promise2 = getLikes(config);
+        let likes = [];
+        let postsLike = [];
+        let postsNoLike = [];
 
-	return (
-		<>
-			<TopMenu />
-			<Container>
-				<div className="content">
-					<h1>timeline</h1>
-					<SubmitBox
-						setPosts={setPosts}
-						setMessage={setMessage}
-						posts={posts}
-					/>
-					{posts.length === 0 ? (
-						<h6>{message}</h6>
-					) : (
-						posts.map((item, index) => (
-							<PostCard
-								key={index}
-								userImg={item.image}
-								name={item.name}
-								text={item.text}
-								urlInfos={item.urlInfos}
-							/>
-						))
-					)}
-				</div>
-			</Container>
-		</>
-	);
+        promise2.then(res => {likes = res.data}).catch(err => console.log("likes not available"));
+          
+        promise1.then(res => {
+            postsNoLike = res.data
+
+            if (likes.length !== 0) {
+                for (let i = 0; i < postsNoLike.length; i++) {
+                    for (let j = 0; j < likes.length; j++) {
+                        if (postsNoLike[i].id === likes[j].postId) {
+                            const newItem = {...postsNoLike[i], liked: true};
+                            postsLike.push(newItem);
+                            break; 
+                        }
+    
+                        if (j === likes.length - 1) {
+                            const newItem = {...postsNoLike[i], liked: false};
+                            postsLike.push(newItem);
+                        }
+                    }
+                }
+            } else {
+                for (let i = 0; i < postsNoLike.length; i++) {
+                    const newItem = {...postsNoLike[i], liked: false};
+                    postsLike.push(newItem);
+                }
+            }
+            
+            setPosts(postsLike);
+            if (posts.length < 1) {
+                setMessage("There are no post yet")
+            }
+        }).catch(err =>{
+            setMessage("An error occured while trying to fetch the posts, please refresh the page")
+        })
+
+    }, [rerender])
+
+
+    return(
+        <>
+            <Container>
+                <div className="content">
+                    <h1>timeline</h1>
+                    <SubmitBox
+                        setPosts={setPosts}
+                        setMessage={setMessage}
+                        posts={posts}
+                    />
+                    {posts.length === 0 ? ( <h6>{message}</h6> )
+                    : (
+                    posts.map((item, index) => <PostCard
+                        key = {index}
+                        id = {item.id}
+                        userImg = {item.image}
+                        name = {item.name}
+                        text = {item.text}
+                        urlInfos = {item.urlInfos}
+                        liked = {item.liked}
+                        rerender = {rerender}
+                        setRerender = {setRerender}
+                    />))}
+                </div>
+            </Container>
+        </>
+    );
 }
 
 const Container = styled.div`
