@@ -23,17 +23,15 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
         urlInfos.image = notImage }
     
     function like () {
-
-        const token = JSON.parse(localStorage.getItem("token"));
+        
         const postId = id;
-        const config = { headers: { "Authorization": `Bearer ${token}` } };
 
         if (liked === true) {
-            const promise = removeLike({ postId }, config);
+            const promise = removeLike({ postId });
             promise.then(res => setRerender(!rerender))
             .catch(err => console.log("dislike not available"))
         } else {
-            const promise = addLike({ postId }, config);
+            const promise = addLike({ postId });
             promise.then(res => setRerender(!rerender))
             .catch(err => console.log("like not available"))
         }
