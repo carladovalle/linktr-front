@@ -25,10 +25,10 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
     const likeIconColor = liked ? "red" : "white";
     return(
         <Container>
-            <span>
-                <img src={userImg} alt="profile-img" onClick={() => like()}/>
-                <IconContext.Provider value={{ className: "likeIcon", color: likeIconColor }}>
-                    {liked ? < AiTwotoneHeart /> : < AiOutlineHeart />} 
+            <span className="leftSide">
+                <img src={userImg} alt="profile-img"/>
+                <IconContext.Provider value={{ className: "likeIcon", color: likeIconColor}}>
+                    {liked ? < AiTwotoneHeart onClick={() => like()}/> : < AiOutlineHeart onClick={() => like()}/>} 
                 </IconContext.Provider>
             </span>
             
@@ -65,6 +65,12 @@ const Container = styled.div`
         height: 50px;
         border-radius: 50%;
         object-fit: cover;
+    }
+
+    .leftSide {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .likeIcon {
