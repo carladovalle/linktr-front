@@ -21,7 +21,6 @@ export default function HashtagList(){
         const promise = getHashtags()
         promise.then(res => {
             setHashtags(res.data)
-
         })
 
         promise.catch(err =>{
@@ -35,7 +34,7 @@ export default function HashtagList(){
             <ul>
                 {hashtags.map((item, index) => <Hashtag
                 key = {index}
-                name = {item.name}
+                name = {item.hashtag}
                 />)}
             </ul>
         </Container>
