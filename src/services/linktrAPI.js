@@ -18,8 +18,8 @@ function createHeaders() {
 }
 
 function getPost() {
-	const promise = axios.get(`${BASE_URL}/posts`);
-	return promise;
+    const promise = axios.get(`${BASE_URL}/posts`)
+    return promise;
 }
 
 function publishPost(body) {
@@ -34,4 +34,26 @@ function searchUsers(params) {
 	return promise;
 }
 
-export { getPost, publishPost, searchUsers };
+function getLikes(config) {
+    const promise = axios.get(`${BASE_URL}/likes`, config)
+    return promise;
+}
+
+function addLike(postId, config) {
+    const promise = axios.post(`${BASE_URL}/likes`, postId, config)
+    return promise
+}
+
+function removeLike(postId, config) {
+    const promise = axios.delete(`${BASE_URL}/likes/${postId.postId}`, config)
+    return promise
+}
+
+export {
+    getPost,
+    publishPost,
+	searchUsers,
+    getLikes,
+    addLike,
+    removeLike
+}
