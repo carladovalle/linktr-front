@@ -49,11 +49,17 @@ function removeLike(postId, config) {
     return promise
 }
 
+function deletePost(postId, config) {
+	const promise = axios.delete(`${BASE_URL}/posts/delete/${postId}`, config);
+    return promise
+}
+
 export {
     getPost,
     publishPost,
 	searchUsers,
     getLikes,
     addLike,
-    removeLike
+    removeLike,
+	deletePost
 }

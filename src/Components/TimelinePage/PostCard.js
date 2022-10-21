@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { AiTwotoneHeart, AiOutlineHeart } from "react-icons/ai";
+import { BiEditAlt } from 'react-icons/bi';
+import { AiFillDelete } from 'react-icons/ai';
 import { IconContext } from "react-icons";
 import { addLike, removeLike } from "../../services/linktrAPI.js";
 
@@ -33,7 +35,15 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
             </span>
             
             <span className="infos">
-                <h4>{name}</h4>
+                <div className="firstLine">
+                    <h4>{name}</h4>
+                        <div className="actions">
+                            <BiEditAlt />
+                            <div className="space">
+                                <AiFillDelete />
+                            </div>
+                        </div>
+                </div>
                 <h5>{text}</h5>
                 <LinkCard onClick={() => window.open(urlInfos.url)}>
                     <div>
@@ -83,6 +93,20 @@ const Container = styled.div`
         margin-left: 18px;
         margin-top: 2px;
     }
+
+    .firstLine {
+        display: flex;
+        justify-content: space-between;        
+    }
+
+    .actions {
+        display: flex;
+    }
+
+    .space {
+        margin-left: 12.53px;
+    }
+
     h4{
         margin-bottom: 7px;
         font-style: normal;
