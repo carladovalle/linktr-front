@@ -3,21 +3,21 @@ import { AiTwotoneHeart, AiOutlineHeart } from "react-icons/ai";
 import { IconContext } from "react-icons";
 import { addLike, removeLike } from "../../services/linktrAPI.js";
 
-export default function PostCard({id, userImg, name, text, urlInfos, liked}){
+export default function PostCard({id, userImg, name, text, urlInfos, liked, rerender, setRerender}){
     
     function like () {
 
-        const token = "come from localStorage";
+        const token = localStorage.getItem("token");
         const postId = id;
         const config = { headers: { "Authorization": `Bearer ${token}` } };
 
-        if (liked) {
-            const promise = removeLike(postId, config);
-            promise.then(res => console.log("disliked"))
+        if (liked === true) {
+            const promise = removeLike({ postId }, config);
+            promise.then(res => setRerender(!rerender))
             .catch(err => console.log("dislike not available"))
         } else {
-            const promise = addLike(postId, config);
-            promise.then(res => console.log("liked"))
+            const promise = addLike({ postId }, config);
+            promise.then(res => setRerender(!rerender))
             .catch(err => console.log("like not available"))
         }
     }
@@ -26,8 +26,8 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked}){
     return(
         <Container>
             <span>
-                <img src={userImg} alt="profile-img"/>
-                <IconContext.Provider value={{ className: "likeIcon", color: likeIconColor }} onClick={() => like()}>
+                <img src={userImg} alt="profile-img" onClick={() => like()}/>
+                <IconContext.Provider value={{ className: "likeIcon", color: likeIconColor }}>
                     {liked ? < AiTwotoneHeart /> : < AiOutlineHeart />} 
                 </IconContext.Provider>
             </span>

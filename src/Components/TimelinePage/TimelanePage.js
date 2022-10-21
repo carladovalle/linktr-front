@@ -7,45 +7,55 @@ import SubmitBox from "../MainPage/SubmitBox"
 export default function TimelinePage(){
 
     const [posts, setPosts] = useState([])
+    const [rerender, setRerender] = useState(false)
     const [message, setMessage] = useState("Loading...")
-    const token = "come from localStorage";
-    const config = { headers: { "Authorization": `Bearer ${token}` } };
 
     useEffect(() => {
 
+        const token = localStorage.getItem("token");
+        const config = { headers: { "Authorization": `Bearer ${token}` } };
         const promise1 = getPost();
         const promise2 = getLikes(config);
-        let postsNoLike;
-        let likes;
-        let postsLike;
+        let likes = [];
+        let postsLike = [];
+        let postsNoLike = [];
 
+        promise2.then(res => {likes = res.data}).catch(err => console.log("likes not available"));
+          
         promise1.then(res => {
-            postsNoLike = res.data;
-            if (postsNoLike.length < 1) {
+            postsNoLike = res.data
+
+            if (likes.length !== 0) {
+                for (let i = 0; i < postsNoLike.length; i++) {
+                    for (let j = 0; j < likes.length; j++) {
+                        if (postsNoLike[i].id === likes[j].postId) {
+                            const newItem = {...postsNoLike[i], liked: true};
+                            postsLike.push(newItem);
+                            break; 
+                        }
+    
+                        if (j === likes.length - 1) {
+                            const newItem = {...postsNoLike[i], liked: false};
+                            postsLike.push(newItem);
+                        }
+                    }
+                }
+            } else {
+                for (let i = 0; i < postsNoLike.length; i++) {
+                    const newItem = {...postsNoLike[i], liked: false};
+                    postsLike.push(newItem);
+                }
+            }
+            
+            setPosts(postsLike);
+            if (posts.length < 1) {
                 setMessage("There are no post yet")
             }
         }).catch(err =>{
             setMessage("An error occured while trying to fetch the posts, please refresh the page")
         })
 
-        promise2.then(res => {
-            likes = res.data;
-        }).catch(err => console.log("likes not available"))
-
-        for (let i = 0; i < postsNoLike.length; i++) {
-            for (let j = 0; j < likes.length; i++) {
-                if (postsNoLike[i].id === likes[j].postId) {
-                    postsLike.push({...postsNoLike[i], liked: true});
-                    break; 
-                }
-            }
-
-            postsLike.push({...postsNoLike[i], liked: false});
-        }
-
-        setPosts(postsLike);
-
-    }, [])
+    }, [rerender])
 
 
     return(
@@ -63,6 +73,9 @@ export default function TimelinePage(){
                 name = {item.name}
                 text = {item.text}
                 urlInfos = {item.urlInfos}
+                liked = {item.liked}
+                rerender = {rerender}
+                setRerender = {setRerender}
                 />)}
                 
             </div>
