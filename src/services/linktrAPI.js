@@ -50,7 +50,7 @@ function removeLike(postId, config) {
 }
 
 function deletePost(postId, config) {
-	const promise = axios.delete(`${BASE_URL}/posts/delete/${postId}`, config);
+	const promise = axios.delete(`${BASE_URL}/posts/delete/${postId.postId}`, config);
     return promise
 }
 

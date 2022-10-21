@@ -3,7 +3,7 @@ import { AiTwotoneHeart, AiOutlineHeart } from "react-icons/ai";
 import { BiEditAlt } from 'react-icons/bi';
 import { AiFillDelete } from 'react-icons/ai';
 import { IconContext } from "react-icons";
-import { addLike, removeLike } from "../../services/linktrAPI.js";
+import { addLike, removeLike, deletePost } from "../../services/linktrAPI.js";
 
 export default function PostCard({id, userImg, name, text, urlInfos, liked, rerender, setRerender}){
     
@@ -24,6 +24,22 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
         }
     }
 
+    function deletePosts () {
+
+        const token = localStorage.getItem("token");
+        const postId = id;
+        const config = { headers: { "Authorization": `Bearer ${token}` } };
+
+        const promise = deletePost({ postId }, config);
+
+        promise.then(() => {
+            window.location.reload();
+        }).catch(() => {
+            console.log("error");
+        });
+
+    } 
+
     const likeIconColor = liked ? "red" : "white";
     return(
         <Container>
@@ -40,7 +56,7 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
                         <div className="actions">
                             <BiEditAlt />
                             <div className="space">
-                                <AiFillDelete />
+                                <AiFillDelete onClick={() => deletePosts()}/>
                             </div>
                         </div>
                 </div>
