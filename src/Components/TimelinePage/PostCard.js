@@ -51,11 +51,16 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
             
             <span className="infos">
                 <h4>{name}</h4>
+                {text ?
                 <ReactTagify 
                 tagStyle={tagStyle}
                 tagClicked={(tag)=> hashtag(tag)}>
                     <h5>{text}</h5>
                 </ReactTagify>
+                :
+                <h5>{text}</h5>
+                }
+                
                 <LinkCard onClick={() => window.open(urlInfos.url)}>
                     <div>
                         <h2>{urlInfos.title}</h2>

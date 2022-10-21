@@ -13,7 +13,7 @@ export default function HashTagPage(){
 
     useEffect(() => {
 
-        const promise = getHashtagPost()
+        const promise = getHashtagPost(hashtag)
         promise.then(res => {
             setPosts(res.data)
             if(posts.length < 1){
@@ -38,7 +38,7 @@ export default function HashTagPage(){
                 key = {index}
                 userImg = {item.image}
                 name = {item.name}
-                text = {item.text}
+                text={item.content}
                 urlInfos = {item.urlInfos}
                 />)}
                 

@@ -14,7 +14,7 @@ function createHeaders() {
 
 function getPost() {
     const config = createHeaders();
-    const promise = axios.get(`${BASE_URL}/posts`)
+    const promise = axios.get(`${BASE_URL}/posts`, config)
     return promise;
 }
 
@@ -47,13 +47,13 @@ function removeLike(postId, config) {
 
 function getHashtagPost(hashtag) {
     const config = createHeaders();
-    const promise = axios.get(`${BASE_URL}/posts/${hashtag}`)
+    const promise = axios.get(`${BASE_URL}/hashtags/${hashtag}`, config)
     return promise
 }
 
 function getHashtags() {
     const config = createHeaders();
-    const promise = axios.get(`${BASE_URL}/hashtags`)
+    const promise = axios.get(`${BASE_URL}/hashtags`, config)
     return promise
 }
 
