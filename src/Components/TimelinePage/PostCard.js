@@ -1,15 +1,41 @@
-import styled from "styled-components"
+import styled from "styled-components";
 import notImage from "../../Common/404.jpeg"
+import { AiTwotoneHeart, AiOutlineHeart } from "react-icons/ai";
+import { IconContext } from "react-icons";
+import { addLike, removeLike } from "../../services/linktrAPI.js";
 
-export default function PostCard({userImg, name, text, urlInfos}){
+export default function PostCard({id, userImg, name, text, urlInfos, liked, rerender, setRerender}){
 
     if(!urlInfos.image){
-        urlInfos.image = notImage 
+        urlInfos.image = notImage }
+    
+    function like () {
+
+        const token = localStorage.getItem("token");
+        const postId = id;
+        const config = { headers: { "Authorization": `Bearer ${token}` } };
+
+        if (liked === true) {
+            const promise = removeLike({ postId }, config);
+            promise.then(res => setRerender(!rerender))
+            .catch(err => console.log("dislike not available"))
+        } else {
+            const promise = addLike({ postId }, config);
+            promise.then(res => setRerender(!rerender))
+            .catch(err => console.log("like not available"))
+        }
     }
 
+    const likeIconColor = liked ? "red" : "white";
     return(
         <Container>
-            <img src={userImg} alt="profile-img"/>
+            <span className="leftSide">
+                <img src={userImg} alt="profile-img"/>
+                <IconContext.Provider value={{ className: "likeIcon", color: likeIconColor}}>
+                    {liked ? < AiTwotoneHeart onClick={() => like()}/> : < AiOutlineHeart onClick={() => like()}/>} 
+                </IconContext.Provider>
+            </span>
+            
             <span className="infos">
                 <h4>{name}</h4>
                 <h5>{text}</h5>
@@ -43,6 +69,17 @@ const Container = styled.div`
         height: 50px;
         border-radius: 50%;
         object-fit: cover;
+    }
+
+    .leftSide {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .likeIcon {
+        font-size: 20px;
+        margin-top: 19px;
     }
 
     .infos{
