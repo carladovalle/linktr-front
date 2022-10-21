@@ -1,17 +1,30 @@
 import styled from "styled-components";
+import { ReactTagify } from "react-tagify";
 import notImage from "../../Common/404.jpeg"
 import { AiTwotoneHeart, AiOutlineHeart } from "react-icons/ai";
 import { IconContext } from "react-icons";
 import { addLike, removeLike } from "../../services/linktrAPI.js";
+import { useNavigate } from "react-router-dom";
 
 export default function PostCard({id, userImg, name, text, urlInfos, liked, rerender, setRerender}){
+    const navigate = useNavigate()
+    const tagStyle = {
+        color: '#FFFFFF',
+        fontWeight: 'bold',
+        cursor: 'pointer'
+      };
+    
+    function hashtag(name){
+        const params = name.slice(1)
+        navigate(`/hashtag/${params}`)
+    }
 
     if(!urlInfos.image){
         urlInfos.image = notImage }
     
     function like () {
 
-        const token = localStorage.getItem("token");
+        const token = JSON.parse(localStorage.getItem("token"));
         const postId = id;
         const config = { headers: { "Authorization": `Bearer ${token}` } };
 
@@ -38,7 +51,11 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
             
             <span className="infos">
                 <h4>{name}</h4>
-                <h5>{text}</h5>
+                <ReactTagify 
+                tagStyle={tagStyle}
+                tagClicked={(tag)=> hashtag(tag)}>
+                    <h5>{text}</h5>
+                </ReactTagify>
                 <LinkCard onClick={() => window.open(urlInfos.url)}>
                     <div>
                         <h2>{urlInfos.title}</h2>

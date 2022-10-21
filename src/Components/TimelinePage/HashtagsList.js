@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 import {getHashtags} from "../../services/linktrAPI"
 import styled from "styled-components"
 
-function Hashtag({id, name}){
+function Hashtag({name}){
     const params = name.slice(1)
     const navigate = useNavigate()
 
@@ -14,14 +14,7 @@ function Hashtag({id, name}){
 
 export default function HashtagList(){
 
-    const [hashtags , setHashtags] = useState([{
-        name: "#teste",
-        id: 1
-    },
-    {
-        name: "#carro",
-        id: 2
-    }])
+    const [hashtags , setHashtags] = useState([])
 
     useEffect(() => {
 
@@ -42,7 +35,6 @@ export default function HashtagList(){
             <ul>
                 {hashtags.map((item, index) => <Hashtag
                 key = {index}
-                id = {item.id}
                 name = {item.name}
                 />)}
             </ul>

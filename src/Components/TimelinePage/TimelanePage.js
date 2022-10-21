@@ -12,7 +12,7 @@ export default function TimelinePage() {
 	const [rerender, setRerender] = useState(false);
 
 	useEffect(() => {
-		const token = localStorage.getItem('token');
+		const token = JSON.parse(localStorage.getItem("token"));
 		const config = { headers: { Authorization: `Bearer ${token}` } };
 		const promise1 = getPost();
 		const promise2 = getLikes(config);
@@ -84,7 +84,7 @@ export default function TimelinePage() {
 								id={item.id}
 								userImg={item.image}
 								name={item.name}
-								text={item.text}
+								text={item.content}
 								urlInfos={item.urlInfos}
 								liked={item.liked}
 								rerender={rerender}
@@ -100,13 +100,13 @@ export default function TimelinePage() {
 }
 
 const Container = styled.div`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	margin-top: 125px;
-	width: 100vw;
 
+	display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: 124px;
+    width: 100%;
+	
 	.content {
 		width: 611px;
 	}
