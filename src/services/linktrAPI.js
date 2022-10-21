@@ -1,19 +1,19 @@
 import axios from 'axios';
-const BASE_URL = process.env.REACT_APP_API_BASE_URL;
-// const BASE_URL = 'http://localhost:4000';
+// const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const BASE_URL = 'http://localhost:4000';
 
 function createHeaders() {
-	// const config = {
-	// 	headers: {
-	// 		Authorization: `Bearer 6c933abc-5f18-4c39-a7fe-b5c2e5075ac6`,
-	// 	},
-	// };
-	const auth = JSON.parse(localStorage.getItem(''));
 	const config = {
 		headers: {
-			Authorization: `Bearer ${auth.token}`,
+			Authorization: `Bearer 6c933abc-5f18-4c39-a7fe-b5c2e5075ac6`,
 		},
 	};
+	// const auth = JSON.parse(localStorage.getItem(''));
+	// const config = {
+	// 	headers: {
+	// 		Authorization: `Bearer ${auth.token}`,
+	// 	},
+	// };
 	return config;
 }
 
@@ -25,6 +25,12 @@ function getPost() {
 function publishPost(body) {
 	const config = createHeaders();
 	const promise = axios.post(`${BASE_URL}/posts/publish`, body, config);
+	return promise;
+}
+
+function searchUsers(params) {
+	const config = createHeaders();
+	const promise = axios.get(`${BASE_URL}/users/search/${params}`, config);
 	return promise;
 }
 
@@ -46,6 +52,7 @@ function removeLike(postId, config) {
 export {
     getPost,
     publishPost,
+	searchUsers,
     getLikes,
     addLike,
     removeLike
