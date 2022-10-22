@@ -4,7 +4,7 @@ import { getPost, publishPost } from '../../services/linktrAPI';
 
 export default function SubmitBox({ setPosts, posts, setMessage }) {
 	const [postContent, setPostContent] = useState({});
-	const { image } = JSON.parse(localStorage.getItem('token'));
+	const image = localStorage.getItem('userImage');
 	const [isPublished, setIsPublished] = useState(false);
 
 	function handleForm(e) {

@@ -3,24 +3,26 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PostCard from '../TimelinePage/PostCard';
 import { getUserPosts } from '../../services/linktrAPI';
-import TopMenu from '../../Common/TopMenu/TopMenu';
 import HashtagList from '../TimelinePage/HashtagsList';
 import Loading from '../../Common/Loading';
 
 export default function UserPage() {
 	const { id } = useParams();
-	const { image } = JSON.parse(localStorage.getItem('token'));
 	const [posts, setPosts] = useState([]);
 	const [message, setMessage] = useState('Loading...');
 	const [name, setName] = useState('');
+	const [image, setImage] = useState('');
 
 	useEffect(() => {
 		const promise = getUserPosts(id);
 		promise.then((res) => {
 			setPosts(res.data);
-			setName(res.data[0].name);
-			if (posts.length < 1) {
-				setMessage('There are no post yet');
+			if (res.data.length < 1) {
+				setMessage("This user haven't any posts at moment");
+				return;
+			} else {
+				setName(res.data[0].name);
+				setImage(res.data[0].image);
 			}
 		});
 
@@ -37,7 +39,6 @@ export default function UserPage() {
 
 	return (
 		<>
-			<TopMenu />
 			<Container>
 				{posts.length === 0 ? (
 					<Loading message={message} />
