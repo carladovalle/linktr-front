@@ -104,50 +104,45 @@ export default function HashTagPage(){
 }
 
 const Container = styled.div`
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    margin-top: 124px;
-    width: 100%;
-    
-    .content{
-        width: 611px;
-    }
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+	margin-top: 124px;
+	width: 100%;
 
+	.content {
+		width: 611px;
+	}
 
-    h1{
-        font-family: 'Oswald', sans-serif;
-        font-style: normal;
-        font-weight: 700;
-        font-size: 43px;
-        line-height: 64px;
-        color: #FFFFFF;
-        margin-bottom: 43px;
-    }
+	h1 {
+		font-family: 'Oswald', sans-serif;
+		font-style: normal;
+		font-weight: 700;
+		font-size: 43px;
+		line-height: 64px;
+		color: #ffffff;
+		margin-bottom: 43px;
+	}
 
-    h6{
-        margin-bottom: 7px;
-        font-style: normal;
-        font-weight: 400;
-        font-size: 19px;
-        line-height: 23px;
-        color: #ffffff;
-        word-break: break-word;
-    }
+	h6 {
+		margin-bottom: 7px;
+		font-style: normal;
+		font-weight: 400;
+		font-size: 19px;
+		line-height: 23px;
+		color: #ffffff;
+		word-break: break-word;
+	}
 
-    @media (max-width: 675px){
-        
-        .content{
-            width: 100%;
-        }
-        h1{
-        margin-left: 17px;
-        }
-        h6{
-            margin-left: 17px;
-
-        }
-
-    }
-    
-`
+	@media (max-width: 675px) {
+		.content {
+			width: 100%;
+		}
+		h1 {
+			margin-left: 17px;
+		}
+		h6 {
+			margin-left: 17px;
+		}
+	}
+`;

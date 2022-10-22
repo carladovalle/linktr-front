@@ -1,10 +1,10 @@
-import HashtagList from "./HashtagsList"
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PostCard from './PostCard';
 import { getPost, getLikes } from '../../services/linktrAPI';
 import SubmitBox from './SubmitBox';
 import TopMenu from '../../Common/TopMenu/TopMenu.js';
+import HashtagList from './HashtagsList';
 
 export default function TimelinePage() {
 	const [posts, setPosts] = useState([]);
@@ -12,10 +12,8 @@ export default function TimelinePage() {
 	const [rerender, setRerender] = useState(false);
 
 	useEffect(() => {
-		const token = JSON.parse(localStorage.getItem("token"));
-		const config = { headers: { Authorization: `Bearer ${token}` } };
 		const promise1 = getPost();
-		const promise2 = getLikes(config);
+		const promise2 = getLikes();
 		let likes = [];
 		let postsLike = [];
 		let postsNoLike = [];
@@ -89,6 +87,7 @@ export default function TimelinePage() {
 								liked={item.liked}
 								rerender={rerender}
 								setRerender={setRerender}
+								userId={item.userId}
 							/>
 						))
 					)}
@@ -100,13 +99,12 @@ export default function TimelinePage() {
 }
 
 const Container = styled.div`
-
 	display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    margin-top: 124px;
-    width: 100%;
-	
+	align-items: flex-start;
+	justify-content: center;
+	margin-top: 125px;
+	width: 100vw;
+
 	.content {
 		width: 611px;
 	}
