@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function TopMenu() {
+	const { image } = JSON.parse(localStorage.getItem('token'));
 	const navigate = useNavigate();
 	const [isClicked, setIsClicked] = useState(false);
 
@@ -15,7 +16,7 @@ export default function TopMenu() {
 	return (
 		<>
 			<MenuStyle>
-				<h1>linkr</h1>
+				<h1 onClick={() => navigate('/timeline')}>linkr</h1>
 				<SearchBar />
 				<div>
 					{isClicked ? (
@@ -23,10 +24,7 @@ export default function TopMenu() {
 					) : (
 						<IoChevronDownOutline onClick={openLogoutField} />
 					)}
-					<img
-						src="https://sempreupdate.com.br/wp-content/uploads/2019/02/qual-a-diferenca-entre-programador-e-desenvolvedor.jpg"
-						alt="profile"
-					/>
+					<img src={image} alt="profile" />
 				</div>
 			</MenuStyle>
 			<LogoutField isClicked={isClicked}>
@@ -61,6 +59,11 @@ const MenuStyle = styled.header`
 		font-size: 49px;
 		font-weight: 700;
 		color: #ffffff;
+
+		&:hover {
+			cursor: pointer;
+			filter: brightness(0.9);
+		}
 	}
 
 	> div {
@@ -71,6 +74,10 @@ const MenuStyle = styled.header`
 		svg {
 			color: #ffffff;
 			font-size: 26px;
+
+			&:hover {
+				cursor: pointer;
+			}
 		}
 
 		img {
@@ -89,7 +96,7 @@ const LogoutField = styled.div`
 	align-items: center;
 	justify-content: center;
 	border-bottom-left-radius: 20px;
-	position: absolute;
+	position: fixed;
 	top: ${(props) => (props.isClicked ? '72px' : '0px')};
 	right: 0;
 	background-color: #171717;
@@ -97,4 +104,9 @@ const LogoutField = styled.div`
 	font-size: 17px;
 	font-weight: 700;
 	transition: all 0.3s ease-out;
+
+	&:hover {
+		cursor: pointer;
+		background-color: #160000;
+	}
 `;

@@ -4,7 +4,7 @@ import notImage from "../../Common/404.jpeg"
 import { useNavigate } from "react-router-dom";
 import LikesPostCard from "./LikesPostCard";
 
-export default function PostCard({id, userImg, name, text, urlInfos, liked, rerender, setRerender}){
+export default function PostCard({id, userImg, name, text, urlInfos, liked, rerender, setRerender, userId}){
     const navigate = useNavigate()
     const tagStyle = {
         color: '#FFFFFF',
@@ -28,12 +28,17 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
             </span>
             
             <span className="infos">
-                <h4>{name}</h4>
+                <h4 onClick={() => navigate(`/user/${userId}`)}>{name}</h4>
+                {text ?
                 <ReactTagify 
                 tagStyle={tagStyle}
                 tagClicked={(tag)=> hashtag(tag)}>
                     <h5>{text}</h5>
                 </ReactTagify>
+                :
+                <h5>{text}</h5>
+                }
+                
                 <LinkCard onClick={() => window.open(urlInfos.url)}>
                     <div>
                         <h2>{urlInfos.title}</h2>
@@ -90,6 +95,11 @@ const Container = styled.div`
         line-height: 23px;
         color: #ffffff;
         word-break: break-word;
+
+        &:hover{
+            cursor: pointer;
+            filter: brightness(0.90)
+        }
     }
 
     h5{
