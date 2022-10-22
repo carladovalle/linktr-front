@@ -59,7 +59,7 @@ function getHashtags() {
 
 function getUserPosts(id) {
 	const config = createHeaders();
-	const promise = axios.get(`${BASE_URL}/users/${id}`, config);
+	const promise = axios.get(`${BASE_URL}/user/${id}`, config);
 	return promise;
 }
 

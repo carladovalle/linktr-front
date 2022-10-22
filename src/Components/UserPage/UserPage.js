@@ -5,17 +5,20 @@ import PostCard from '../TimelinePage/PostCard';
 import { getUserPosts } from '../../services/linktrAPI';
 import TopMenu from '../../Common/TopMenu/TopMenu';
 import HashtagList from '../TimelinePage/HashtagsList';
+import gif from '../../Common/spinner.gif';
 
-export default function UserPage({ name }) {
+export default function UserPage() {
 	const { id } = useParams();
 	const { image } = JSON.parse(localStorage.getItem('token'));
 	const [posts, setPosts] = useState([]);
 	const [message, setMessage] = useState('Loading...');
+	const [name, setName] = useState('');
 
 	useEffect(() => {
 		const promise = getUserPosts(id);
 		promise.then((res) => {
-			setPosts(res.data.list);
+			setPosts(res.data);
+			setName(res.data[0].name);
 			if (posts.length < 1) {
 				setMessage('There are no post yet');
 			}
@@ -32,16 +35,15 @@ export default function UserPage({ name }) {
 		<>
 			<TopMenu />
 			<Container>
-				<div className="content">
-					<header>
-						<img src={image} alt="profile" />
-						<h1>{name}'s posts</h1>
-					</header>
-
-					{posts.length === 0 ? (
-						<h6>{message}</h6>
-					) : (
-						posts.map((item, index) => (
+				{posts.length === 0 ? (
+					<Loading message={message} length={posts.length} />
+				) : (
+					<div className="content">
+						<header>
+							<img src={image} alt="profile" />
+							<h1>{name}'s posts</h1>
+						</header>
+						{posts.map((item, index) => (
 							<PostCard
 								key={index}
 								userImg={item.image}
@@ -49,12 +51,21 @@ export default function UserPage({ name }) {
 								text={item.content}
 								urlInfos={item.urlInfos}
 							/>
-						))
-					)}
-				</div>
+						))}
+					</div>
+				)}
 				<HashtagList />
 			</Container>
 		</>
+	);
+}
+
+function Loading({ message }) {
+	return (
+		<LoadingStyle length={message}>
+			<img src={gif} alt="" />
+			<p>{message}</p>
+		</LoadingStyle>
 	);
 }
 
@@ -70,6 +81,7 @@ const Container = styled.div`
 	}
 
 	img {
+		display: ${(props) => (props.message === 'Loading...' ? 'flex' : 'none')};
 		width: 50px;
 		height: 50px;
 		border-radius: 50px;
@@ -116,5 +128,26 @@ const Container = styled.div`
 		h6 {
 			margin-left: 17px;
 		}
+	}
+`;
+
+const LoadingStyle = styled.section`
+	width: 611px;
+	height: 50%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding-top: 100px;
+
+	img {
+		width: 120px;
+		height: 120px;
+	}
+
+	p {
+		font-size: 17px;
+		font-family: 'Oswald', sans-serif;
+		color: #ffffff;
 	}
 `;
