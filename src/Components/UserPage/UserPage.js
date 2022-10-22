@@ -25,6 +25,10 @@ export default function UserPage() {
 		});
 
 		promise.catch((err) => {
+			if (err.response.status === 404) {
+				setMessage(err.response.data);
+				return;
+			}
 			setMessage(
 				'An error occured while trying to fetch the posts, please refresh the page'
 			);
@@ -36,7 +40,7 @@ export default function UserPage() {
 			<TopMenu />
 			<Container>
 				{posts.length === 0 ? (
-					<Loading message={message} length={posts.length} />
+					<Loading message={message} />
 				) : (
 					<div className="content">
 						<header>
@@ -62,7 +66,7 @@ export default function UserPage() {
 
 function Loading({ message }) {
 	return (
-		<LoadingStyle length={message}>
+		<LoadingStyle message={message}>
 			<img src={gif} alt="" />
 			<p>{message}</p>
 		</LoadingStyle>
@@ -81,7 +85,6 @@ const Container = styled.div`
 	}
 
 	img {
-		display: ${(props) => (props.message === 'Loading...' ? 'flex' : 'none')};
 		width: 50px;
 		height: 50px;
 		border-radius: 50px;
@@ -112,9 +115,12 @@ const Container = styled.div`
 		align-items: center;
 		gap: 20px;
 		margin-bottom: 43px;
+		margin-left: 17px;
 	}
 
 	@media (max-width: 675px) {
+		margin-top: 144px;
+
 		.content {
 			width: 100%;
 		}
@@ -122,11 +128,17 @@ const Container = styled.div`
 			width: 40px;
 			height: 40px;
 		}
-		h1 {
-			margin-left: 17px;
-		}
 		h6 {
 			margin-left: 17px;
+		}
+
+		header {
+			margin-left: 17px;
+			margin-bottom: 23px;
+		}
+
+		h1 {
+			font-size: 33px;
 		}
 	}
 `;
@@ -141,6 +153,7 @@ const LoadingStyle = styled.section`
 	padding-top: 100px;
 
 	img {
+		display: ${(props) => (props.message === 'Loading...' ? 'flex' : 'none')};
 		width: 120px;
 		height: 120px;
 	}

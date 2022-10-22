@@ -16,7 +16,7 @@ export default function TopMenu() {
 	return (
 		<>
 			<MenuStyle>
-				<h1>linkr</h1>
+				<h1 onClick={() => navigate('/timeline')}>linkr</h1>
 				<SearchBar />
 				<div>
 					{isClicked ? (
@@ -59,6 +59,11 @@ const MenuStyle = styled.header`
 		font-size: 49px;
 		font-weight: 700;
 		color: #ffffff;
+
+		&:hover {
+			cursor: pointer;
+			filter: brightness(0.9);
+		}
 	}
 
 	> div {
@@ -69,6 +74,10 @@ const MenuStyle = styled.header`
 		svg {
 			color: #ffffff;
 			font-size: 26px;
+
+			&:hover {
+				cursor: pointer;
+			}
 		}
 
 		img {
@@ -95,4 +104,9 @@ const LogoutField = styled.div`
 	font-size: 17px;
 	font-weight: 700;
 	transition: all 0.3s ease-out;
+
+	&:hover {
+		cursor: pointer;
+		background-color: #160000;
+	}
 `;

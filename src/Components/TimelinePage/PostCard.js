@@ -6,7 +6,7 @@ import { IconContext } from "react-icons";
 import { addLike, removeLike } from "../../services/linktrAPI.js";
 import { useNavigate } from "react-router-dom";
 
-export default function PostCard({id, userImg, name, text, urlInfos, liked, rerender, setRerender}){
+export default function PostCard({id, userImg, name, text, urlInfos, liked, rerender, setRerender, userId}){
     const navigate = useNavigate()
     const tagStyle = {
         color: '#FFFFFF',
@@ -50,7 +50,7 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
             </span>
             
             <span className="infos">
-                <h4>{name}</h4>
+                <h4 onClick={() => navigate(`/user/${userId}`)}>{name}</h4>
                 {text ?
                 <ReactTagify 
                 tagStyle={tagStyle}
@@ -117,6 +117,11 @@ const Container = styled.div`
         line-height: 23px;
         color: #ffffff;
         word-break: break-word;
+
+        &:hover{
+            cursor: pointer;
+            filter: brightness(0.90)
+        }
     }
 
     h5{

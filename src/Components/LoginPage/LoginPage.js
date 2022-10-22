@@ -19,8 +19,7 @@ export default function LoginPage() {
 
 	function sendForm(event) {
 		event.preventDefault();
-		const url = 'http://localhost:5000';
-		//const url = process.env.REACT_APP_API_BASE_URL
+		const url = process.env.REACT_APP_API_BASE_URL
 		axios
 			.post(`${url}/sign-in`, form)
 			.then((response) => {
