@@ -1,4 +1,4 @@
-import gif from '../../Common/spinner.gif';
+import gif from './spinner.gif';
 import styled from 'styled-components';
 
 export default function Loading({ message }) {

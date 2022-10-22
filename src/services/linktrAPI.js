@@ -31,7 +31,8 @@ function searchUsers(params) {
 }
 
 function getLikes(config) {
-	const promise = axios.get(`${BASE_URL}/likes`, config);
+	console.log(config)
+	const promise = axios.get(`${BASE_URL}likes`, config);
 	return promise;
 }
 
