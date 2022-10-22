@@ -54,6 +54,34 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
         await setIsEditing(true);
         inputEditText.current?.focus();
     }
+
+    function updatePosts (e) {
+
+        e.preventDefault();
+
+        const postId = id;
+
+        const promise = editPost({ postId });
+
+        promise.then(() => {
+            setIsEditing(false);
+        }).catch(() => {
+            alert("Could not edit post.")
+        });
+
+    }
+
+    document.onkeydown = function handleKeyDown(e){
+        try {
+            switch(e.key) {
+                case 'Escape':
+                    setIsEditing(false);
+                    break;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     
     if(!urlInfos.image){
         urlInfos.image = notImage }
@@ -91,9 +119,11 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
                         ref={inputEditText} 
                         type="text" 
                         value={newText}
+                        onChange={e => setNewText(e.target.value)}
+                        onKeyPress={(e) => { e.key === 'Enter' && updatePosts(e); }}
                     /> 
                     : 
-                    <h5>{text}</h5>
+                    <h5>{newText}</h5>
                 }
                 {text ?
                 <ReactTagify 
