@@ -1,21 +1,21 @@
 import axios from 'axios';
- const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 function createHeaders() {
-    const auth = JSON.parse(localStorage.getItem("token"))
-    const config = {
-        headers: {
-            Authorization: `Bearer ${auth}`
-        }
-    };
+	const auth = JSON.parse(localStorage.getItem('token'));
+	const config = {
+		headers: {
+			Authorization: `Bearer ${auth.token}`,
+		},
+	};
 
-    return config;
+	return config;
 }
 
 function getPost() {
-    const config = createHeaders();
-    const promise = axios.get(`${BASE_URL}/posts`, config)
-    return promise;
+	const config = createHeaders();
+	const promise = axios.get(`${BASE_URL}/posts`, config);
+	return promise;
 }
 
 function publishPost(body) {
@@ -31,40 +31,46 @@ function searchUsers(params) {
 }
 
 function getLikes(config) {
-    const promise = axios.get(`${BASE_URL}/likes`, config)
-    return promise;
+	const promise = axios.get(`${BASE_URL}/likes`, config);
+	return promise;
 }
 
 function addLike(postId, config) {
-    const promise = axios.post(`${BASE_URL}/likes`, postId, config)
-    return promise
+	const promise = axios.post(`${BASE_URL}/likes`, postId, config);
+	return promise;
 }
 
 function removeLike(postId, config) {
-    const promise = axios.delete(`${BASE_URL}/likes/${postId.postId}`, config)
-    return promise
+	const promise = axios.delete(`${BASE_URL}/likes/${postId.postId}`, config);
+	return promise;
 }
 
 function getHashtagPost(hashtag) {
-    const config = createHeaders();
-    const promise = axios.get(`${BASE_URL}/hashtags/${hashtag}`, config)
-    return promise
+	const config = createHeaders();
+	const promise = axios.get(`${BASE_URL}/hashtags/${hashtag}`, config);
+	return promise;
 }
 
 function getHashtags() {
-    const config = createHeaders();
-    const promise = axios.get(`${BASE_URL}/hashtags`, config)
-    return promise
+	const config = createHeaders();
+	const promise = axios.get(`${BASE_URL}/hashtags`, config);
+	return promise;
 }
 
+function getUserPosts(id) {
+	const config = createHeaders();
+	const promise = axios.get(`${BASE_URL}/user/${id}`, config);
+	return promise;
+}
 
 export {
-    getPost,
-    publishPost,
-    getHashtagPost,
-    getHashtags,
+	getPost,
+	publishPost,
+	getHashtagPost,
+	getHashtags,
 	searchUsers,
-    getLikes,
-    addLike,
-    removeLike
-}
+	getLikes,
+	addLike,
+	removeLike,
+	getUserPosts,
+};
