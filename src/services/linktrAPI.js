@@ -54,6 +54,11 @@ function deletePost(postId, config) {
     return promise
 }
 
+function editPost(postId, config) {
+	const promise = axios.put(`${BASE_URL}/posts/edit/${postId.postId}`, config);
+    return promise
+}
+
 export {
     getPost,
     publishPost,
@@ -61,5 +66,6 @@ export {
     getLikes,
     addLike,
     removeLike,
-	deletePost
+	deletePost, 
+	editPost
 }

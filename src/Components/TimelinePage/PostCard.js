@@ -1,16 +1,19 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useRef} from "react";
 import { AiTwotoneHeart, AiOutlineHeart } from "react-icons/ai";
 import { BiEditAlt } from 'react-icons/bi';
 import { AiFillDelete } from 'react-icons/ai';
 import { IconContext } from "react-icons";
-import { addLike, removeLike, deletePost } from "../../services/linktrAPI.js";
+import { addLike, removeLike, deletePost, editPost } from "../../services/linktrAPI.js";
 import ConfirmScreen from "./ConfirmScreen.js";
 
 export default function PostCard({id, userImg, name, text, urlInfos, liked, rerender, setRerender, posts}){
     
     const [showConfirmScreen, setShowConfirmScreen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const inputEditText = useRef(null);
+    //const [newDescription, setNewDescription] = useState(post.description);
 
     function like () {
 
@@ -52,7 +55,29 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
 
     } 
 
+    async function editPost() {
+        await setIsEditing(true);
+        inputEditText.current?.focus();
+    }
+
+    /*function editPosts () {
+
+        const token = localStorage.getItem("token");
+        const postId = id;
+        const config = { headers: { "Authorization": `Bearer ${token}` } };
+
+        const promise = editPost({ postId }, config);
+
+        promise.then(() => {
+            console.log("ok")
+        }).catch(() => {
+            alert("Could not edit post.")
+        });
+
+    } */
+
     const likeIconColor = liked ? "red" : "white";
+
     return(
         <Container>
                     {showConfirmScreen && (
@@ -74,7 +99,7 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
                 <div className="firstLine">
                     <h4>{name}</h4>
                         <div className="actions">
-                            <BiEditAlt />
+                            {isEditing? <BiEditAlt onClick={() => setIsEditing(false)} /> : <BiEditAlt onClick={editPost} />}
                             <div className="space">
                                 <AiFillDelete onClick={() => screenToDelete()}/>
                             </div>
