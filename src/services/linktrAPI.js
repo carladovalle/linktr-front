@@ -30,9 +30,9 @@ function searchUsers(params) {
 	return promise;
 }
 
-function getLikes(config) {
-	console.log(config)
-	const promise = axios.get(`${BASE_URL}likes`, config);
+function getLikes() {
+	const config = createHeaders();
+	const promise = axios.get(`${BASE_URL}/likes`, config);
 	return promise;
 }
 
@@ -42,12 +42,14 @@ function getLikesQtd (postId) {
     return promise;
 }
 
-function addLike(postId, config) {
+function addLike(postId) {
+	const config = createHeaders();
 	const promise = axios.post(`${BASE_URL}/likes`, postId, config);
 	return promise;
 }
 
-function removeLike(postId, config) {
+function removeLike(postId) {
+	const config = createHeaders();
 	const promise = axios.delete(`${BASE_URL}/likes/${postId.postId}`, config);
 	return promise;
 }
