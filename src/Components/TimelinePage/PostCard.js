@@ -1,10 +1,8 @@
 import styled from "styled-components";
 import { ReactTagify } from "react-tagify";
 import notImage from "../../Common/404.jpeg"
-import { AiTwotoneHeart, AiOutlineHeart } from "react-icons/ai";
-import { IconContext } from "react-icons";
-import { addLike, removeLike } from "../../services/linktrAPI.js";
 import { useNavigate } from "react-router-dom";
+import LikesPostCard from "./LikesPostCard";
 
 export default function PostCard({id, userImg, name, text, urlInfos, liked, rerender, setRerender, userId}){
     const navigate = useNavigate()
@@ -22,31 +20,11 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
     if(!urlInfos.image){
         urlInfos.image = notImage }
     
-    function like () {
-
-        const token = JSON.parse(localStorage.getItem("token"));
-        const postId = id;
-        const config = { headers: { "Authorization": `Bearer ${token}` } };
-
-        if (liked === true) {
-            const promise = removeLike({ postId }, config);
-            promise.then(res => setRerender(!rerender))
-            .catch(err => console.log("dislike not available"))
-        } else {
-            const promise = addLike({ postId }, config);
-            promise.then(res => setRerender(!rerender))
-            .catch(err => console.log("like not available"))
-        }
-    }
-
-    const likeIconColor = liked ? "red" : "white";
     return(
         <Container>
             <span className="leftSide">
                 <img src={userImg} alt="profile-img"/>
-                <IconContext.Provider value={{ className: "likeIcon", color: likeIconColor}}>
-                    {liked ? < AiTwotoneHeart onClick={() => like()}/> : < AiOutlineHeart onClick={() => like()}/>} 
-                </IconContext.Provider>
+                <LikesPostCard id={id} liked={liked} rerender={rerender} setRerender={setRerender}/>
             </span>
             
             <span className="infos">

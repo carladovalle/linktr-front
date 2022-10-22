@@ -31,8 +31,15 @@ function searchUsers(params) {
 }
 
 function getLikes(config) {
-	const promise = axios.get(`${BASE_URL}/likes`, config);
+	console.log(config)
+	const promise = axios.get(`${BASE_URL}likes`, config);
 	return promise;
+}
+
+function getLikesQtd (postId) {
+	const config = createHeaders();
+    const promise = axios.get(`${BASE_URL}/likesQtd/${postId}`, config)
+    return promise;
 }
 
 function addLike(postId, config) {
@@ -69,8 +76,9 @@ export {
 	getHashtagPost,
 	getHashtags,
 	searchUsers,
-	getLikes,
-	addLike,
-	removeLike,
+    getLikes,
+    getLikesQtd,
+    addLike,
+    removeLike,
 	getUserPosts,
 };
