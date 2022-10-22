@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function TopMenu() {
+	const { image } = JSON.parse(localStorage.getItem('token'));
 	const navigate = useNavigate();
 	const [isClicked, setIsClicked] = useState(false);
 
@@ -23,10 +24,7 @@ export default function TopMenu() {
 					) : (
 						<IoChevronDownOutline onClick={openLogoutField} />
 					)}
-					<img
-						src="https://sempreupdate.com.br/wp-content/uploads/2019/02/qual-a-diferenca-entre-programador-e-desenvolvedor.jpg"
-						alt="profile"
-					/>
+					<img src={image} alt="profile" />
 				</div>
 			</MenuStyle>
 			<LogoutField isClicked={isClicked}>
@@ -89,7 +87,7 @@ const LogoutField = styled.div`
 	align-items: center;
 	justify-content: center;
 	border-bottom-left-radius: 20px;
-	position: absolute;
+	position: fixed;
 	top: ${(props) => (props.isClicked ? '72px' : '0px')};
 	right: 0;
 	background-color: #171717;

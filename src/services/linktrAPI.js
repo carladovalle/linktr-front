@@ -5,7 +5,7 @@ function createHeaders() {
 	const auth = JSON.parse(localStorage.getItem('token'));
 	const config = {
 		headers: {
-			Authorization: `Bearer ${auth}`,
+			Authorization: `Bearer ${auth.token}`,
 		},
 	};
 
@@ -57,6 +57,12 @@ function getHashtags() {
 	return promise;
 }
 
+function getUserPosts(id) {
+	const config = createHeaders();
+	const promise = axios.get(`${BASE_URL}/users/${id}`, config);
+	return promise;
+}
+
 export {
 	getPost,
 	publishPost,
@@ -66,4 +72,5 @@ export {
 	getLikes,
 	addLike,
 	removeLike,
+	getUserPosts,
 };

@@ -4,6 +4,7 @@ import { getPost, publishPost } from '../../services/linktrAPI';
 
 export default function SubmitBox({ setPosts, posts, setMessage }) {
 	const [postContent, setPostContent] = useState({});
+	const { image } = JSON.parse(localStorage.getItem('token'));
 	const [isPublished, setIsPublished] = useState(false);
 
 	function handleForm(e) {
@@ -48,10 +49,7 @@ export default function SubmitBox({ setPosts, posts, setMessage }) {
 
 	return (
 		<BoxStyle>
-			<img
-				src="https://sempreupdate.com.br/wp-content/uploads/2019/02/qual-a-diferenca-entre-programador-e-desenvolvedor.jpg"
-				alt="profile"
-			/>
+			<img src={image} alt="profile" />
 
 			<PostForm isPublished={isPublished} onSubmit={sendForm}>
 				<h2>What are you going to share today?</h2>

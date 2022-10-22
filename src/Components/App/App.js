@@ -4,6 +4,7 @@ import TimelinePage from '../TimelinePage/TimelanePage.js';
 import HashTagPage from '../HashtagPage/HashtagPage';
 import LoginPage from '../LoginPage/LoginPage.js';
 import RegisterPage from '../LoginPage/RegisterPage.js';
+import UserPage from '../UserPage/UserPage';
 
 export default function App() {
 	return (
@@ -15,7 +16,8 @@ export default function App() {
 					<Route path="/" element={<LoginPage />} />
 					<Route path="/sign-up" element={<RegisterPage />} />
 					<Route path="/timeline" element={<TimelinePage />}></Route>
-					<Route path="/hashtag/:hashtag" element={<HashTagPage/>}/>
+					<Route path="/hashtag/:hashtag" element={<HashTagPage />} />
+					<Route path="/user/:id" element={<UserPage />} />
 				</Routes>
 			</BrowserRouter>
 		</>
