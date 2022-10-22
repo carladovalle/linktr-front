@@ -1,35 +1,32 @@
 import styled from "styled-components";
-import { useState, useRef} from "react";
-import { AiTwotoneHeart, AiOutlineHeart } from "react-icons/ai";
+import { ReactTagify } from "react-tagify";
+import notImage from "../../Common/404.jpeg"
+import { useNavigate } from "react-router-dom";
+import { useState, useRef } from "react";
+import LikesPostCard from "./LikesPostCard";
 import { BiEditAlt } from 'react-icons/bi';
 import { AiFillDelete } from 'react-icons/ai';
-import { IconContext } from "react-icons";
-import { addLike, removeLike, deletePost, editPost } from "../../services/linktrAPI.js";
+import { deletePost } from "../../services/linktrAPI.js";
 import ConfirmScreen from "./ConfirmScreen.js";
 
-export default function PostCard({id, userImg, name, text, urlInfos, liked, rerender, setRerender, posts}){
-    
+
+export default function PostCard({id, userImg, name, text, urlInfos, liked, rerender, setRerender, userId, posts}){
+
     const [showConfirmScreen, setShowConfirmScreen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const inputEditText = useRef(null);
-    //const [newDescription, setNewDescription] = useState(post.description);
-
-    function like () {
-
-        const token = localStorage.getItem("token");
-        const postId = id;
-        const config = { headers: { "Authorization": `Bearer ${token}` } };
-
-        if (liked === true) {
-            const promise = removeLike({ postId }, config);
-            promise.then(res => setRerender(!rerender))
-            .catch(err => console.log("dislike not available"))
-        } else {
-            const promise = addLike({ postId }, config);
-            promise.then(res => setRerender(!rerender))
-            .catch(err => console.log("like not available"))
-        }
+    const [newText, setNewText] = useState(text);
+    const navigate = useNavigate()
+    const tagStyle = {
+        color: '#FFFFFF',
+        fontWeight: 'bold',
+        cursor: 'pointer'
+      };
+    
+    function hashtag(name){
+        const params = name.slice(1)
+        navigate(`/hashtag/${params}`)
     }
 
     function screenToDelete(){
@@ -39,11 +36,9 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
     function deletePosts () {
 
         setIsLoading(true);
-        const token = localStorage.getItem("token");
         const postId = id;
-        const config = { headers: { "Authorization": `Bearer ${token}` } };
 
-        const promise = deletePost({ postId }, config);
+        const promise = deletePost({ postId });
 
         promise.then(() => {
             window.location.reload();
@@ -59,60 +54,64 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
         await setIsEditing(true);
         inputEditText.current?.focus();
     }
-
-    /*function editPosts () {
-
-        const token = localStorage.getItem("token");
-        const postId = id;
-        const config = { headers: { "Authorization": `Bearer ${token}` } };
-
-        const promise = editPost({ postId }, config);
-
-        promise.then(() => {
-            console.log("ok")
-        }).catch(() => {
-            alert("Could not edit post.")
-        });
-
-    } */
-
-    const likeIconColor = liked ? "red" : "white";
-
+    
+    if(!urlInfos.image){
+        urlInfos.image = notImage }
+    
     return(
         <Container>
                     {showConfirmScreen && (
-                    <ConfirmScreen 
-                        posts={posts} 
-                        deletePost={deletePosts}
-                        setShow={setShowConfirmScreen}
-                        isLoading={isLoading}
-                    />
-                )}
+                        <ConfirmScreen 
+                            posts={posts} 
+                            deletePost={deletePosts}
+                            setShow={setShowConfirmScreen}
+                            isLoading={isLoading}
+                        />
+                    )}
             <span className="leftSide">
                 <img src={userImg} alt="profile-img"/>
-                <IconContext.Provider value={{ className: "likeIcon", color: likeIconColor}}>
-                    {liked ? < AiTwotoneHeart onClick={() => like()}/> : < AiOutlineHeart onClick={() => like()}/>} 
-                </IconContext.Provider>
+                <LikesPostCard id={id} liked={liked} rerender={rerender} setRerender={setRerender}/>
             </span>
             
             <span className="infos">
                 <div className="firstLine">
-                    <h4>{name}</h4>
-                        <div className="actions">
-                            {isEditing? <BiEditAlt onClick={() => setIsEditing(false)} /> : <BiEditAlt onClick={editPost} />}
-                            <div className="space">
-                                <AiFillDelete onClick={() => screenToDelete()}/>
-                            </div>
-                        </div>
+                    <h4 onClick={() => navigate(`/user/${userId}`)}>{name}</h4>
+                    <div className="actions">
+                        <Edit>
+                            {isEditing? 
+                                <BiEditAlt onClick={() => setIsEditing(false)} /> 
+                                : 
+                                <BiEditAlt onClick={editPost} />}
+                        </Edit>
+                        <AiFillDelete onClick={() => screenToDelete()} />
+                    </div>
                 </div>
+                {isEditing ?
+                    <EditText 
+                        ref={inputEditText} 
+                        type="text" 
+                        value={newText}
+                    /> 
+                    : 
+                    <h5>{text}</h5>
+                }
+                {text ?
+                <ReactTagify 
+                tagStyle={tagStyle}
+                tagClicked={(tag)=> hashtag(tag)}>
+                    <h5>{text}</h5>
+                </ReactTagify>
+                :
                 <h5>{text}</h5>
+                }
+
                 <LinkCard onClick={() => window.open(urlInfos.url)}>
                     <div>
                         <h2>{urlInfos.title}</h2>
                         <h3>{urlInfos.description}</h3>
                         <p>{urlInfos.url}</p>
                     </div>
-                    <img src={urlInfos.img} alt=""/>
+                    <img src={urlInfos.image} alt=""/>
                 </LinkCard>
             </span>
         </Container>
@@ -176,6 +175,11 @@ const Container = styled.div`
         line-height: 23px;
         color: #ffffff;
         word-break: break-word;
+
+        &:hover{
+            cursor: pointer;
+            filter: brightness(0.90)
+        }
     }
 
     h5{
@@ -318,3 +322,27 @@ const LinkCard = styled.div`
 
     }
 `
+const Edit = styled.div`
+`
+const EditText = styled.textarea`
+    resize: vertical;
+    background: #171717;
+    width: 100%;
+    max-height: 150px;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 20px;
+    background: #FFFFFF;
+    border-radius: 7px; 
+
+    &:focus {
+        box-shadow: 0 0 0 0;
+        border: 0 none;
+        outline: 0;
+    }
+
+    @media (max-width: 610px) {
+        font-size: 15px;
+        line-height: 18px;
+    }
+`;

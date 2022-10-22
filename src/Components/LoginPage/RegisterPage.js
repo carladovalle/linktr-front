@@ -18,7 +18,9 @@ export default function RegisterPage() {
 
     function sendForm(event){
         event.preventDefault()
-        axios.post('http://localhost:4000/sign-up', form)
+        const url = "http://localhost:5000"
+        //const url = process.env.REACT_APP_API_BASE_URL
+        axios.post(`${url}/sign-up`, form)
           .then((response) => {
             console.log(response);
             navigate("/")

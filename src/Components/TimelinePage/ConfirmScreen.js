@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useState } from "react";
 import { ThreeDots } from 'react-loader-spinner';
 
 export default function ConfirmScreen({setShow, deletePost, posts, isLoading}) {

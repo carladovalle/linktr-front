@@ -3,6 +3,7 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import { useEffect, useState } from 'react';
 import { searchUsers } from '../../services/linktrAPI';
 import { DebounceInput } from 'react-debounce-input';
+import { useNavigate } from 'react-router-dom';
 
 export default function SearchBar() {
 	const [searchResult, setSearchResult] = useState([]);
@@ -43,8 +44,14 @@ export default function SearchBar() {
 				{searchResult.length === 0 ? (
 					<span>Sorry, there are no results for this search.</span>
 				) : (
-					searchResult.map(({ name, image }, index) => (
-						<UserFound name={name} image={image} key={index} />
+					searchResult.map(({ id, name, image }, index) => (
+						<UserFound
+							name={name}
+							image={image}
+							key={index}
+							id={id}
+							setIsSearching={setIsSearching}
+						/>
 					))
 				)}
 			</UsersContainer>
@@ -52,9 +59,15 @@ export default function SearchBar() {
 	);
 }
 
-function UserFound({ name, image }) {
+function UserFound({ id, name, image, setIsSearching }) {
+	const navigate = useNavigate();
 	return (
-		<UserLine>
+		<UserLine
+			onClick={() => {
+				navigate(`/user/${id}`);
+				window.location.reload();
+			}}
+		>
 			<img src={image} alt="" />
 			<p>{name}</p>
 		</UserLine>
