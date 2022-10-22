@@ -9,7 +9,6 @@ function LikesPostCard ({id, liked, rerender, setRerender}) {
 
     const [totalLikes, setTotalLikes] = useState([]);
     const [userId, setUserId] = useState(0);
-    //const [tipText, setTipText] = useState("");
     let tipText = "";
 
     useEffect(() => {
