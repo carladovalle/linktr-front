@@ -72,6 +72,8 @@ export default function TimelinePage() {
 						setPosts={setPosts}
 						setMessage={setMessage}
 						posts={posts}
+						rerender={rerender}
+						setRerender={setRerender}
 					/>
 					{posts.length === 0 ? (
 						<h6>{message}</h6>
