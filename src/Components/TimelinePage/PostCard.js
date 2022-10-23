@@ -59,18 +59,21 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
 
         e.preventDefault();
 
+        setIsLoading(true);
+
         const postId = id;
 
         const promise = editPost({ postId });
 
         promise.then(() => {
-            setIsEditing(false);
+            setIsLoading(false);
         }).catch(() => {
-            alert("Could not edit post.")
+            alert("Could not edit post.");
+            setIsEditing(false);
         });
 
     }
-
+    console.log(newText)
     document.onkeydown = function handleKeyDown(e){
         try {
             switch(e.key) {
@@ -119,8 +122,9 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
                         ref={inputEditText} 
                         type="text" 
                         value={newText}
+                        disabled={isLoading}
                         onChange={e => setNewText(e.target.value)}
-                        onKeyPress={(e) => { e.key === 'Enter' && updatePosts(e); }}
+                        onKeyPress={(e) => { e.key === 'Enter' && updatePosts(e) }}
                     /> 
                     : 
                     <h5>{newText}</h5>
