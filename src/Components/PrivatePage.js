@@ -8,10 +8,12 @@ export default function PrivatePage({ children }) {
 
 	useEffect(() => {
 		const data = localStorage.getItem('token');
+    console.log(data)
 		if (!data) {
 			setIsAllowed(false);
 			return;
 		}
+    console.log(data)
 		const token = JSON.parse(data).token;
 		async function fetchData() {
 			try {
@@ -45,20 +47,3 @@ export default function PrivatePage({ children }) {
 		</>
 	);
 }
-
-// export default function PrivatePage({ children }) {
-
-// 	const data = localStorage.getItem('token');
-// 	if (!data) {
-// 		<Navigate to="/" replace>
-// 		return;
-// 	}
-// 	const token = JSON.parse(data).token;
-
-// 	return (
-// 		<>
-// 			<TopMenu />
-// 			{children}
-// 		</>
-// 	);
-// }

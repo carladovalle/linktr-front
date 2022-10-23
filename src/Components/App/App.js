@@ -16,8 +16,22 @@ export default function App() {
 				<Routes>
 					<Route path="/" element={<LoginPage />} />
 					<Route path="/sign-up" element={<RegisterPage />} />
-					<Route path="/timeline" element={<TimelinePage />}></Route>
-					<Route path="/hashtag/:hashtag" element={<HashTagPage />} />
+					<Route
+						path="/timeline"
+						element={
+							<PrivatePage>
+								<TimelinePage />
+							</PrivatePage>
+						}
+					/>
+					<Route
+						path="/hashtag/:hashtag"
+						element={
+							<PrivatePage>
+								<HashTagPage />
+							</PrivatePage>
+						}
+					/>
 					<Route
 						path="/user/:id"
 						element={
