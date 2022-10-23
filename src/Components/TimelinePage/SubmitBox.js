@@ -159,6 +159,11 @@ const PostForm = styled.form`
 		font-size: 14px;
 		font-weight: 700;
 		opacity: ${(props) => (props.isPublished ? '0.5' : '1')};
+
+		&:hover{
+			cursor: pointer;
+			filter: brightness(0.8);
+		}
 	}
 
 	@media (max-width: 675px) {

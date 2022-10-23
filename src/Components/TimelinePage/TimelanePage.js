@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import PostCard from './PostCard';
 import { getPost, getLikes } from '../../services/linktrAPI';
 import SubmitBox from './SubmitBox';
-import TopMenu from '../../Common/TopMenu/TopMenu.js';
 
 export default function TimelinePage() {
 	const [posts, setPosts] = useState([]);
@@ -63,7 +62,6 @@ export default function TimelinePage() {
 
 	return (
 		<>
-			<TopMenu />
 			<Container>
 				<div className="content">
 					<h1>timeline</h1>
