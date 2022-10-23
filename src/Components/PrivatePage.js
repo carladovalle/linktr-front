@@ -13,11 +13,10 @@ export default function PrivatePage({ children }) {
 			setIsAllowed(false);
 			return;
 		}
-    console.log(data)
 		const token = JSON.parse(data).token;
 		async function fetchData() {
 			try {
-				const promise = await axios.get('http://localhost:5000/access/auth', {
+				const promise = await axios.get('http://localhost:4000/access/auth', {
 					headers: { Authorization: `Bearer ${token}` },
 				});
 				localStorage.setItem('userImage', promise.data.image);
