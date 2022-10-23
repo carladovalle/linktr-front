@@ -6,9 +6,8 @@ import { useState, useRef } from "react";
 import LikesPostCard from "./LikesPostCard";
 import { BiEditAlt } from 'react-icons/bi';
 import { AiFillDelete } from 'react-icons/ai';
-import { deletePost } from "../../services/linktrAPI.js";
+import { deletePost, editPost } from "../../services/linktrAPI.js";
 import ConfirmScreen from "./ConfirmScreen.js";
-
 
 export default function PostCard({id, userImg, name, text, urlInfos, liked, rerender, setRerender, userId, posts}){
 
@@ -16,7 +15,8 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
     const [isLoading, setIsLoading] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const inputEditText = useRef(null);
-    const [newText, setNewText] = useState(text);
+    const [newText, setNewText] = useState("");
+    const [descriptionText, setDescriptionText ] = useState(text);
     const navigate = useNavigate()
     const tagStyle = {
         color: '#FFFFFF',
@@ -63,17 +63,19 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
 
         const postId = id;
 
-        const promise = editPost({ postId });
+        const promise = editPost({ postId }, {descriptionText: newText});
 
         promise.then(() => {
+            setDescriptionText(newText);
+            setIsEditing(false);
             setIsLoading(false);
         }).catch(() => {
-            alert("Could not edit post.");
             setIsEditing(false);
+            alert("Could not edit post.");
         });
 
     }
-    console.log(newText)
+
     document.onkeydown = function handleKeyDown(e){
         try {
             switch(e.key) {
@@ -119,24 +121,19 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
                 </div>
                 {isEditing ?
                     <EditText 
+                        disabled={isLoading}
                         ref={inputEditText} 
                         type="text" 
                         value={newText}
-                        disabled={isLoading}
                         onChange={e => setNewText(e.target.value)}
                         onKeyPress={(e) => { e.key === 'Enter' && updatePosts(e) }}
                     /> 
                     : 
-                    <h5>{newText}</h5>
-                }
-                {text ?
-                <ReactTagify 
-                tagStyle={tagStyle}
-                tagClicked={(tag)=> hashtag(tag)}>
-                    <h5>{text}</h5>
-                </ReactTagify>
-                :
-                <h5>{text}</h5>
+                    <ReactTagify 
+                        tagStyle={tagStyle}
+                        tagClicked={(tag)=> hashtag(tag)}>
+                            <h5>{descriptionText}</h5>
+                    </ReactTagify>
                 }
 
                 <LinkCard onClick={() => window.open(urlInfos.url)}>

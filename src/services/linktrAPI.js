@@ -76,7 +76,7 @@ function deletePost(postId) {
     return promise;
 }
 
-function editPost(postId) {
+function editThePost(postId) {
 	const config = createHeaders();
 	const promise = axios.put(`${BASE_URL}/posts/edit/${postId.postId}`, config);
     return promise;
@@ -93,6 +93,6 @@ export {
     addLike,
     removeLike,
 	deletePost, 
-	editPost,
+	editThePost,
 	getUserPosts,
 };
