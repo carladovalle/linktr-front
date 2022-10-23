@@ -1,12 +1,14 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PostCard from '../TimelinePage/PostCard';
 import { getUserPosts } from '../../services/linktrAPI';
 import HashtagList from '../TimelinePage/HashtagsList';
 import Loading from '../../Common/Loading';
+import { BsArrowLeftCircle } from 'react-icons/bs';
 
 export default function UserPage() {
+	const navigate = useNavigate();
 	const { id } = useParams();
 	const [posts, setPosts] = useState([]);
 	const [message, setMessage] = useState('Loading...');
@@ -45,6 +47,7 @@ export default function UserPage() {
 					<Loading message={message} />
 				) : (
 					<div className="content">
+						<BsArrowLeftCircle onClick={() => navigate('/timeline')} />
 						<header>
 							<img src={image} alt="profile" />
 							<h1>{name}'s posts</h1>
@@ -87,6 +90,19 @@ const Container = styled.div`
 			color: #ffffff;
 			text-align: center;
 		}
+
+		> svg {
+			color: #ffffff;
+			font-size: 30px;
+			position: fixed;
+			top: 18%;
+			left: 5%;
+
+			&:hover {
+				cursor: pointer;
+				filter: brightness(0.7);
+			}
+		}
 	}
 
 	img {
@@ -124,7 +140,7 @@ const Container = styled.div`
 	}
 
 	@media (max-width: 675px) {
-		margin-top: 144px;
+		margin-top: 174px;
 
 		.content {
 			width: 100%;
