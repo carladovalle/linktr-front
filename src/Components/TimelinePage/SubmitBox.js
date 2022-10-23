@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { getPost, publishPost } from '../../services/linktrAPI';
 
-export default function SubmitBox({ setPosts, posts, setMessage }) {
+export default function SubmitBox({ setPosts, posts, setMessage, rerender, setRerender }) {
 	const [postContent, setPostContent] = useState({});
 	const { image } = JSON.parse(localStorage.getItem('token'));
 	const [isPublished, setIsPublished] = useState(false);
@@ -25,7 +25,8 @@ export default function SubmitBox({ setPosts, posts, setMessage }) {
 			setMessage('Loading...');
 			setPostContent({});
 			setIsPublished(false);
-			const postsListPromise = getPost();
+			setRerender(!rerender);
+			/* const postsListPromise = getPost();
 			postsListPromise
 				.then((res) => {
 					if (posts.length < 1) {
@@ -37,7 +38,7 @@ export default function SubmitBox({ setPosts, posts, setMessage }) {
 					setMessage(
 						'An error occured while trying to fetch the posts, please refresh the page'
 					);
-				});
+				}); */
 		});
 		promise.catch(() => {
 			alert(

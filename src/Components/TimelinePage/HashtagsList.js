@@ -5,7 +5,7 @@ import styled from "styled-components"
 
 function Hashtag({name}){
     const params = name.slice(1)
-    const navigate = useNavigate()
+    const navigate = useNavigate()    
 
     return(
         <li onClick={() => navigate(`/hashtag/${params}`)}>{name}</li>
@@ -15,6 +15,17 @@ function Hashtag({name}){
 export default function HashtagList(){
 
     const [hashtags , setHashtags] = useState([])
+    const [switchRefresh, setSwitchRefresh] = useState(false)
+
+    function refreshList(){
+        if(switchRefresh){
+            setSwitchRefresh(false)
+        }else{
+            setSwitchRefresh(true)
+        }
+    }
+
+    setInterval(refreshList, 60000)
 
     useEffect(() => {
 
@@ -25,7 +36,7 @@ export default function HashtagList(){
 
         promise.catch(err =>{
         })
-    }, [])
+    }, [switchRefresh])
 
     return(
         <Container>

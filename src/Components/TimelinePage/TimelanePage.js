@@ -4,6 +4,7 @@ import PostCard from './PostCard';
 import { getPost, getLikes } from '../../services/linktrAPI';
 import SubmitBox from './SubmitBox';
 import TopMenu from '../../Common/TopMenu/TopMenu.js';
+import HashtagList from './HashtagsList';
 
 export default function TimelinePage() {
 	const [posts, setPosts] = useState([]);
@@ -71,6 +72,8 @@ export default function TimelinePage() {
 						setPosts={setPosts}
 						setMessage={setMessage}
 						posts={posts}
+						rerender={rerender}
+						setRerender={setRerender}
 					/>
 					{posts.length === 0 ? (
 						<h6>{message}</h6>
@@ -93,6 +96,7 @@ export default function TimelinePage() {
 						))
 					)}
 				</div>
+				<HashtagList/>
 			</Container>
 		</>
 	);
@@ -100,8 +104,7 @@ export default function TimelinePage() {
 
 const Container = styled.div`
 	display: flex;
-	flex-direction: column;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: center;
 	margin-top: 125px;
 	width: 100vw;
