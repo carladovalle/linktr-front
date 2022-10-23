@@ -1,53 +1,103 @@
-import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import PostCard from '../TimelinePage/PostCard';
-import { getHashtagPost } from '../../services/linktrAPI';
-import TopMenu from '../../Common/TopMenu/TopMenu.js';
-import HashtagList from '../TimelinePage/HashtagsList';
+import { useParams } from "react-router-dom"
+import { useEffect, useState } from "react"
+import styled from "styled-components"
+import PostCard from "../TimelinePage/PostCard"
+import {getHashtagPost, getLikes} from "../../services/linktrAPI"
+import TopMenu from "../../Common/TopMenu/TopMenu"
+import HashtagList from "../TimelinePage/HashtagsList"
 
-export default function HashTagPage() {
-	const { hashtag } = useParams();
-	const [posts, setPosts] = useState([]);
+export default function HashTagPage(){
+    const { hashtag } = useParams()
+    const [posts, setPosts] = useState([]);
 	const [message, setMessage] = useState('Loading...');
+	const [rerender, setRerender] = useState(false);
+    const [isHashtag, setIsHashtag] = useState()
 
 	useEffect(() => {
-		const promise = getHashtagPost(hashtag);
-		promise.then((res) => {
-			setPosts(res.data);
-			if (posts.length < 1) {
-				setMessage('There are no post yet');
-			}
-		});
+		const token = JSON.parse(localStorage.getItem("token"));
+		const config = { headers: { Authorization: `Bearer ${token}` } };
+		const promise1 = getHashtagPost(hashtag);
+		const promise2 = getLikes(config);
+		let likes = [];
+		let postsLike = [];
+		let postsNoLike = [];
+        
+        if(hashtag !== isHashtag){
+            setIsHashtag(hashtag)
+            setPosts([])
+            setMessage('Loading...')
+            
+        }
 
-		promise.catch((err) => {
-			setMessage(
-				'An error occured while trying to fetch the posts, please refresh the page'
-			);
-		});
-	}, []);
+		promise2
+			.then((res) => {
+				likes = res.data;
+			})
+			.catch((err) => console.log('likes not available'));
+
+		promise1
+			.then((res) => {
+				postsNoLike = res.data;
+
+				if (likes.length !== 0) {
+					for (let i = 0; i < postsNoLike.length; i++) {
+						for (let j = 0; j < likes.length; j++) {
+							if (postsNoLike[i].id === likes[j].postId) {
+								const newItem = { ...postsNoLike[i], liked: true };
+								postsLike.push(newItem);
+								break;
+							}
+
+							if (j === likes.length - 1) {
+								const newItem = { ...postsNoLike[i], liked: false };
+								postsLike.push(newItem);
+							}
+						}
+					}
+				} else {
+					for (let i = 0; i < postsNoLike.length; i++) {
+						const newItem = { ...postsNoLike[i], liked: false };
+						postsLike.push(newItem);
+					}
+				}
+				console.log(postsLike)
+				setPosts(postsLike);
+				if (postsLike.length < 1) {
+					setMessage('There are no post yet');
+				}
+			})
+			.catch((err) => {
+				setMessage(
+					'An error occured while trying to fetch the posts, please refresh the page'
+				);
+			});
+	}, [rerender, hashtag]);
 
 	return (
 		<>
 			<TopMenu />
 			<Container>
 				<div className="content">
-					<h1>#{hashtag}</h1>
+					<h1># {hashtag}</h1>
 					{posts.length === 0 ? (
 						<h6>{message}</h6>
 					) : (
 						posts.map((item, index) => (
 							<PostCard
 								key={index}
+								id={item.id}
 								userImg={item.image}
 								name={item.name}
 								text={item.content}
 								urlInfos={item.urlInfos}
+								liked={item.liked}
+								rerender={rerender}
+								setRerender={setRerender}
 							/>
 						))
 					)}
 				</div>
-				<HashtagList />
+				<HashtagList/>
 			</Container>
 		</>
 	);
