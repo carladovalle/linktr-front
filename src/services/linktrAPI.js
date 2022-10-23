@@ -32,7 +32,7 @@ function searchUsers(params) {
 
 function getLikes() {
 	const config = createHeaders();
-	const promise = axios.get(`${BASE_URL}likes`, config);
+	const promise = axios.get(`${BASE_URL}/likes`, config);
 	return promise;
 }
 

@@ -60,9 +60,9 @@ export default function HashTagPage(){
 						postsLike.push(newItem);
 					}
 				}
-
+				console.log(postsLike)
 				setPosts(postsLike);
-				if (posts.length < 1) {
+				if (postsLike.length < 1) {
 					setMessage('There are no post yet');
 				}
 			})
@@ -78,7 +78,7 @@ export default function HashTagPage(){
 			<TopMenu />
 			<Container>
 				<div className="content">
-					<h1>{hashtag}</h1>
+					<h1># {hashtag}</h1>
 					{posts.length === 0 ? (
 						<h6>{message}</h6>
 					) : (
