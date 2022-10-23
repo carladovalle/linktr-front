@@ -1,27 +1,32 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PostCard from '../TimelinePage/PostCard';
 import { getUserPosts } from '../../services/linktrAPI';
-import TopMenu from '../../Common/TopMenu/TopMenu';
 import HashtagList from '../TimelinePage/HashtagsList';
 import Loading from '../../Common/Loading';
+import { BsArrowLeftCircle } from 'react-icons/bs';
 
 export default function UserPage() {
+	const navigate = useNavigate();
 	const { id } = useParams();
-	const { image } = JSON.parse(localStorage.getItem('token'));
 	const [posts, setPosts] = useState([]);
 	const [message, setMessage] = useState('Loading...');
 	const [name, setName] = useState('');
+	const [image, setImage] = useState('');
+	const [hasPost, setHasPost] = useState(false);
 
 	useEffect(() => {
 		const promise = getUserPosts(id);
 		promise.then((res) => {
 			setPosts(res.data);
-			setName(res.data[0].name);
-			if (posts.length < 1) {
-				setMessage('There are no post yet');
+			if (res.data[0].link === null) {
+				setMessage("This user haven't any posts at moment");
+			} else {
+				setHasPost(true);
 			}
+			setName(res.data[0].name);
+			setImage(res.data[0].image);
 		});
 
 		promise.catch((err) => {
@@ -37,25 +42,29 @@ export default function UserPage() {
 
 	return (
 		<>
-			<TopMenu />
 			<Container>
 				{posts.length === 0 ? (
 					<Loading message={message} />
 				) : (
 					<div className="content">
+						<BsArrowLeftCircle onClick={() => navigate('/timeline')} />
 						<header>
 							<img src={image} alt="profile" />
 							<h1>{name}'s posts</h1>
 						</header>
-						{posts.map((item, index) => (
-							<PostCard
-								key={index}
-								userImg={item.image}
-								name={item.name}
-								text={item.content}
-								urlInfos={item.urlInfos}
-							/>
-						))}
+						{hasPost === false ? (
+							<p>This user haven't posts yet</p>
+						) : (
+							posts.map((item, index) => (
+								<PostCard
+									key={index}
+									userImg={item.image}
+									name={item.name}
+									text={item.content}
+									urlInfos={item.urlInfos}
+								/>
+							))
+						)}
 					</div>
 				)}
 				<HashtagList />
@@ -73,6 +82,27 @@ const Container = styled.div`
 
 	.content {
 		width: 611px;
+
+		> p {
+			margin-top: 50px;
+			font-size: 18px;
+			font-family: 'Oswald', sans-serif;
+			color: #ffffff;
+			text-align: center;
+		}
+
+		> svg {
+			color: #ffffff;
+			font-size: 30px;
+			position: fixed;
+			top: 18%;
+			left: 5%;
+
+			&:hover {
+				cursor: pointer;
+				filter: brightness(0.7);
+			}
+		}
 	}
 
 	img {
@@ -110,7 +140,7 @@ const Container = styled.div`
 	}
 
 	@media (max-width: 675px) {
-		margin-top: 144px;
+		margin-top: 174px;
 
 		.content {
 			width: 100%;

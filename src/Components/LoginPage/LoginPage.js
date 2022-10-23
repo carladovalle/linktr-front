@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import LogoDiv from './LogoDiv.js';
@@ -9,6 +9,14 @@ export default function LoginPage() {
 	const [form, setForm] = useState({});
 	const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 	const navigate = useNavigate();
+	const data = localStorage.getItem('token');
+
+	useEffect(() => {
+		if (data) {
+				navigate("/timeline")
+				return;
+		}
+},[data, navigate])
 
 	function handleForm(event) {
 		setForm({
@@ -19,7 +27,7 @@ export default function LoginPage() {
 
 	function sendForm(event) {
 		event.preventDefault();
-		const url = process.env.REACT_APP_API_BASE_URL
+		const url = "http://localhost:5000";
 		axios
 			.post(`${url}/sign-in`, form)
 			.then((response) => {

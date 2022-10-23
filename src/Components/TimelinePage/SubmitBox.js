@@ -4,7 +4,7 @@ import { getPost, publishPost } from '../../services/linktrAPI';
 
 export default function SubmitBox({ setPosts, posts, setMessage, rerender, setRerender }) {
 	const [postContent, setPostContent] = useState({});
-	const { image } = JSON.parse(localStorage.getItem('token'));
+	const image = localStorage.getItem('userImage');
 	const [isPublished, setIsPublished] = useState(false);
 
 	function handleForm(e) {
@@ -160,6 +160,11 @@ const PostForm = styled.form`
 		font-size: 14px;
 		font-weight: 700;
 		opacity: ${(props) => (props.isPublished ? '0.5' : '1')};
+
+		&:hover{
+			cursor: pointer;
+			filter: brightness(0.8);
+		}
 	}
 
 	@media (max-width: 675px) {

@@ -5,9 +5,10 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function TopMenu() {
-	const { image } = JSON.parse(localStorage.getItem('token'));
+	const image = localStorage.getItem('userImage');
 	const navigate = useNavigate();
 	const [isClicked, setIsClicked] = useState(false);
+	console.log(image);
 
 	function openLogoutField() {
 		setIsClicked(!isClicked);

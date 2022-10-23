@@ -3,7 +3,6 @@ import { useEffect, useState } from "react"
 import styled from "styled-components"
 import PostCard from "../TimelinePage/PostCard"
 import {getHashtagPost, getLikes} from "../../services/linktrAPI"
-import TopMenu from "../../Common/TopMenu/TopMenu"
 import HashtagList from "../TimelinePage/HashtagsList"
 
 export default function HashTagPage(){
@@ -75,7 +74,6 @@ export default function HashTagPage(){
 
 	return (
 		<>
-			<TopMenu />
 			<Container>
 				<div className="content">
 					<h1># {hashtag}</h1>
