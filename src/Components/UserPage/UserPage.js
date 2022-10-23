@@ -12,18 +12,19 @@ export default function UserPage() {
 	const [message, setMessage] = useState('Loading...');
 	const [name, setName] = useState('');
 	const [image, setImage] = useState('');
+	const [hasPost, setHasPost] = useState(false);
 
 	useEffect(() => {
 		const promise = getUserPosts(id);
 		promise.then((res) => {
 			setPosts(res.data);
-			if (res.data.length < 1) {
+			if (res.data[0].link === null) {
 				setMessage("This user haven't any posts at moment");
-				return;
 			} else {
-				setName(res.data[0].name);
-				setImage(res.data[0].image);
+				setHasPost(true);
 			}
+			setName(res.data[0].name);
+			setImage(res.data[0].image);
 		});
 
 		promise.catch((err) => {
@@ -48,15 +49,19 @@ export default function UserPage() {
 							<img src={image} alt="profile" />
 							<h1>{name}'s posts</h1>
 						</header>
-						{posts.map((item, index) => (
-							<PostCard
-								key={index}
-								userImg={item.image}
-								name={item.name}
-								text={item.content}
-								urlInfos={item.urlInfos}
-							/>
-						))}
+						{hasPost === false ? (
+							<p>This user haven't posts yet</p>
+						) : (
+							posts.map((item, index) => (
+								<PostCard
+									key={index}
+									userImg={item.image}
+									name={item.name}
+									text={item.content}
+									urlInfos={item.urlInfos}
+								/>
+							))
+						)}
 					</div>
 				)}
 				<HashtagList />
@@ -74,6 +79,14 @@ const Container = styled.div`
 
 	.content {
 		width: 611px;
+
+		> p {
+			margin-top: 50px;
+			font-size: 18px;
+			font-family: 'Oswald', sans-serif;
+			color: #ffffff;
+			text-align: center;
+		}
 	}
 
 	img {
