@@ -38,7 +38,8 @@ function LikesPostCard ({id, liked, rerender, setRerender}) {
     if (totalLikes.length !== 0) {
         if (liked === true) {
             const index = totalLikes.findIndex(element => element.userIdLike === userId);
-            const totalLikesNoUser = totalLikes.slice(index, index+1);
+            const totalLikesNoUser = [...totalLikes]; 
+            totalLikesNoUser.splice(index, 1);
     
             if (totalLikes.length === 1) {
                 tipText = `Você`
