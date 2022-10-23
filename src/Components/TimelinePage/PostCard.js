@@ -102,7 +102,7 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
                         />
                     )}
             <span className="leftSide">
-                <img src={userImg} alt="profile-img"/>
+                <img src={userImg} alt="profile-img"  onClick={() => navigate(`/user/${userId}`)}/>
                 <LikesPostCard id={id} liked={liked} rerender={rerender} setRerender={setRerender}/>
             </span>
             
@@ -166,6 +166,11 @@ const Container = styled.div`
         height: 50px;
         border-radius: 50%;
         object-fit: cover;
+
+        &:hover{
+            cursor: pointer;
+            filter: brightness(0.90)
+        }
     }
 
     .leftSide {

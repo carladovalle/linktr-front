@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LogoDiv from './LogoDiv';
 import axios from 'axios';
@@ -9,6 +9,15 @@ export default function RegisterPage() {
     const [form, setForm] = useState({})
     const [isButtonDisabled, setIsButtonDisabled] = useState(false)
     const navigate = useNavigate()
+    const data = localStorage.getItem('token');
+
+    useEffect(() => {
+        if (data) {
+            navigate("/timeline")
+            return;
+        }
+    },[data, navigate])
+    
 
     function handleForm(event) {
         setForm({
