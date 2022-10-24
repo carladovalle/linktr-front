@@ -8,7 +8,6 @@ export default function TopMenu() {
 	const image = localStorage.getItem('userImage');
 	const navigate = useNavigate();
 	const [isClicked, setIsClicked] = useState(false);
-	console.log(image);
 
 	function openLogoutField() {
 		setIsClicked(!isClicked);

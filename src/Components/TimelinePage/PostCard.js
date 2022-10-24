@@ -10,7 +10,8 @@ import { deletePost, editPost } from "../../services/linktrAPI.js";
 import ConfirmScreen from "./ConfirmScreen.js";
 
 export default function PostCard({id, userImg, name, text, urlInfos, liked, rerender, setRerender, userId, posts}){
-    const idLocalStorage = JSON.parse(localStorage.getItem('token'))
+    const idLocalStorage = Number(localStorage.getItem('id'))
+    const style = { color: "white", fontSize: "18px", margin: "0 3px" }
     const [showConfirmScreen, setShowConfirmScreen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -111,18 +112,21 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
                     <h4 onClick={() => navigate(`/user/${userId}`)}>{name}</h4>
 
                     {
-                        
+                        userId === idLocalStorage ?
+                            <div className="actions">
+                                <Edit>
+                                    {isEditing? 
+                                        <BiEditAlt style={style} onClick={() => setIsEditing(false)} /> 
+                                        : 
+                                        <BiEditAlt style={style} onClick={editPost} />}
+                                </Edit>
+                                <AiFillDelete style={style} onClick={() => screenToDelete()} />
+                            </div>
+                        :
+                            <></>
                     }
 
-                    <div className="actions">
-                        <Edit>
-                            {isEditing? 
-                                <BiEditAlt onClick={() => setIsEditing(false)} /> 
-                                : 
-                                <BiEditAlt onClick={editPost} />}
-                        </Edit>
-                        <AiFillDelete onClick={() => screenToDelete()} />
-                    </div>
+                    
                 </div>
                 {isEditing ?
                     <EditText 

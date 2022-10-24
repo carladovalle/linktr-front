@@ -19,25 +19,25 @@ export default function App() {
 					<Route
 						path="/timeline"
 						element={
-							
+							<PrivatePage>
 								<TimelinePage />
-							
+							</PrivatePage>
 						}
 					/>
 					<Route
 						path="/hashtag/:hashtag"
 						element={
-							
+							<PrivatePage>
 								<HashTagPage />
-							
+							</PrivatePage>
 						}
 					/>
 					<Route
 						path="/user/:id"
 						element={
-							
+							<PrivatePage>
 								<UserPage />
-							
+							</PrivatePage>
 						}
 					/>
 				</Routes>

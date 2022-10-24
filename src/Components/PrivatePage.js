@@ -8,7 +8,6 @@ export default function PrivatePage({ children }) {
 	const url = process.env.REACT_APP_API_BASE_URL;
 	useEffect(() => {
 		const data = localStorage.getItem('token');
-    console.log(data)
 		if (!data) {
 			setIsAllowed(false);
 			return;
@@ -20,8 +19,10 @@ export default function PrivatePage({ children }) {
 					headers: { Authorization: `Bearer ${token}` },
 				});
 				localStorage.setItem('userImage', promise.data.image);
+				localStorage.setItem('id', promise.data.id);
 				setIsAllowed(true);
 			} catch (error) {
+				localStorage.clear()
 				alert(
 					'Your login credentials is expired or invalid.\nPlease, sign-in again'
 				);
