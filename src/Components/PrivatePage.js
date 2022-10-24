@@ -8,21 +8,20 @@ export default function PrivatePage({ children }) {
 
 	useEffect(() => {
 		const data = localStorage.getItem('token');
-    console.log(data)
 		if (!data) {
 			setIsAllowed(false);
 			return;
 		}
-    console.log(data)
 		const token = JSON.parse(data).token;
 		async function fetchData() {
 			try {
-				const promise = await axios.get('http://localhost:5000/access/auth', {
+				const promise = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/access/auth`, {
 					headers: { Authorization: `Bearer ${token}` },
 				});
 				localStorage.setItem('userImage', promise.data.image);
 				setIsAllowed(true);
 			} catch (error) {
+				localStorage.clear();
 				alert(
 					'Your login credentials is expired or invalid.\nPlease, sign-in again'
 				);
@@ -34,9 +33,9 @@ export default function PrivatePage({ children }) {
 		}
 	}, []);
 
-  if(isAllowed === undefined){
-    return
-  }
+	if (isAllowed === undefined) {
+		return;
+	}
 
 	return isAllowed === false ? (
 		<Navigate to="/" replace />

@@ -53,7 +53,7 @@ const MenuStyle = styled.header`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	z-index: 1;
+	z-index: 10;
 
 	h1 {
 		font-family: 'Passion One', cursive;
@@ -104,7 +104,8 @@ const LogoutField = styled.div`
 	color: #ffffff;
 	font-size: 17px;
 	font-weight: 700;
-	transition: all 0.3s ease-out;
+	z-index: ${(props) => (props.isClicked ? '10' : '2')};
+	transition: all 0.2s ease-in;
 
 	&:hover {
 		cursor: pointer;
