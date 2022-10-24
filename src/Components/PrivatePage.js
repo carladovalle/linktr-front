@@ -5,6 +5,7 @@ import TopMenu from '../Common/TopMenu/TopMenu.js';
 
 export default function PrivatePage({ children }) {
 	const [isAllowed, setIsAllowed] = useState(undefined);
+	const url = process.env.REACT_APP_API_BASE_URL;
 
 	useEffect(() => {
 		const data = localStorage.getItem('token');
@@ -17,7 +18,7 @@ export default function PrivatePage({ children }) {
 		const token = JSON.parse(data).token;
 		async function fetchData() {
 			try {
-				const promise = await axios.get('http://localhost:5000/access/auth', {
+				const promise = await axios.get(`${url}/access/auth`, {
 					headers: { Authorization: `Bearer ${token}` },
 				});
 				localStorage.setItem('userImage', promise.data.image);
