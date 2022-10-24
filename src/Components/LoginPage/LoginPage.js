@@ -38,7 +38,6 @@ export default function LoginPage() {
 				navigate('/timeline');
 			})
 			.catch((error) => {
-				console.log(error.response)
 				if (error.response.status === 401) {
 					alert('E-mail ou senha incorretos');
 				} else {
