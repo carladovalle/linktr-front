@@ -10,7 +10,7 @@ import { deletePost, editPost } from "../../services/linktrAPI.js";
 import ConfirmScreen from "./ConfirmScreen.js";
 
 export default function PostCard({id, userImg, name, text, urlInfos, liked, rerender, setRerender, userId, posts}){
-
+    const idLocalStorage = JSON.parse(localStorage.getItem('token'))
     const [showConfirmScreen, setShowConfirmScreen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -109,6 +109,11 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
             <span className="infos">
                 <div className="firstLine">
                     <h4 onClick={() => navigate(`/user/${userId}`)}>{name}</h4>
+
+                    {
+                        
+                    }
+
                     <div className="actions">
                         <Edit>
                             {isEditing? 
@@ -129,11 +134,14 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
                         onKeyPress={(e) => { e.key === 'Enter' && updatePosts(e) }}
                     /> 
                     : 
+                    descriptionText?
                     <ReactTagify 
                         tagStyle={tagStyle}
                         tagClicked={(tag)=> hashtag(tag)}>
                             <h5>{descriptionText}</h5>
                     </ReactTagify>
+                    :
+                    <h5>{descriptionText}</h5>
                 }
 
                 <LinkCard onClick={() => window.open(urlInfos.url)}>
@@ -252,7 +260,6 @@ const Container = styled.div`
     }
 }
 `
-
 const LinkCard = styled.div`
 
     &&{
