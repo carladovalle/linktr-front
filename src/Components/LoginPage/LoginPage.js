@@ -27,12 +27,14 @@ export default function LoginPage() {
 
 	function sendForm(event) {
 		event.preventDefault();
+		setIsButtonDisabled(true)
 		const url = process.env.REACT_APP_API_BASE_URL;
 		axios
 			.post(`${url}/sign-in`, form)
 			.then((response) => {
 				const loginSerialized = JSON.stringify(response.data);
 				localStorage.setItem('token', loginSerialized);
+				setIsButtonDisabled(false);
 				navigate('/timeline');
 			})
 			.catch((error) => {
@@ -43,7 +45,6 @@ export default function LoginPage() {
 				}
 				setIsButtonDisabled(false);
 			});
-		setIsButtonDisabled(!isButtonDisabled);
 	}
 	return (
 		<MainPageContent>
@@ -55,12 +56,14 @@ export default function LoginPage() {
 						type="text"
 						placeholder="E-mail"
 						onChange={handleForm}
+						disabled={isButtonDisabled ? true : false}
 					/>
 					<input
 						name="password"
 						type="password"
 						placeholder="Password"
 						onChange={handleForm}
+						disabled={isButtonDisabled ? true : false}
 					/>
 					<button name="login" type="submit" disabled={isButtonDisabled}>
 						log in
