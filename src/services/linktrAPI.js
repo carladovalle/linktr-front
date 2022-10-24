@@ -80,7 +80,6 @@ function deletePost(postId) {
 
 function editThePost(postId, content) {
 	const config = createHeaders();
-	console.log(content)
 	const promise = axios.put(`${BASE_URL}/posts/edit/${postId.postId}`, content ,config);
     return promise;
 }

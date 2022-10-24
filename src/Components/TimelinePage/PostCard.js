@@ -70,7 +70,7 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
         promise.then(() => {
             setDescriptionText(newText);
             setIsEditing(false);
-            setIsLoading(false);
+            setIsLoading(false);    
         }).catch((err) => {
             setIsEditing(false);
             console.log(err)
