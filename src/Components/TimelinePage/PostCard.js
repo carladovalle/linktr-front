@@ -10,7 +10,8 @@ import { deletePost, editPost } from "../../services/linktrAPI.js";
 import ConfirmScreen from "./ConfirmScreen.js";
 
 export default function PostCard({id, userImg, name, text, urlInfos, liked, rerender, setRerender, userId, posts}){
-
+    const idLocalStorage = Number(localStorage.getItem('id'))
+    const style = { color: "white", fontSize: "18px", margin: "0 3px" }
     const [showConfirmScreen, setShowConfirmScreen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -109,15 +110,23 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
             <span className="infos">
                 <div className="firstLine">
                     <h4 onClick={() => navigate(`/user/${userId}`)}>{name}</h4>
-                    <div className="actions">
-                        <Edit>
-                            {isEditing? 
-                                <BiEditAlt onClick={() => setIsEditing(false)} /> 
-                                : 
-                                <BiEditAlt onClick={editPost} />}
-                        </Edit>
-                        <AiFillDelete onClick={() => screenToDelete()} />
-                    </div>
+
+                    {
+                        userId === idLocalStorage ?
+                            <div className="actions">
+                                <Edit>
+                                    {isEditing? 
+                                        <BiEditAlt style={style} onClick={() => setIsEditing(false)} /> 
+                                        : 
+                                        <BiEditAlt style={style} onClick={editPost} />}
+                                </Edit>
+                                <AiFillDelete style={style} onClick={() => screenToDelete()} />
+                            </div>
+                        :
+                            <></>
+                    }
+
+                    
                 </div>
                 {isEditing ?
                     <EditText 
@@ -133,11 +142,14 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
                         }}
                     /> 
                     : 
+                    descriptionText?
                     <ReactTagify 
                         tagStyle={tagStyle}
                         tagClicked={(tag)=> hashtag(tag)}>
                             <h5>{descriptionText}</h5>
                     </ReactTagify>
+                    :
+                    <h5>{descriptionText}</h5>
                 }
 
                 <LinkCard onClick={() => window.open(urlInfos.url)}>
@@ -256,7 +268,6 @@ const Container = styled.div`
     }
 }
 `
-
 const LinkCard = styled.div`
 
     &&{

@@ -4,7 +4,7 @@ export default function LogoDiv(){
     return(
         <DesktopDiv>
             <div>
-                <h1>linktr</h1>
+                <h1>linkr</h1>
                 <p>save, share and discover</p>
                 <p>the best links on the web</p>
             </div>
@@ -25,12 +25,13 @@ const DesktopDiv = styled.div`
         font-weight:700;
         font-size:106px;
         color:#FFFFFF;
-        font-family: 'Oswald';
+        font-family: 'Passion One';
         font-style: normal;
         margin-bottom: 20px;
     }
 
     p{
+        font-family: 'Oswald';
         font-weight: 700;
         font-size: 43px;
         color: #FFFFFF;
@@ -39,7 +40,7 @@ const DesktopDiv = styled.div`
 
     @media (max-width: 635px){
         height:20%;
-
+        width: 100vw;
         h1{
             text-align:center;
             margin-top: 10px;
