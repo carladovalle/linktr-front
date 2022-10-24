@@ -74,10 +74,11 @@ const MainPageContent = styled.div`
 const FormDiv = styled.div`
 
     form{
+        height: 100%;
         display: flex;
         flex-direction: column;
-        margin-top: 45%;
-        padding: 50px;
+        justify-content: center;
+        padding: 0 50px;
 
         @media (max-width: 635px) {
 			margin-top: 10%;
@@ -95,6 +96,10 @@ const FormDiv = styled.div`
         border-radius: 6px;
         margin-bottom: 13px;
         padding-left:20px;
+
+        @media (max-width: 635px) {
+			width: 85%;
+		}
     }
 
     input::placeholder{
@@ -118,6 +123,10 @@ const FormDiv = styled.div`
         font-size: 27px;
         color: #FFFFFF;
         text-align: center;
+
+        @media (max-width: 635px) {
+			width: 85%;
+		}
     }
 
     button:disabled{

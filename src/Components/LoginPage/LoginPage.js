@@ -13,10 +13,10 @@ export default function LoginPage() {
 
 	useEffect(() => {
 		if (data) {
-				navigate("/timeline")
-				return;
+			navigate('/timeline');
+			return;
 		}
-},[data, navigate])
+	}, [data, navigate]);
 
 	function handleForm(event) {
 		setForm({
@@ -85,10 +85,11 @@ const MainPageContent = styled.div`
 
 const FormDiv = styled.div`
 	form {
+		height: 100%;
 		display: flex;
 		flex-direction: column;
-		margin-top: 60%;
-		padding: 50px;
+		padding: 0 50px;
+		justify-content: center;
 
 		@media (max-width: 635px) {
 			margin-top: 10%;
@@ -106,6 +107,10 @@ const FormDiv = styled.div`
 		border-radius: 6px;
 		margin-bottom: 13px;
 		padding-left: 20px;
+
+		@media (max-width: 635px) {
+			width: 85%;
+		}
 	}
 
 	input::placeholder {
@@ -129,6 +134,10 @@ const FormDiv = styled.div`
 		font-size: 27px;
 		color: #ffffff;
 		text-align: center;
+
+		@media (max-width: 635px) {
+			width: 85%;
+		}
 	}
 
 	button:disabled {
