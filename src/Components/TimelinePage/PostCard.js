@@ -126,7 +126,11 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
                         type="text" 
                         value={newText}
                         onChange={e => setNewText(e.target.value)}
-                        onKeyPress={(e) => { e.key === 'Enter' && updatePosts(e) }}
+                        onKeyPress={(e) => { 
+                            if(e.key === 'Enter'){
+                                updatePosts(e)  
+                            }  
+                        }}
                     /> 
                     : 
                     <ReactTagify 
