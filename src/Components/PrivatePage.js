@@ -34,9 +34,9 @@ export default function PrivatePage({ children }) {
 		}
 	}, []);
 
-  if(isAllowed === undefined){
-    return
-  }
+	if (isAllowed === undefined) {
+		return;
+	}
 
 	return isAllowed === false ? (
 		<Navigate to="/" replace />

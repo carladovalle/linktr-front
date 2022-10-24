@@ -27,10 +27,12 @@ export default function RegisterPage() {
 
     function sendForm(event){
         event.preventDefault()
+        setIsButtonDisabled(true)
         const url = process.env.REACT_APP_API_BASE_URL
         axios.post(`${url}/sign-up`, form)
           .then((response) => {
             console.log(response);
+            setIsButtonDisabled(false)
             navigate("/")
           })
           .catch((error) => {
@@ -40,7 +42,6 @@ export default function RegisterPage() {
             }
             setIsButtonDisabled(false)
           });
-        setIsButtonDisabled(!isButtonDisabled)
     }
 
     return (
@@ -48,11 +49,11 @@ export default function RegisterPage() {
             <LogoDiv/>
             <FormDiv>
                 <form onSubmit={sendForm}>
-                    <input name='email' type='email' placeholder='E-mail' onChange={handleForm} required/>
-                    <input name='password' type='password' placeholder='Password' onChange={handleForm} required/>
-                    <input name='name' type='text' placeholder='Name' onChange={handleForm} required/>
-                    <input name='username' type='text' placeholder='Username' onChange={handleForm} required/>
-                    <input name='image' type='url' placeholder='Picture URL' onChange={handleForm} required/>
+                    <input name='email' type='email' placeholder='E-mail' onChange={handleForm} disabled={isButtonDisabled ? true : false} required/>
+                    <input name='password' type='password' placeholder='Password' onChange={handleForm} disabled={isButtonDisabled ? true : false} required/>
+                    <input name='name' type='text' placeholder='Name' onChange={handleForm} disabled={isButtonDisabled ? true : false} required/>
+                    <input name='username' type='text' placeholder='Username' onChange={handleForm} disabled={isButtonDisabled ? true : false} required/>
+                    <input name='image' type='url' placeholder='Picture URL' onChange={handleForm} disabled={isButtonDisabled ? true : false} required/>
                     <button name='sign-up' type='submit' onChange={handleForm} disabled={isButtonDisabled} required>Sign Up</button>
                     <Link to='/'><p>Switch back to log in</p></Link>
                 </form>
@@ -74,10 +75,11 @@ const MainPageContent = styled.div`
 const FormDiv = styled.div`
 
     form{
+        height: 100%;
         display: flex;
         flex-direction: column;
-        margin-top: 45%;
-        padding: 50px;
+        justify-content: center;
+        padding: 0 50px;
 
         @media (max-width: 635px) {
 			margin-top: 10%;
@@ -95,6 +97,10 @@ const FormDiv = styled.div`
         border-radius: 6px;
         margin-bottom: 13px;
         padding-left:20px;
+
+        @media (max-width: 635px) {
+			width: 85%;
+		}
     }
 
     input::placeholder{
@@ -118,6 +124,10 @@ const FormDiv = styled.div`
         font-size: 27px;
         color: #FFFFFF;
         text-align: center;
+
+        @media (max-width: 635px) {
+			width: 85%;
+		}
     }
 
     button:disabled{
