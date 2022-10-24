@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import ReactTooltip from "react-tooltip";
-import { AiTwotoneHeart, AiOutlineHeart } from "react-icons/ai";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { ThreeDots } from 'react-loader-spinner'
 import { IconContext } from "react-icons";
 import { addLike, getLikesQtd, removeLike } from "../../services/linktrAPI.js";
 import { useEffect, useState } from "react";
@@ -9,6 +10,7 @@ function LikesPostCard ({id, liked, rerender, setRerender}) {
 
     const [totalLikes, setTotalLikes] = useState([]);
     const [userId, setUserId] = useState(0);
+    const [loading, setLoading] = useState(false);
     let tipText = "";
 
     useEffect(() => {
@@ -16,21 +18,24 @@ function LikesPostCard ({id, liked, rerender, setRerender}) {
             const postId = id;
             const promise = getLikesQtd (postId)
             promise.then(res => {setTotalLikes(res.data.likes); setUserId(res.data.userId);})
+
+            setLoading(false)
     
         }, [liked])
     
     function like () {
 
+        setLoading(true);
         const postId = id;
 
         if (liked === true) {
             const promise = removeLike({ postId });
-            promise.then(res => setRerender(!rerender))
-            .catch(err => console.log("dislike not available"))
+            promise.then(res => {setRerender(!rerender)})
+            .catch(err => {console.log("dislike not available")})
         } else {
             const promise = addLike({ postId });
-            promise.then(res => setRerender(!rerender))
-            .catch(err => console.log("like not available"))
+            promise.then(res => {setRerender(!rerender)})
+            .catch(err => {console.log("like not available")})
         }
     }
 
@@ -67,11 +72,13 @@ function LikesPostCard ({id, liked, rerender, setRerender}) {
 
     return (
 
-        totalLikes.length !== 0 ? (
+        loading === false ?
+
+        (totalLikes.length !== 0 ? (
             <Container>
                 
                 <IconContext.Provider value={{ className: "likeIcon", color: likeIconColor}}>
-                    {liked ? < AiTwotoneHeart onClick={() => like()}/> : < AiOutlineHeart onClick={() => like()}/>}
+                    {liked ? < AiFillHeart onClick={() => like()}/> : < AiOutlineHeart onClick={() => like()}/>}
                 </IconContext.Provider>
                 {totalLikes.length > 1 ? <p data-tip={tipText}>{totalLikes.length} likes</p> : <p data-tip={tipText}>{totalLikes.length} like</p>}
                 <ReactTooltip place="bottom" backgroundColor="white" textColor="#505050"/>
@@ -79,11 +86,24 @@ function LikesPostCard ({id, liked, rerender, setRerender}) {
         ) : (
             <Container>
                 <IconContext.Provider value={{ className: "likeIcon", color: likeIconColor}}>
-                    {liked ? < AiTwotoneHeart onClick={() => like()}/> : < AiOutlineHeart onClick={() => like()}/>}
+                    {liked ? < AiFillHeart onClick={() => like()}/> : < AiOutlineHeart onClick={() => like()}/>}
                 </IconContext.Provider>
             </Container>
         )
-        
+        )
+        :
+        (<Container>
+                <ThreeDots 
+                    height="20" 
+                    width="20" 
+                    radius="20"
+                    color="white" 
+                    ariaLabel="three-dots-loading"
+                    wrapperStyle={{marginTop: "19px"}}
+                    wrapperClassName=""
+                    visible={true}
+                />
+        </Container>)
     )
 }
 

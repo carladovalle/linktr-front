@@ -65,6 +65,10 @@ const isButtonDisabled = true
 
 const MainPageContent = styled.div`
     display:flex;
+    @media (max-width: 635px) {
+		display: flex;
+		flex-direction: column;
+	}   
 `
 
 const FormDiv = styled.div`
@@ -74,6 +78,13 @@ const FormDiv = styled.div`
         flex-direction: column;
         margin-top: 45%;
         padding: 50px;
+
+        @media (max-width: 635px) {
+			margin-top: 10%;
+			padding: 0;
+			justify-content: center;
+			align-items: center;
+		}
     }
 
     input{

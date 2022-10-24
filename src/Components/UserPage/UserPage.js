@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PostCard from '../TimelinePage/PostCard';
-import { getUserPosts } from '../../services/linktrAPI';
+import { getLikes, getUserPosts } from '../../services/linktrAPI';
 import HashtagList from '../TimelinePage/HashtagsList';
 import Loading from '../../Common/Loading';
 import { BsArrowLeftCircle } from 'react-icons/bs';
@@ -15,11 +15,49 @@ export default function UserPage() {
 	const [name, setName] = useState('');
 	const [image, setImage] = useState('');
 	const [hasPost, setHasPost] = useState(false);
+	const [rerender, setRerender] = useState(false);
 
 	useEffect(() => {
-		const promise = getUserPosts(id);
-		promise.then((res) => {
-			setPosts(res.data);
+		const promise2 = getLikes();
+		let likes = [];
+		let postsLike = [];
+		let postsNoLike = [];
+
+		promise2
+			.then((res) => {
+				likes = res.data;
+			})
+			.catch((err) => console.log('likes not available'));
+
+
+		const promise1 = getUserPosts(id);
+		promise1.then((res) => {
+
+			postsNoLike = res.data;
+
+				if (likes.length !== 0) {
+					for (let i = 0; i < postsNoLike.length; i++) {
+						for (let j = 0; j < likes.length; j++) {
+							if (postsNoLike[i].id === likes[j].postId) {
+								const newItem = { ...postsNoLike[i], liked: true };
+								postsLike.push(newItem);
+								break;
+							}
+
+							if (j === likes.length - 1) {
+								const newItem = { ...postsNoLike[i], liked: false };
+								postsLike.push(newItem);
+							}
+						}
+					}
+				} else {
+					for (let i = 0; i < postsNoLike.length; i++) {
+						const newItem = { ...postsNoLike[i], liked: false };
+						postsLike.push(newItem);
+					}
+				}
+
+			setPosts(postsLike);
 			if (res.data[0].link === null) {
 				setMessage("This user haven't any posts at moment");
 			} else {
@@ -29,7 +67,7 @@ export default function UserPage() {
 			setImage(res.data[0].image);
 		});
 
-		promise.catch((err) => {
+		promise1.catch((err) => {
 			if (err.response.status === 404) {
 				setMessage(err.response.data);
 				return;
@@ -38,7 +76,7 @@ export default function UserPage() {
 				'An error occured while trying to fetch the posts, please refresh the page'
 			);
 		});
-	}, [posts.length, id]);
+	}, [posts.length, id, rerender]);
 
 	return (
 		<>
@@ -57,12 +95,19 @@ export default function UserPage() {
 						) : (
 							posts.map((item, index) => (
 								<PostCard
-									key={index}
-									userImg={item.image}
-									name={item.name}
-									text={item.content}
-									urlInfos={item.urlInfos}
-								/>
+								key={index}
+								id={item.id}
+								userImg={item.image}
+								name={item.name}
+								text={item.content}
+								urlInfos={item.urlInfos}
+								liked={item.liked}
+								rerender={rerender}
+								setRerender={setRerender}
+								posts={posts}
+								setMessage={setMessage}
+								userId={item.userId}
+							/>
 							))
 						)}
 					</div>

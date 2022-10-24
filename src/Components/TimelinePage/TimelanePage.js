@@ -87,6 +87,8 @@ export default function TimelinePage() {
 								liked={item.liked}
 								rerender={rerender}
 								setRerender={setRerender}
+								posts={posts}
+								setMessage={setMessage}
 								userId={item.userId}
 							/>
 						))

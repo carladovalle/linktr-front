@@ -72,6 +72,18 @@ function getUserPosts(id) {
 	return promise;
 }
 
+function deletePost(postId) {
+	const config = createHeaders();
+	const promise = axios.delete(`${BASE_URL}/posts/delete/${postId.postId}`, config);
+    return promise;
+}
+
+function editThePost(postId) {
+	const config = createHeaders();
+	const promise = axios.put(`${BASE_URL}/posts/edit/${postId.postId}`, config);
+    return promise;
+}
+
 export {
 	getPost,
 	publishPost,
@@ -82,5 +94,7 @@ export {
     getLikesQtd,
     addLike,
     removeLike,
+	deletePost, 
+	editThePost,
 	getUserPosts,
 };

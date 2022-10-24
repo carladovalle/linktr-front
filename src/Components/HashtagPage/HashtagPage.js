@@ -13,10 +13,8 @@ export default function HashTagPage(){
     const [isHashtag, setIsHashtag] = useState()
 
 	useEffect(() => {
-		const token = JSON.parse(localStorage.getItem("token"));
-		const config = { headers: { Authorization: `Bearer ${token}` } };
 		const promise1 = getHashtagPost(hashtag);
-		const promise2 = getLikes(config);
+		const promise2 = getLikes();
 		let likes = [];
 		let postsLike = [];
 		let postsNoLike = [];
@@ -59,7 +57,7 @@ export default function HashTagPage(){
 						postsLike.push(newItem);
 					}
 				}
-				console.log(postsLike)
+
 				setPosts(postsLike);
 				if (postsLike.length < 1) {
 					setMessage('There are no post yet');
@@ -91,6 +89,9 @@ export default function HashTagPage(){
 								liked={item.liked}
 								rerender={rerender}
 								setRerender={setRerender}
+								posts={posts}
+								setMessage={setMessage}
+								userId={item.userId}
 							/>
 						))
 					)}
