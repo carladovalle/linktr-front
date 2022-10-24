@@ -89,6 +89,9 @@ export default function HashTagPage(){
 								liked={item.liked}
 								rerender={rerender}
 								setRerender={setRerender}
+								posts={posts}
+								setMessage={setMessage}
+								userId={item.userId}
 							/>
 						))
 					)}

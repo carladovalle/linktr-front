@@ -95,16 +95,19 @@ export default function UserPage() {
 						) : (
 							posts.map((item, index) => (
 								<PostCard
-									key={index}
-									id={item.id}
-									userImg={item.image}
-									name={item.name}
-									text={item.content}
-									urlInfos={item.urlInfos}
-									liked={item.liked}
-									rerender={rerender}
-									setRerender={setRerender}
-								/>
+								key={index}
+								id={item.id}
+								userImg={item.image}
+								name={item.name}
+								text={item.content}
+								urlInfos={item.urlInfos}
+								liked={item.liked}
+								rerender={rerender}
+								setRerender={setRerender}
+								posts={posts}
+								setMessage={setMessage}
+								userId={item.userId}
+							/>
 							))
 						)}
 					</div>
