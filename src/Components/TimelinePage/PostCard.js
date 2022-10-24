@@ -6,7 +6,7 @@ import { useState, useRef } from "react";
 import LikesPostCard from "./LikesPostCard";
 import { BiEditAlt } from 'react-icons/bi';
 import { AiFillDelete } from 'react-icons/ai';
-import { deletePost, editPost } from "../../services/linktrAPI.js";
+import { deletePost, editThePost } from "../../services/linktrAPI.js";
 import ConfirmScreen from "./ConfirmScreen.js";
 
 export default function PostCard({id, userImg, name, text, urlInfos, liked, rerender, setRerender, userId, posts}){
@@ -16,7 +16,7 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
     const [isLoading, setIsLoading] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const inputEditText = useRef(null);
-    const [newText, setNewText] = useState("");
+    const [newText, setNewText] = useState(text);
     const [descriptionText, setDescriptionText ] = useState(text);
     const navigate = useNavigate()
     const tagStyle = {
@@ -64,13 +64,14 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
 
         const postId = id;
 
-        const promise = editPost({ postId }, {descriptionText: newText});
+        const promise = editThePost({ postId }, {link: urlInfos.url,
+            content: newText});
 
         promise.then(() => {
             setDescriptionText(newText);
             setIsEditing(false);
-            setIsLoading(false);
-        }).catch(() => {
+            setIsLoading(false);    
+        }).catch((err) => {
             setIsEditing(false);
             alert("Could not edit post.");
         });
@@ -118,7 +119,7 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
                                     {isEditing? 
                                         <BiEditAlt style={style} onClick={() => setIsEditing(false)} /> 
                                         : 
-                                        <BiEditAlt style={style} onClick={editPost} />}
+                                        <BiEditAlt style={style} onClick={() => editPost()} />}
                                 </Edit>
                                 <AiFillDelete style={style} onClick={() => screenToDelete()} />
                             </div>
