@@ -14,7 +14,6 @@ export default function PrivatePage({ children }) {
 			setIsAllowed(false);
 			return;
 		}
-    console.log(data)
 		const token = JSON.parse(data).token;
 		async function fetchData() {
 			try {
