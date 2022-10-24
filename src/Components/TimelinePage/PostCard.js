@@ -73,7 +73,6 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
             setIsLoading(false);    
         }).catch((err) => {
             setIsEditing(false);
-            console.log(err)
             alert("Could not edit post.");
         });
 
