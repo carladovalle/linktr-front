@@ -13,7 +13,6 @@ export default function HashTagPage(){
     const [isHashtag, setIsHashtag] = useState()
 
 	useEffect(() => {
-		const promise1 = getHashtagPost(hashtag);
 		const promise2 = getLikes();
 		let likes = [];
 		let postsLike = [];
@@ -32,6 +31,8 @@ export default function HashTagPage(){
 			})
 			.catch((err) => console.log('likes not available'));
 
+		function fetchData(){
+			const promise1 = getHashtagPost(hashtag);
 		promise1
 			.then((res) => {
 				postsNoLike = res.data;
@@ -68,6 +69,8 @@ export default function HashTagPage(){
 					'An error occured while trying to fetch the posts, please refresh the page'
 				);
 			});
+		}
+		setTimeout(fetchData, 300);
 	}, [rerender, hashtag]);
 
 	return (

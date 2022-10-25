@@ -17,6 +17,7 @@ function LikesPostCard ({id, liked, rerender, setRerender}) {
 
             const postId = id;
             const promise = getLikesQtd (postId)
+
             promise.then(res => {setTotalLikes(res.data.likes); setUserId(res.data.userId);})
 
             setLoading(false)

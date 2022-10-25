@@ -29,8 +29,8 @@ export default function UserPage() {
 			})
 			.catch((err) => console.log('likes not available'));
 
-
-		const promise1 = getUserPosts(id);
+		function fetchData(){
+			const promise1 = getUserPosts(id);
 		promise1.then((res) => {
 
 			postsNoLike = res.data;
@@ -76,6 +76,8 @@ export default function UserPage() {
 				'An error occured while trying to fetch the posts, please refresh the page'
 			);
 		});
+		}
+		setTimeout(fetchData, 300);
 	}, [posts.length, id, rerender]);
 
 	return (
