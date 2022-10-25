@@ -11,7 +11,6 @@ export default function TimelinePage() {
 	const [rerender, setRerender] = useState(false);
 
 	useEffect(() => {
-		const promise1 = getPost();
 		const promise2 = getLikes();
 		let likes = [];
 		let postsLike = [];
@@ -23,42 +22,45 @@ export default function TimelinePage() {
 			})
 			.catch((err) => console.log('likes not available'));
 
-		promise1
-			.then((res) => {
-				postsNoLike = res.data;
+		function fetchData() {
+			const promise1 = getPost();
+			promise1
+				.then((res) => {
+					postsNoLike = res.data;
 
-				if (likes.length !== 0) {
-					for (let i = 0; i < postsNoLike.length; i++) {
-						for (let j = 0; j < likes.length; j++) {
-							if (postsNoLike[i].id === likes[j].postId) {
-								const newItem = { ...postsNoLike[i], liked: true };
-								postsLike.push(newItem);
-								break;
-							}
+					if (likes.length !== 0) {
+						for (let i = 0; i < postsNoLike.length; i++) {
+							for (let j = 0; j < likes.length; j++) {
+								if (postsNoLike[i].id === likes[j].postId) {
+									const newItem = { ...postsNoLike[i], liked: true };
+									postsLike.push(newItem);
+									break;
+								}
 
-							if (j === likes.length - 1) {
-								const newItem = { ...postsNoLike[i], liked: false };
-								postsLike.push(newItem);
+								if (j === likes.length - 1) {
+									const newItem = { ...postsNoLike[i], liked: false };
+									postsLike.push(newItem);
+								}
 							}
 						}
+					} else {
+						for (let i = 0; i < postsNoLike.length; i++) {
+							const newItem = { ...postsNoLike[i], liked: false };
+							postsLike.push(newItem);
+						}
 					}
-				} else {
-					for (let i = 0; i < postsNoLike.length; i++) {
-						const newItem = { ...postsNoLike[i], liked: false };
-						postsLike.push(newItem);
+					setPosts(postsLike);
+					if (posts.length < 1) {
+						setMessage('There are no post yet');
 					}
-				}
-
-				setPosts(postsLike);
-				if (posts.length < 1) {
-					setMessage('There are no post yet');
-				}
-			})
-			.catch((err) => {
-				setMessage(
-					'An error occured while trying to fetch the posts, please refresh the page'
-				);
-			});
+				})
+				.catch((err) => {
+					setMessage(
+						'An error occured while trying to fetch the posts, please refresh the page'
+					);
+				});
+		}
+		setTimeout(fetchData, 300);
 	}, [rerender]);
 
 	return (
@@ -94,7 +96,7 @@ export default function TimelinePage() {
 						))
 					)}
 				</div>
-				<HashtagList/>
+				<HashtagList />
 			</Container>
 		</>
 	);
