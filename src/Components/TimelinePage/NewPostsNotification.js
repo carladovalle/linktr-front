@@ -2,19 +2,31 @@ import styled from "styled-components";
 import { TfiReload } from "react-icons/tfi";
 import useInterval from "use-interval";
 import { useState } from "react";
+import { getLastPostId } from "../../services/linktrAPI";
 
-export default function NewPostNotification(props){
+export default function NewPostNotification({lastPostRendered}){
     const [ newPostsQt, setNewPostsQt ] = useState(0)
-    console.log(props.lastPost)
-    
+    let lastPostId
+
     useInterval(() => {
-        setNewPostsQt(newPostsQt+1)
+        let promise = getLastPostId()
+        promise = getLastPostId()
+            .then((res) => {
+                lastPostId = res.data.id
+
+                if(lastPostRendered && lastPostRendered.id < lastPostId){
+                    const numberOfNewPosts = lastPostId - lastPostRendered.id
+                    setNewPostsQt(numberOfNewPosts)
+                }
+            })
+            .catch((error) => console.log(error))
+
     }, 5000)
 
     return (
         <>
             {newPostsQt !== 0 ?         
-            <NewPostButton onClick={() => alert("Clicou!")}>
+            <NewPostButton onClick={() => window.location.reload()}>
             <span> {newPostsQt} new posts! Load more! </span>
                 <TfiReload/>
             </NewPostButton> : <></>}

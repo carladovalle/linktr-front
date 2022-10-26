@@ -84,6 +84,11 @@ function editThePost(postId, content) {
     return promise;
 }
 
+function getLastPostId(){
+	const promise = axios.get(`${BASE_URL}/haveNewPost`)
+	return promise
+}
+
 export {
 	getPost,
 	publishPost,
@@ -97,4 +102,5 @@ export {
 	deletePost, 
 	editThePost,
 	getUserPosts,
+	getLastPostId
 };
