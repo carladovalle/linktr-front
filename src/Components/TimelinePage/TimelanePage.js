@@ -4,6 +4,7 @@ import PostCard from './PostCard';
 import { getPost, getLikes } from '../../services/linktrAPI';
 import SubmitBox from './SubmitBox';
 import HashtagList from './HashtagsList';
+import NewPostNotification from './NewPostsNotification';
 import InfiniteScroll from 'react-infinite-scroller';
 
 export default function TimelinePage() {
@@ -134,12 +135,14 @@ export default function TimelinePage() {
 						rerender={rerender}
 						setRerender={setRerender}
 					/>
-					
+          
+					<NewPostNotification lastPostRendered = {posts[0]}/>
+          
 					<InfiniteScroll
 					loadMore={loadData}
               		hasMore={more}
 					>
-					
+          
 					{posts.length === 0 ? (
 						<h6>{message}</h6>
 					) : (
