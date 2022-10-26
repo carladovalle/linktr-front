@@ -2,10 +2,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PostCard from '../TimelinePage/PostCard';
-import { getLikes, getUserPosts } from '../../services/linktrAPI';
+import { changeFollow, getLikes, getUserPosts, isFollowed } from '../../services/linktrAPI';
 import HashtagList from '../TimelinePage/HashtagsList';
 import Loading from '../../Common/Loading';
 import { BsArrowLeftCircle } from 'react-icons/bs';
+import InfiniteScroll from 'react-infinite-scroller';
 
 export default function UserPage() {
 	const navigate = useNavigate();
@@ -16,6 +17,80 @@ export default function UserPage() {
 	const [image, setImage] = useState('');
 	const [hasPost, setHasPost] = useState(false);
 	const [rerender, setRerender] = useState(false);
+	const [followed, setFollowed] = useState(false);
+	const [disabled, setDisabled] = useState(false);
+	const [more, setMore] = useState(true)
+
+
+	function hasMore(offset, item) {
+		if(offset !== 0 && item.length === 0){
+			setMore(false)
+		}
+	}
+
+	function loadData() {
+		const promise2 = getLikes();
+		const promise3 = isFollowed(id);
+		let likes = [];
+		let postsLike = [];
+		let postsNoLike = [];
+		const offset = posts.length
+
+		promise3
+			.then((res) => res.data ? setFollowed(true) : setFollowed(false))
+			.catch((err) => console.log('follows not available'));
+
+		promise2
+			.then((res) => {
+				likes = res.data;
+			})
+			.catch((err) => console.log('likes not available'));
+
+		function fetchData() {
+			const promise1 = getUserPosts(id, offset);
+			promise1
+				.then((res) => {
+					postsNoLike = res.data;
+
+					if (likes.length !== 0) {
+						for (let i = 0; i < postsNoLike.length; i++) {
+							for (let j = 0; j < likes.length; j++) {
+								if (postsNoLike[i].id === likes[j].postId) {
+									const newItem = { ...postsNoLike[i], liked: true };
+									postsLike.push(newItem);
+									break;
+								}
+
+								if (j === likes.length - 1) {
+									const newItem = { ...postsNoLike[i], liked: false };
+									postsLike.push(newItem);
+								}
+							}
+						}
+					} else {
+						for (let i = 0; i < postsNoLike.length; i++) {
+							const newItem = { ...postsNoLike[i], liked: false };
+							postsLike.push(newItem);
+						}
+					}
+					hasMore(offset, res.data)
+					setPosts([...posts, ...postsLike]);
+					if (res.data[0].link === null) {
+						setMessage("This user haven't any posts at moment");
+					} else {
+						setHasPost(true);
+					}
+					setName(res.data[0].name);
+					setImage(res.data[0].image)
+				})
+				.catch((err) => {
+					setMessage(
+						'An error occured while trying to fetch the posts, please refresh the page'
+					);
+				});
+		}
+		setTimeout(fetchData, 300);
+	}
 
 	useEffect(() => {
 		const promise2 = getLikes();
@@ -30,90 +105,80 @@ export default function UserPage() {
 			.catch((err) => console.log('likes not available'));
 
 		function fetchData(){
-			const promise1 = getUserPosts(id);
-		promise1.then((res) => {
+			postsNoLike = posts;
 
-			postsNoLike = res.data;
+			if (likes.length !== 0) {
+				for (let i = 0; i < postsNoLike.length; i++) {
+					for (let j = 0; j < likes.length; j++) {
+						if (postsNoLike[i].id === likes[j].postId) {
+							const newItem = { ...postsNoLike[i], liked: true };
+							postsLike.push(newItem);
+							break;
+						}
 
-				if (likes.length !== 0) {
-					for (let i = 0; i < postsNoLike.length; i++) {
-						for (let j = 0; j < likes.length; j++) {
-							if (postsNoLike[i].id === likes[j].postId) {
-								const newItem = { ...postsNoLike[i], liked: true };
-								postsLike.push(newItem);
-								break;
-							}
-
-							if (j === likes.length - 1) {
-								const newItem = { ...postsNoLike[i], liked: false };
-								postsLike.push(newItem);
-							}
+						if (j === likes.length - 1) {
+							const newItem = { ...postsNoLike[i], liked: false };
+							postsLike.push(newItem);
 						}
 					}
-				} else {
-					for (let i = 0; i < postsNoLike.length; i++) {
-						const newItem = { ...postsNoLike[i], liked: false };
-						postsLike.push(newItem);
-					}
 				}
-
-			setPosts(postsLike);
-			if (res.data[0].link === null) {
-				setMessage("This user haven't any posts at moment");
 			} else {
-				setHasPost(true);
+				for (let i = 0; i < postsNoLike.length; i++) {
+					const newItem = { ...postsNoLike[i], liked: false };
+					postsLike.push(newItem);
+				}
 			}
-			setName(res.data[0].name);
-			setImage(res.data[0].image);
-		});
 
-		promise1.catch((err) => {
-			if (err.response.status === 404) {
-				setMessage(err.response.data);
-				return;
-			}
-			setMessage(
-				'An error occured while trying to fetch the posts, please refresh the page'
-			);
-		});
+		setPosts(postsLike);
 		}
 		setTimeout(fetchData, 300);
-	}, [posts.length, id, rerender]);
+	}, [id, rerender]);
+
+	async function toFollow () {
+		setDisabled(true);
+		const aloka = changeFollow(id, followed);
+		aloka
+			.then(res => {setRerender(!rerender); setDisabled(false)})
+			.catch((err) => alert("follow/unfollow unavailable")); 
+	}
 
 	return (
 		<>
 			<Container>
-				{posts.length === 0 ? (
-					<Loading message={message} />
-				) : (
 					<div className="content">
 						<BsArrowLeftCircle onClick={() => navigate('/timeline')} />
 						<header>
 							<img src={image} alt="profile" />
 							<h1>{name}'s posts</h1>
+							<button onClick={toFollow} disabled={disabled} followed={followed}>{followed ? "Unfollow" : "Follow"}</button>
 						</header>
-						{hasPost === false ? (
-							<p>This user haven't posts yet</p>
+						<InfiniteScroll
+						loadMore={loadData}
+						hasMore={more}
+						>
+						
+						{posts.length === 0 ? (
+							<h6>This user haven't any posts at moment</h6>
 						) : (
 							posts.map((item, index) => (
 								<PostCard
-								key={index}
-								id={item.id}
-								userImg={item.image}
-								name={item.name}
-								text={item.content}
-								urlInfos={item.urlInfos}
-								liked={item.liked}
-								rerender={rerender}
-								setRerender={setRerender}
-								posts={posts}
-								setMessage={setMessage}
-								userId={item.userId}
-							/>
+									key={item.id}
+									id={item.id}
+									userImg={item.image}
+									name={item.name}
+									text={item.content}
+									urlInfos={item.urlInfos}
+									liked={item.liked}
+									rerender={rerender}
+									setRerender={setRerender}
+									posts={posts}
+									setMessage={setMessage}
+									userId={item.userId}
+								/>
 							))
 						)}
+						</InfiniteScroll>
 					</div>
-				)}
 				<HashtagList />
 			</Container>
 		</>
@@ -166,6 +231,18 @@ const Container = styled.div`
 		font-size: 43px;
 		line-height: 64px;
 		color: #ffffff;
+	}
+
+	button {
+		width: 112px;
+		height: 31px;
+		border-radius: 5px;
+		border: none;
+		background-color: ${props => props.followed ? "#FFFFFF" : "#1877F2"};
+		font-size: 14px;
+		font-weight: 700;
+		color: ${props => props.followed ? "#1877F2" : "#FFFFFF"};
+		float: right;
 	}
 
 	h6 {
