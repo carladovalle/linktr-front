@@ -28,6 +28,7 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
     function hashtag(name){
         const params = name.slice(1)
         navigate(`/hashtag/${params}`)
+        window.location.reload()
     }
 
     function screenToDelete(){
