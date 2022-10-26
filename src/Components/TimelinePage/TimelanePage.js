@@ -4,11 +4,77 @@ import PostCard from './PostCard';
 import { getPost, getLikes } from '../../services/linktrAPI';
 import SubmitBox from './SubmitBox';
 import HashtagList from './HashtagsList';
+import InfiniteScroll from 'react-infinite-scroller';
 
 export default function TimelinePage() {
 	const [posts, setPosts] = useState([]);
 	const [message, setMessage] = useState('Loading...');
 	const [rerender, setRerender] = useState(false);
+	const [more, setMore] = useState(true)
+	
+
+
+	function hasMore(offset, item) {
+		if(offset !== 0 && item.length === 0){
+			setMore(false)
+			
+		}
+	}
+
+	function loadData() {
+		const promise2 = getLikes();
+		let likes = [];
+		let postsLike = [];
+		let postsNoLike = [];
+		const offset = posts.length
+
+		promise2
+			.then((res) => {
+				likes = res.data;
+			})
+			.catch((err) => console.log('likes not available'));
+
+		function fetchData() {
+			const promise1 = getPost(offset);
+			promise1
+				.then((res) => {
+					postsNoLike = res.data;
+
+					if (likes.length !== 0) {
+						for (let i = 0; i < postsNoLike.length; i++) {
+							for (let j = 0; j < likes.length; j++) {
+								if (postsNoLike[i].id === likes[j].postId) {
+									const newItem = { ...postsNoLike[i], liked: true };
+									postsLike.push(newItem);
+									break;
+								}
+
+								if (j === likes.length - 1) {
+									const newItem = { ...postsNoLike[i], liked: false };
+									postsLike.push(newItem);
+								}
+							}
+						}
+					} else {
+						for (let i = 0; i < postsNoLike.length; i++) {
+							const newItem = { ...postsNoLike[i], liked: false };
+							postsLike.push(newItem);
+						}
+					}
+					hasMore(offset, res.data)
+					setPosts([...posts, ...postsLike]);
+					if (posts.length < 1) {
+						setMessage('There are no post yet');
+					}
+				})
+				.catch((err) => {
+					setMessage(
+						'An error occured while trying to fetch the posts, please refresh the page'
+					);
+				});
+		}
+		setTimeout(fetchData, 300);
+	}
 
 	useEffect(() => {
 		const promise2 = getLikes();
@@ -23,10 +89,8 @@ export default function TimelinePage() {
 			.catch((err) => console.log('likes not available'));
 
 		function fetchData() {
-			const promise1 = getPost();
-			promise1
-				.then((res) => {
-					postsNoLike = res.data;
+
+					postsNoLike = posts;
 
 					if (likes.length !== 0) {
 						for (let i = 0; i < postsNoLike.length; i++) {
@@ -53,16 +117,11 @@ export default function TimelinePage() {
 					if (posts.length < 1) {
 						setMessage('There are no post yet');
 					}
-				})
-				.catch((err) => {
-					setMessage(
-						'An error occured while trying to fetch the posts, please refresh the page'
-					);
-				});
+				
 		}
 		setTimeout(fetchData, 300);
 	}, [rerender]);
-
+		
 	return (
 		<>
 			<Container>
@@ -75,12 +134,18 @@ export default function TimelinePage() {
 						rerender={rerender}
 						setRerender={setRerender}
 					/>
+					
+					<InfiniteScroll
+					loadMore={loadData}
+              		hasMore={more}
+					>
+					
 					{posts.length === 0 ? (
 						<h6>{message}</h6>
 					) : (
 						posts.map((item, index) => (
 							<PostCard
-								key={index}
+								key={item.id}
 								id={item.id}
 								userImg={item.image}
 								name={item.name}
@@ -95,6 +160,8 @@ export default function TimelinePage() {
 							/>
 						))
 					)}
+					</InfiniteScroll>
+					{more ? <></> : <h6>Yay! You have seen it all</h6>}
 				</div>
 				<HashtagList />
 			</Container>
@@ -107,7 +174,7 @@ const Container = styled.div`
 	align-items: flex-start;
 	justify-content: center;
 	margin-top: 125px;
-	width: 100vw;
+	
 
 	.content {
 		width: 611px;
@@ -124,7 +191,7 @@ const Container = styled.div`
 	}
 
 	h6 {
-		margin-bottom: 7px;
+		margin-bottom: 30px;
 		font-style: normal;
 		font-weight: 400;
 		font-size: 19px;
