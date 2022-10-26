@@ -10,7 +10,6 @@ export default function NewPostNotification({lastPostRendered}){
 
     useInterval(() => {
         let promise = getLastPostId()
-        promise = getLastPostId()
             .then((res) => {
                 lastPostId = res.data.id
 
