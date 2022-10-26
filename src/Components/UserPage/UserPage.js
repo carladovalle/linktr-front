@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PostCard from '../TimelinePage/PostCard';
-import { getLikes, getUserPosts } from '../../services/linktrAPI';
+import { changeFollow, getLikes, getUserPosts, isFollowed } from '../../services/linktrAPI';
 import HashtagList from '../TimelinePage/HashtagsList';
 import Loading from '../../Common/Loading';
 import { BsArrowLeftCircle } from 'react-icons/bs';
@@ -17,8 +17,9 @@ export default function UserPage() {
 	const [image, setImage] = useState('');
 	const [hasPost, setHasPost] = useState(false);
 	const [rerender, setRerender] = useState(false);
+	const [followed, setFollowed] = useState(false);
+	const [disabled, setDisabled] = useState(false);
 	const [more, setMore] = useState(true)
-	
 
 
 	function hasMore(offset, item) {
@@ -29,10 +30,15 @@ export default function UserPage() {
 
 	function loadData() {
 		const promise2 = getLikes();
+		const promise3 = isFollowed(id);
 		let likes = [];
 		let postsLike = [];
 		let postsNoLike = [];
 		const offset = posts.length
+
+		promise3
+			.then((res) => res.data ? setFollowed(true) : setFollowed(false))
+			.catch((err) => console.log('follows not available'));
 
 		promise2
 			.then((res) => {
@@ -128,6 +134,14 @@ export default function UserPage() {
 		setTimeout(fetchData, 300);
 	}, [id, rerender]);
 
+	async function toFollow () {
+		setDisabled(true);
+		const aloka = changeFollow(id, followed);
+		aloka
+			.then(res => {setRerender(!rerender); setDisabled(false)})
+			.catch((err) => alert("follow/unfollow unavailable")); 
+	}
+
 	return (
 		<>
 			<Container>
@@ -136,6 +150,7 @@ export default function UserPage() {
 						<header>
 							<img src={image} alt="profile" />
 							<h1>{name}'s posts</h1>
+							<button onClick={toFollow} disabled={disabled} followed={followed}>{followed ? "Unfollow" : "Follow"}</button>
 						</header>
 						<InfiniteScroll
 						loadMore={loadData}
@@ -216,6 +231,18 @@ const Container = styled.div`
 		font-size: 43px;
 		line-height: 64px;
 		color: #ffffff;
+	}
+
+	button {
+		width: 112px;
+		height: 31px;
+		border-radius: 5px;
+		border: none;
+		background-color: ${props => props.followed ? "#FFFFFF" : "#1877F2"};
+		font-size: 14px;
+		font-weight: 700;
+		color: ${props => props.followed ? "#1877F2" : "#FFFFFF"};
+		float: right;
 	}
 
 	h6 {

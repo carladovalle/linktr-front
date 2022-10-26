@@ -54,6 +54,19 @@ function removeLike(postId) {
 	return promise;
 }
 
+function isFollowed(followedId) {
+	const config = createHeaders();
+	const promise = axios.get(`${BASE_URL}/follows/${followedId}`, config);
+	return promise;
+}
+
+function changeFollow(followedId, followed) {
+	const config = createHeaders();
+	const body = { followedId, followed }
+	const promise = axios.post(`${BASE_URL}/follows`, body, config);
+	return promise;
+}
+
 function getHashtagPost(hashtag, offset) {
 	const config = createHeaders();
 	const promise = axios.get(`${BASE_URL}/hashtags/${hashtag}/?offset=${offset}&limit=10`, config);
@@ -94,6 +107,8 @@ export {
     getLikesQtd,
     addLike,
     removeLike,
+	isFollowed,
+	changeFollow,
 	deletePost, 
 	editThePost,
 	getUserPosts,
