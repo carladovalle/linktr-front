@@ -77,7 +77,7 @@ export default function TimelinePage() {
 						setRerender={setRerender}
 					/>
 
-					<NewPostNotification/>
+					<NewPostNotification lastPost = {posts[0]}/>
 
 					{posts.length === 0 ? (
 						<h6>{message}</h6>

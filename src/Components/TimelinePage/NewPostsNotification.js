@@ -3,8 +3,9 @@ import { TfiReload } from "react-icons/tfi";
 import useInterval from "use-interval";
 import { useState } from "react";
 
-export default function NewPostNotification(){
+export default function NewPostNotification(props){
     const [ newPostsQt, setNewPostsQt ] = useState(0)
+    console.log(props.lastPost)
     
     useInterval(() => {
         setNewPostsQt(newPostsQt+1)
@@ -12,7 +13,11 @@ export default function NewPostNotification(){
 
     return (
         <>
-
+            {newPostsQt !== 0 ?         
+            <NewPostButton onClick={() => alert("Clicou!")}>
+            <span> {newPostsQt} new posts! Load more! </span>
+                <TfiReload/>
+            </NewPostButton> : <></>}
         </>
 
     )
