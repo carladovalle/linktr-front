@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { searchUsers } from '../../services/linktrAPI';
 import { DebounceInput } from 'react-debounce-input';
 import { useNavigate } from 'react-router-dom';
+import { BsFillCircleFill } from 'react-icons/bs';
 
 export default function SearchBar() {
 	const [searchResult, setSearchResult] = useState([]);
@@ -44,9 +45,10 @@ export default function SearchBar() {
 				{searchResult.length === 0 ? (
 					<span>Sorry, there are no results for this search.</span>
 				) : (
-					searchResult.map(({ id, name, image }, index) => (
+					searchResult.map(({ id, name, image, profileUserId }, index) => (
 						<UserFound
 							name={name}
+							profileUserId={profileUserId}
 							image={image}
 							key={index}
 							id={id}
@@ -59,8 +61,10 @@ export default function SearchBar() {
 	);
 }
 
-function UserFound({ id, name, image, setIsSearching }) {
+function UserFound({ id, name, image, profileUserId }) {
 	const navigate = useNavigate();
+	const myId = Number(localStorage.getItem('id'));
+
 	return (
 		<UserLine
 			onClick={() => {
@@ -70,6 +74,19 @@ function UserFound({ id, name, image, setIsSearching }) {
 		>
 			<img src={image} alt="" />
 			<p>{name}</p>
+			{profileUserId ? (
+				<>
+					<BsFillCircleFill />
+					<span>following</span>
+				</>
+			) : myId === Number(id) ? (
+				<>
+					<BsFillCircleFill />
+					<span>me</span>
+				</>
+			) : (
+				''
+			)}
 		</UserLine>
 	);
 }
@@ -98,7 +115,7 @@ const BarStyle = styled.nav`
 		}
 	}
 
-	svg {
+	> svg {
 		color: #c6c6c6;
 		font-size: 26px;
 	}
@@ -157,8 +174,24 @@ const UserLine = styled.div`
 		color: #515151;
 	}
 
+	> span {
+		font-size: 19px;
+		font-weight: 400;
+		color: #c5c5c5;
+	}
+
+	> svg {
+		font-size: 8px;
+		color: #c5c5c5;
+		margin-top: 2px;
+	}
+
 	&:hover {
 		background-color: #c6c6c6;
 		cursor: pointer;
+		> svg,
+		> span {
+			color: #e6dfdf;
+		}
 	}
 `;
