@@ -11,73 +11,44 @@ export default function TimelinePage() {
 	const [posts, setPosts] = useState([]);
 	const [message, setMessage] = useState('Loading...');
 	const [rerender, setRerender] = useState(false);
-	const [more, setMore] = useState(true)
-	
-
+	const [more, setMore] = useState(true);
+	const [ref, setRef] = useState(true);
 
 	function hasMore(offset, item) {
-		if(offset !== 0 && item.length === 0){
-			setMore(false)
-			
+		if (offset !== 0 && item.length === 0) {
+			setMore(false);
+		}
+	}
+
+	function att() {
+		if (ref) {
+			setRef(false);
+		} else {
+			setRef(true);
 		}
 	}
 
 	function loadData() {
-		const promise2 = getLikes();
-		let likes = [];
-		let postsLike = [];
-		let postsNoLike = [];
-		const offset = posts.length
-
-		promise2
+		const offset = posts.length;
+		const promise1 = getPost(offset);
+		promise1
 			.then((res) => {
-				likes = res.data;
+				hasMore(offset, res.data);
+				setPosts([...posts, ...res.data]);
+				if (posts.length < 1) {
+					setMessage('There are no post yet');
+				}
+				att();
 			})
-			.catch((err) => console.log('likes not available'));
-
-		function fetchData() {
-			const promise1 = getPost(offset);
-			promise1
-				.then((res) => {
-					postsNoLike = res.data;
-
-					if (likes.length !== 0) {
-						for (let i = 0; i < postsNoLike.length; i++) {
-							for (let j = 0; j < likes.length; j++) {
-								if (postsNoLike[i].id === likes[j].postId) {
-									const newItem = { ...postsNoLike[i], liked: true };
-									postsLike.push(newItem);
-									break;
-								}
-
-								if (j === likes.length - 1) {
-									const newItem = { ...postsNoLike[i], liked: false };
-									postsLike.push(newItem);
-								}
-							}
-						}
-					} else {
-						for (let i = 0; i < postsNoLike.length; i++) {
-							const newItem = { ...postsNoLike[i], liked: false };
-							postsLike.push(newItem);
-						}
-					}
-					hasMore(offset, res.data)
-					setPosts([...posts, ...postsLike]);
-					if (posts.length < 1) {
-						setMessage('There are no post yet');
-					}
-				})
-				.catch((err) => {
-					setMessage(
-						'An error occured while trying to fetch the posts, please refresh the page'
-					);
-				});
-		}
-		setTimeout(fetchData, 300);
+			.catch((err) => {
+				setMessage(
+					'An error occured while trying to fetch the posts, please refresh the page'
+				);
+			});
 	}
 
 	useEffect(() => {
+		console.log('useEffect');
 		const promise2 = getLikes();
 		let likes = [];
 		let postsLike = [];
@@ -90,39 +61,37 @@ export default function TimelinePage() {
 			.catch((err) => console.log('likes not available'));
 
 		function fetchData() {
+			postsNoLike = posts;
 
-					postsNoLike = posts;
-
-					if (likes.length !== 0) {
-						for (let i = 0; i < postsNoLike.length; i++) {
-							for (let j = 0; j < likes.length; j++) {
-								if (postsNoLike[i].id === likes[j].postId) {
-									const newItem = { ...postsNoLike[i], liked: true };
-									postsLike.push(newItem);
-									break;
-								}
-
-								if (j === likes.length - 1) {
-									const newItem = { ...postsNoLike[i], liked: false };
-									postsLike.push(newItem);
-								}
-							}
+			if (likes.length !== 0) {
+				for (let i = 0; i < postsNoLike.length; i++) {
+					for (let j = 0; j < likes.length; j++) {
+						if (postsNoLike[i].id === likes[j].postId) {
+							const newItem = { ...postsNoLike[i], liked: true };
+							postsLike.push(newItem);
+							break;
 						}
-					} else {
-						for (let i = 0; i < postsNoLike.length; i++) {
+
+						if (j === likes.length - 1) {
 							const newItem = { ...postsNoLike[i], liked: false };
 							postsLike.push(newItem);
 						}
 					}
-					setPosts(postsLike);
-					if (posts.length < 1) {
-						setMessage('There are no post yet');
-					}
-				
+				}
+			} else {
+				for (let i = 0; i < postsNoLike.length; i++) {
+					const newItem = { ...postsNoLike[i], liked: false };
+					postsLike.push(newItem);
+				}
+			}
+			setPosts(postsLike);
+			if (posts.length < 1) {
+				setMessage('There are no post yet');
+			}
 		}
 		setTimeout(fetchData, 300);
-	}, [rerender]);
-		
+	}, [rerender, ref]);
+
 	return (
 		<>
 			<Container>
@@ -135,34 +104,30 @@ export default function TimelinePage() {
 						rerender={rerender}
 						setRerender={setRerender}
 					/>
-          
-					<NewPostNotification lastPostRendered = {posts[0]}/>
-          
-					<InfiniteScroll
-					loadMore={loadData}
-              		hasMore={more}
-					>
-          
-					{posts.length === 0 ? (
-						<h6>{message}</h6>
-					) : (
-						posts.map((item, index) => (
-							<PostCard
-								key={item.id}
-								id={item.id}
-								userImg={item.image}
-								name={item.name}
-								text={item.content}
-								urlInfos={item.urlInfos}
-								liked={item.liked}
-								rerender={rerender}
-								setRerender={setRerender}
-								posts={posts}
-								setMessage={setMessage}
-								userId={item.userId}
-							/>
-						))
-					)}
+
+					<NewPostNotification lastPostRendered={posts[0]} />
+
+					<InfiniteScroll loadMore={loadData} hasMore={more}>
+						{posts.length === 0 ? (
+							<h6>{message}</h6>
+						) : (
+							posts.map((item, index) => (
+								<PostCard
+									key={item.id}
+									id={item.id}
+									userImg={item.image}
+									name={item.name}
+									text={item.content}
+									urlInfos={item.urlInfos}
+									liked={item.liked}
+									rerender={rerender}
+									setRerender={setRerender}
+									posts={posts}
+									setMessage={setMessage}
+									userId={item.userId}
+								/>
+							))
+						)}
 					</InfiniteScroll>
 					{more ? <></> : <h6>Yay! You have seen it all</h6>}
 				</div>
@@ -177,7 +142,6 @@ const Container = styled.div`
 	align-items: flex-start;
 	justify-content: center;
 	margin-top: 125px;
-	
 
 	.content {
 		width: 611px;
