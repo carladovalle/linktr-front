@@ -54,6 +54,12 @@ function removeLike(postId) {
 	return promise;
 }
 
+function getFollows() {
+	const config = createHeaders();
+	const promise = axios.get(`${BASE_URL}/follows`, config);
+	return promise;
+}
+
 function isFollowed(followedId) {
 	const config = createHeaders();
 	const promise = axios.get(`${BASE_URL}/follows/${followedId}`, config);
@@ -112,6 +118,7 @@ export {
     getLikesQtd,
     addLike,
     removeLike,
+	getFollows,
 	isFollowed,
 	changeFollow,
 	deletePost, 
