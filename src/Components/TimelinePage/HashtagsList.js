@@ -8,8 +8,7 @@ function Hashtag({name}){
     const navigate = useNavigate()    
 
     return(
-        <li onClick={() => {navigate(`/hashtag/${params}`)
-        window.location.reload()}}>{name}</li>
+        <li onClick={() => {navigate(`/hashtag/${params}`)}}>{name}</li>
     )
 }
 
