@@ -80,7 +80,7 @@ export default function TimelinePage() {
 					console.log("has more")
 					console.log(offset)
 					console.log(more)
-					console.log(res.data)
+					console.log(posts.length)
 					hasMore(offset, res.data)
 					setPosts([...posts, ...postsLike]);
 					if (posts.length < 1) {
@@ -96,7 +96,9 @@ export default function TimelinePage() {
 		setTimeout(fetchData, 300);
 	}
 
+
 	useEffect(() => {
+
 		const promise2 = getLikes();
 		const promise3 = getFollows(); //retorna array com ids dos usuarios seguidos pelo user
 		let likes = [];
