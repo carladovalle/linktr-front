@@ -77,6 +77,10 @@ export default function TimelinePage() {
 							postsLike.push(newItem);
 						}
 					}
+					console.log("has more")
+					console.log(offset)
+					console.log(more)
+					console.log(res.data)
 					hasMore(offset, res.data)
 					setPosts([...posts, ...postsLike]);
 					if (posts.length < 1) {
@@ -100,7 +104,6 @@ export default function TimelinePage() {
 		let postsNoLike = [];
 		let followsHash = {};
 		let followedPosts = [];
-		const offset = posts.length
 
 		promise2
 			.then((res) => {
