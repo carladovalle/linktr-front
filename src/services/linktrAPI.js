@@ -55,6 +55,12 @@ function removeLike(postId) {
 	return promise;
 }
 
+function getFollows() {
+	const config = createHeaders();
+	const promise = axios.get(`${BASE_URL}/follows`, config);
+	return promise;
+}
+
 function isFollowed(followedId) {
 	const config = createHeaders();
 	const promise = axios.get(`${BASE_URL}/follows/${followedId}`, config);
@@ -116,8 +122,8 @@ function getCommentsQtd(postId) {
     return promise;
 }
 
-function getLastPostId(){
-	const promise = axios.get(`${BASE_URL}/haveNewPost`)
+function getLastPostId(followsIds){
+	const promise = axios.post(`${BASE_URL}/haveNewPost`, followsIds)
 	return promise
 }
 
@@ -142,6 +148,7 @@ export {
     getLikesQtd,
     addLike,
     removeLike,
+	getFollows,
 	isFollowed,
 	changeFollow,
 	deletePost, 

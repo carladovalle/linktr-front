@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PostCard from './PostCard';
-import { getPost, getLikes } from '../../services/linktrAPI';
+import { getPost, getLikes, getFollows } from '../../services/linktrAPI';
 import SubmitBox from './SubmitBox';
 import HashtagList from './HashtagsList';
 import NewPostNotification from './NewPostsNotification';
@@ -13,6 +13,8 @@ export default function TimelinePage() {
 	const [rerender, setRerender] = useState(false);
 	const [more, setMore] = useState(true);
 	const [ref, setRef] = useState(true);
+	const [postsOriginalSize, setPostsOriginalSize] = useState(0);
+	const [fIds, setFIds] = useState([]);
 
 	function hasMore(offset, item) {
 		if (offset !== 0 && item.length === 0) {
@@ -29,8 +31,10 @@ export default function TimelinePage() {
 	}
 
 	function loadData() {
-		const offset = posts.length;
+
+		const offset = postsOriginalSize;		
 		const promise1 = getPost(offset);
+		
 		promise1
 			.then((res) => {
 				hasMore(offset, res.data);
@@ -47,11 +51,17 @@ export default function TimelinePage() {
 			});
 	}
 
+
 	useEffect(() => {
+
 		const promise2 = getLikes();
+		const promise3 = getFollows();
 		let likes = [];
 		let postsLike = [];
 		let postsNoLike = [];
+		let followsHash = {};
+		let followedPosts = [];
+		let followsIds = [];
 
 		promise2
 			.then((res) => {
@@ -59,36 +69,58 @@ export default function TimelinePage() {
 			})
 			.catch((err) => console.log('likes not available'));
 
+		promise3
+			.then((res) => { console.log(res.data); for (let i=0; i < res.data.length; i++) {
+				followsHash[res.data[i].profileUserId] = true;
+				followsIds = [...followsIds, res.data[i].profileUserId];
+			}
+			})
+			.catch((err) => console.log("follows id not available"));
+
+
+
 		function fetchData() {
 			postsNoLike = posts;
 
-			if (likes.length !== 0) {
-				for (let i = 0; i < postsNoLike.length; i++) {
-					for (let j = 0; j < likes.length; j++) {
-						if (postsNoLike[i].id === likes[j].postId) {
-							const newItem = { ...postsNoLike[i], liked: true };
-							postsLike.push(newItem);
-							break;
+				console.log(followsHash);
+					for (let i=0; i < postsNoLike.length; i++) {
+						if (followsHash[postsNoLike[i].userId]) {
+							followedPosts.push(postsNoLike[i]);
 						}
+					}
+					console.log(followedPosts);
 
-						if (j === likes.length - 1) {
-							const newItem = { ...postsNoLike[i], liked: false };
+					if (likes.length !== 0) {
+						for (let i = 0; i < followedPosts.length; i++) {
+							for (let j = 0; j < likes.length; j++) {
+								if (followedPosts[i].id === likes[j].postId) {
+									const newItem = { ...followedPosts[i], liked: true };
+									postsLike.push(newItem);
+									break;
+								}
+
+								if (j === likes.length - 1) {
+									const newItem = { ...followedPosts[i], liked: false };
+									postsLike.push(newItem);
+								}
+							}
+						}
+					} else {
+						for (let i = 0; i < followedPosts.length; i++) {
+							const newItem = { ...followedPosts[i], liked: false };
 							postsLike.push(newItem);
 						}
 					}
+
+					setPostsOriginalSize(posts.length);
+					setFIds(followsIds);
+					setPosts(postsLike);
+					if (posts.length < 1) {
+						setMessage('There are no post yet');
+					}
 				}
-			} else {
-				for (let i = 0; i < postsNoLike.length; i++) {
-					const newItem = { ...postsNoLike[i], liked: false };
-					postsLike.push(newItem);
-				}
-			}
-			setPosts(postsLike);
-			if (posts.length < 1) {
-				setMessage('There are no post yet');
-			}
-		}
-		setTimeout(fetchData, 300);
+		
+			setTimeout(fetchData, 300);
 	}, [rerender, ref]);
 
 	return (
@@ -104,7 +136,7 @@ export default function TimelinePage() {
 						setRerender={setRerender}
 					/>
 
-					<NewPostNotification lastPostRendered={posts[0]} />
+					<NewPostNotification lastPostRendered={posts[0]} followsIds={fIds}/>
 
 					<InfiniteScroll loadMore={loadData} hasMore={more}>
 						{posts.length === 0 ? (
@@ -112,7 +144,7 @@ export default function TimelinePage() {
 						) : (
 							posts.map((item, index) => (
 								<PostCard
-									key={item.id}
+									key={index}
 									id={item.id}
 									userImg={item.image}
 									name={item.name}
