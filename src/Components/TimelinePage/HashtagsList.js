@@ -98,12 +98,6 @@ const Container = styled.div`
 		cursor: pointer;
 		color: #ffffff;
 	}
-
-	@media (max-width: 990px) {
-		&& {
-			display: none;
-		}
-	}
 `;
 
 const Wrapper = styled.aside`
