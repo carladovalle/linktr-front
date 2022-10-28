@@ -23,9 +23,9 @@ export default function UserPage() {
 	const [rerender, setRerender] = useState(false);
 	const [followed, setFollowed] = useState(false);
 	const [disabled, setDisabled] = useState(false);
-	const [hasResponse, setHasResponse] = useState(false);
 	const [more, setMore] = useState(true);
 	const [ref, setRef] = useState(true);
+	const myId = localStorage.getItem('id');
 
 	useEffect(() => {
 		loadData();
@@ -129,7 +129,7 @@ export default function UserPage() {
 	return (
 		<>
 			<Container>
-				{ !name ? (
+				{!name ? (
 					<Loading message={message} />
 				) : (
 					<div className="content">
@@ -137,14 +137,17 @@ export default function UserPage() {
 						<header>
 							<img src={image} alt="profile" />
 							<h1>{name}'s posts</h1>
-							
-							<button
-								onClick={toFollow}
-								disabled={disabled}
-								followed={followed}
-							>
-								{followed ? 'Unfollow' : 'Follow'}
-							</button>
+							{myId === id ? (
+								<></>
+							) : (
+								<button
+									onClick={toFollow}
+									disabled={disabled}
+									followed={followed}
+								>
+									{followed ? 'Unfollow' : 'Follow'}
+								</button>
+							)}
 						</header>
 						<InfiniteScroll loadMore={loadData} hasMore={more}>
 							{posts.length === 0 ? (
@@ -234,6 +237,11 @@ const Container = styled.div`
 		font-weight: 700;
 		color: ${(props) => (props.followed ? '#1877F2' : '#FFFFFF')};
 		float: right;
+
+		&:hover{
+			cursor: pointer;
+			filter: brightness(0.85);
+		}
 	}
 
 	h6 {
