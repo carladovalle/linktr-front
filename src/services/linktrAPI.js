@@ -110,6 +110,12 @@ function getCommentPost(postId) {
     return promise;
 }
 
+function getCommentsQtd(postId) {
+	const config = createHeaders();
+	const promise = axios.get(`${BASE_URL}/commentsQtd/${postId}`, config);
+    return promise;
+}
+
 function getLastPostId(){
 	const promise = axios.get(`${BASE_URL}/haveNewPost`)
 	return promise
@@ -132,5 +138,6 @@ export {
 	getUserPosts,
 	addCommentPost,
 	getCommentPost,
-	getLastPostId
+	getLastPostId,
+	getCommentsQtd
 };
