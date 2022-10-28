@@ -29,6 +29,7 @@ export default function RegisterPage() {
         event.preventDefault()
         setIsButtonDisabled(true)
         const url = process.env.REACT_APP_API_BASE_URL
+        
         axios.post(`${url}/sign-up`, form)
           .then((response) => {
             console.log(response);

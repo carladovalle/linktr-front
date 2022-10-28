@@ -8,6 +8,7 @@ import { BiEditAlt } from 'react-icons/bi';
 import { AiFillDelete } from 'react-icons/ai';
 import { deletePost, editThePost } from "../../services/linktrAPI.js";
 import ConfirmScreen from "./ConfirmScreen.js";
+import Comments from "./Comments";
 
 export default function PostCard({id, userImg, name, text, urlInfos, liked, rerender, setRerender, userId, posts}){
     const idLocalStorage = Number(localStorage.getItem('id'))
@@ -89,11 +90,12 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
             console.log(error);
         }
     }
-    
+
     if(!urlInfos.image){
         urlInfos.image = notImage }
     
     return(
+        <>
         <Container>
                     {showConfirmScreen && (
                         <ConfirmScreen 
@@ -163,6 +165,8 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
                 </LinkCard>
             </span>
         </Container>
+        <Comments id={id} userImg={userImg} whoPosted={userId} />
+        </>
     )
 }
 
@@ -173,53 +177,43 @@ const Container = styled.div`
         justify-content: flex-start;
         width: 100%;
         background: #171717;    
-        border-radius: 16px;
+        border-radius: 16px 16px 0 0;
         padding: 17px;
-        margin-bottom: 16px;
     }
-
     img{
         width: 50px;
         height: 50px;
         border-radius: 50%;
         object-fit: cover;
-
         &:hover{
             cursor: pointer;
             filter: brightness(0.90)
         }
     }
-
     .leftSide {
         display: flex;
         flex-direction: column;
         align-items: center;
     }
-
     .likeIcon {
         font-size: 20px;
         margin-top: 19px;
     }
-
     .infos{
         width: 100%;
         margin-left: 18px;
         margin-top: 2px;
     }
-
     .firstLine {
         display: flex;
         justify-content: space-between;        
     }
-
     .actions {
         display: flex;
     }
-
     .space {
         margin-left: 12.53px;
     }
-
     h4{
         margin-bottom: 7px;
         font-style: normal;
@@ -228,13 +222,11 @@ const Container = styled.div`
         line-height: 23px;
         color: #ffffff;
         word-break: break-word;
-
         &:hover{
             cursor: pointer;
             filter: brightness(0.90)
         }
     }
-
     h5{
         margin-bottom: 10px;
         font-weight: 400;
@@ -243,7 +235,6 @@ const Container = styled.div`
         color: #B7B7B7;
         word-break: break-word;
     }
-
     @media (max-width: 675px){
         
     &&{
@@ -251,26 +242,21 @@ const Container = styled.div`
         padding: 9px 15px 15px 15px;
         margin-bottom: 16px;
     }
-
     img{
         width: 40px;
         height: 40px;
     }
-
     h4{
         font-size: 17px;
         line-height: 20px;
     }
-
     h5{
         font-size: 15px;
         line-height: 18px;
-
     }
 }
 `
 const LinkCard = styled.div`
-
     &&{
         display: flex;
         justify-content: space-between;
@@ -281,18 +267,15 @@ const LinkCard = styled.div`
         height: 100%;
         cursor: pointer;
     }
-
     && img{
         min-width: 154px;
         min-height: 154px;
         border-radius: 0px 10px 10px 0px;
         object-fit: cover;
     }
-
     div{
         min-height: 154px;
         width: 100%;
-
         display: flex;
         flex-direction: column;
         align-items: flex-start;
@@ -311,18 +294,15 @@ const LinkCard = styled.div`
         word-break: break-word;
         margin-bottom: 4px;
     }
-
     h3{
         font-style: normal;
         font-weight: 400;
         font-size: 11px;
         line-height: 13px;
-
         color: #9B9595;
         word-break: break-word;
         margin-bottom: 13px;
     }
-
     p{
         font-weight: 400;
         font-size: 11px;
@@ -330,9 +310,7 @@ const LinkCard = styled.div`
         word-break: break-word;
         color: #CECECE;
     }
-
     @media (max-width: 675px){
-
         &&{
         display: flex;
         justify-content: space-between;
@@ -343,14 +321,12 @@ const LinkCard = styled.div`
         height: 100%;
         cursor: pointer;
     }
-
     && img{
         min-width: 95px;
         min-height: 105px;
         border-radius: 0px 10px 10px 0px;
         object-fit: cover;
     }
-
     div{
         min-height: 105px;
         width: 100%;
@@ -361,17 +337,14 @@ const LinkCard = styled.div`
         font-size: 11px;
         line-height: 13px;
     }
-
     h3{
         font-size: 9px;
         line-height: 11px;
     }
-
     p{
         font-size: 9px;
         line-height: 11px;
     }
-
     }
 `
 const Edit = styled.div`
@@ -386,13 +359,11 @@ const EditText = styled.textarea`
     line-height: 20px;
     background: #FFFFFF;
     border-radius: 7px; 
-
     &:focus {
         box-shadow: 0 0 0 0;
         border: 0 none;
         outline: 0;
     }
-
     @media (max-width: 610px) {
         font-size: 15px;
         line-height: 18px;
