@@ -80,6 +80,7 @@ export default function TimelinePage() {
 				followsIds = [...followsIds, res.data[i].profileUserId];
 		}
 				followsHash[userId] = true;
+				followsIds = [...followsIds, userId]
 		})
 			.catch(() => console.log("follows id not available"));
 
@@ -125,8 +126,7 @@ export default function TimelinePage() {
 						setMessage('No post found from your friends');
 					}
 				}
-		
-			setTimeout(fetchData, 1000);
+			setTimeout(fetchData, 1500);
 	}, [rerender, ref]);
 
 	return (
