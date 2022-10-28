@@ -24,6 +24,10 @@ export default function PostCard({
 	setRerender,
 	userId,
 	posts,
+	isrepost,
+	reposterid,
+	reposterName
+
 }) {
 	const idLocalStorage = Number(localStorage.getItem('id'));
 	const style = { color: 'white', fontSize: '18px', margin: '0 3px' };
@@ -40,6 +44,10 @@ export default function PostCard({
 		cursor: 'pointer',
 	};
 	const [openedComments, setOpenedComments] = useState(false);
+	let isUserId = userId
+	if(isrepost){
+		isUserId = reposterid
+	}
 
 	function hashtag(name) {
 		const params = name.slice(1);
@@ -115,7 +123,11 @@ export default function PostCard({
 
 	return (
 		<Wrapper>
-			<RepostBar></RepostBar>
+			<RepostBar
+			isrepost={isrepost}
+			reposterid={reposterid}
+			reposterName={reposterName}
+			></RepostBar>
 			<Container>
 				{showConfirmScreen && (
 					<ConfirmScreen
@@ -149,8 +161,10 @@ export default function PostCard({
 					<div className="firstLine">
 						<h4 onClick={() => navigate(`/user/${userId}`)}>{name}</h4>
 
-						{userId === idLocalStorage ? (
-							<div className="actions">
+						{isUserId === idLocalStorage ? (
+							<div className="actions">{
+								isrepost ? <></>
+								:
 								<Edit>
 									{isEditing ? (
 										<BiEditAlt
@@ -161,6 +175,7 @@ export default function PostCard({
 										<BiEditAlt style={style} onClick={() => editPost()} />
 									)}
 								</Edit>
+							}
 								<AiFillDelete style={style} onClick={() => screenToDelete()} />
 							</div>
 						) : (

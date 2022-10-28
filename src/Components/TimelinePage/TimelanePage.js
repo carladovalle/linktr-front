@@ -45,6 +45,7 @@ export default function TimelinePage() {
 					'An error occured while trying to fetch the posts, please refresh the page'
 				);
 			});
+			console.log(posts)
 	}
 
 	useEffect(() => {
@@ -125,13 +126,16 @@ export default function TimelinePage() {
 									posts={posts}
 									setMessage={setMessage}
 									userId={item.userId}
+									isrepost={item.isrepost}
+									reposterid={item.reposterid}
+									reposterName={item.reposterName}
 								/>
 							))
 						)}
 					</InfiniteScroll>
 					{more ? <></> : <h6>Yay! You have seen it all</h6>}
 				</div>
-				<span className='hashtagList'><HashtagList/></span>
+				<HashtagList />
 			</Container>
 		</>
 	);
@@ -165,12 +169,6 @@ const Container = styled.div`
 		line-height: 23px;
 		color: #ffffff;
 		word-break: break-word;
-	}
-
-	@media (max-width: 990px) {
-		.hashtagList{
-			display:none
-		}
 	}
 
 	@media (max-width: 675px) {
