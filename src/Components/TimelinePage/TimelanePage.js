@@ -126,7 +126,7 @@ export default function TimelinePage() {
 					}
 				}
 		
-			setTimeout(fetchData, 300);
+			setTimeout(fetchData, 1000);
 	}, [rerender, ref]);
 
 	return (
