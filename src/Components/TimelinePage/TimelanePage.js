@@ -115,7 +115,6 @@ export default function TimelinePage() {
 					setPostsOriginalSize(posts.length);
 					setFIds(followsIds);
 					setPosts(postsLike);
-					console.log(posts[0])
 					if (posts.length < 1) {
 						setMessage('There are no post yet');
 					}
@@ -157,6 +156,9 @@ export default function TimelinePage() {
 									posts={posts}
 									setMessage={setMessage}
 									userId={item.userId}
+									isrepost={item.isrepost}
+									reposterid={item.reposterid}
+									reposterName={item.reposterName}
 								/>
 							))
 						)}

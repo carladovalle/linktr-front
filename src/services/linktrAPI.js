@@ -1,5 +1,6 @@
 import axios from 'axios';
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+//const BASE_URL = "http://localhost:4000";
 
 function createHeaders() {
 	const auth = JSON.parse(localStorage.getItem('token'));
@@ -99,7 +100,25 @@ function deletePost(postId) {
 
 function editThePost(postId, content) {
 	const config = createHeaders();
-	const promise = axios.put(`${BASE_URL}/posts/edit/${postId.postId}`, content ,config);
+	const promise = axios.put(`${BASE_URL}/posts/edit/${postId.postId}`, content, config);
+    return promise;
+}
+
+function addCommentPost(postId, text) {
+	const config = createHeaders();
+	const promise = axios.post(`${BASE_URL}/comments/${postId.postId}`, text, config);
+    return promise;
+}
+
+function getCommentPost(postId) {
+	const config = createHeaders();
+	const promise = axios.get(`${BASE_URL}/comments/${postId.postId}`, config);
+    return promise;
+}
+
+function getCommentsQtd(postId) {
+	const config = createHeaders();
+	const promise = axios.get(`${BASE_URL}/commentsQtd/${postId}`, config);
     return promise;
 }
 
@@ -108,6 +127,17 @@ function getLastPostId(followsIds){
 	const promise = axios.post(`${BASE_URL}/haveNewPost`, followsIds)
 	return promise
 }
+
+function repost(postId) {
+	const config = createHeaders();
+	const promise = axios.post(`${BASE_URL}/repost`, postId, config);
+	return promise;
+}
+function getRepostQtd(postId) {
+    const promise = axios.get(`${BASE_URL}/repostNumber/${postId}`)
+    return promise;
+}
+
 
 export {
 	getPost,
@@ -125,5 +155,10 @@ export {
 	deletePost, 
 	editThePost,
 	getUserPosts,
-	getLastPostId
+	addCommentPost,
+	getCommentPost,
+	getLastPostId,
+	getCommentsQtd,
+	repost,
+	getRepostQtd
 };
