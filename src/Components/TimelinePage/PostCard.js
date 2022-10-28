@@ -121,11 +121,13 @@ export default function PostCard({
 	};
 
 	function repostPost() {
+		setLoading(true)
         const postId = id;
         const promise = repost({ postId });
-        promise.then(res => {setRerender(!rerender); setConfirmRepost(false)})
+        promise.then(res => {setRerender(!rerender); setConfirmRepost(false); setLoading(false)})
         .catch(err => {console.log("repost not available")
-		setConfirmRepost(false)})
+		setConfirmRepost(false)
+		setLoading(false)})
     }
 
 	if (!urlInfos.image) {
@@ -165,6 +167,7 @@ export default function PostCard({
 					rerender={rerender}
 					setRerender={setRerender}
 					loading={loading}
+					setLoading={setLoading}
 					setConfirmRepost={setConfirmRepost}/>
 					<CommentButton
 						id={id}
@@ -238,6 +241,7 @@ export default function PostCard({
 					<ConfirmRepost
 						setConfirmRepost={setConfirmRepost}
 						repostPost={repostPost}
+						loading={loading}
 					/>
 					:
 					<></>
