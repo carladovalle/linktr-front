@@ -5,10 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useRef } from 'react';
 import LikesPostCard from './LikesPostCard';
 import { BiEditAlt } from 'react-icons/bi';
-import { AiFillDelete, AiOutlineComment } from 'react-icons/ai';
+import { AiFillDelete } from 'react-icons/ai';
 import { deletePost, editThePost } from '../../services/linktrAPI.js';
 import ConfirmScreen from './ConfirmScreen.js';
-import Comments from './Comments/Comments';
+import Comments from './Comments/Comments.js';
+import RepostBar from './RepostBar';
+import RepostPostCard from './RepostPostCard';
 import CommentButton from './Comments/CommentsButton';
 
 export default function PostCard({
@@ -37,7 +39,7 @@ export default function PostCard({
 		fontWeight: 'bold',
 		cursor: 'pointer',
 	};
-    const [openedComments, setOpenedComments] = useState(false)
+	const [openedComments, setOpenedComments] = useState(false);
 
 	function hashtag(name) {
 		const params = name.slice(1);
@@ -100,6 +102,7 @@ export default function PostCard({
 				case 'Escape':
 					setIsEditing(false);
 					break;
+				default:
 			}
 		} catch (error) {
 			console.log(error);
@@ -112,6 +115,7 @@ export default function PostCard({
 
 	return (
 		<Wrapper>
+			<RepostBar></RepostBar>
 			<Container>
 				{showConfirmScreen && (
 					<ConfirmScreen
@@ -133,7 +137,12 @@ export default function PostCard({
 						rerender={rerender}
 						setRerender={setRerender}
 					/>
-					<CommentButton id={id} openedComments={openedComments} setOpenedComments={setOpenedComments} />
+					<RepostPostCard />
+					<CommentButton
+						id={id}
+						openedComments={openedComments}
+						setOpenedComments={setOpenedComments}
+					/>
 				</span>
 
 				<span className="infos">
@@ -189,16 +198,20 @@ export default function PostCard({
 					</LinkCard>
 				</span>
 			</Container>
-            {openedComments ? <Comments id={id} userImg={userImg} whoPosted={userId} /> : ""}
+			{openedComments ? (
+				<Comments id={id} userImg={userImg} whoPosted={userId} />
+			) : (
+				''
+			)}
 		</Wrapper>
 	);
 }
 
 const Wrapper = styled.section`
-    margin-bottom: 32px;
-    display: flex;
-    flex-direction: column;
-`
+	margin-bottom: 32px;
+	display: flex;
+	flex-direction: column;
+`;
 
 const Container = styled.div`
 	&& {
@@ -209,8 +222,8 @@ const Container = styled.div`
 		background: #171717;
 		border-radius: 16px;
 		padding: 17px;
-        margin-bottom: -15px;
-        z-index: 1;
+		margin-bottom: -15px;
+		z-index: 1;
 	}
 	img {
 		width: 50px;
@@ -223,7 +236,7 @@ const Container = styled.div`
 		}
 	}
 	.leftSide {
-        width: 12%;
+		width: 12%;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
