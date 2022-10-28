@@ -14,6 +14,8 @@ import { BsArrowLeftCircle } from 'react-icons/bs';
 import InfiniteScroll from 'react-infinite-scroller';
 
 export default function UserPage() {
+	const logedId = localStorage.getItem("id")
+
 	const navigate = useNavigate();
 	const { id } = useParams();
 	const [posts, setPosts] = useState([]);
@@ -137,13 +139,17 @@ export default function UserPage() {
 						<header>
 							<img src={image} alt="profile" />
 							<h1>{name}'s posts</h1>
-							<button
+							{logedId !== id ? 
+								(<button
 								onClick={toFollow}
 								disabled={disabled}
 								followed={followed}
-							>
+								>
 								{followed ? 'Unfollow' : 'Follow'}
-							</button>
+								</button>) :
+								(<></>)
+							}
+							
 						</header>
 						<InfiniteScroll loadMore={loadData} hasMore={more}>
 							{posts.length === 0 ? (
@@ -170,6 +176,7 @@ export default function UserPage() {
 					</div>
 				)}
 				<HashtagList />
+				
 			</Container>
 		</>
 	);
