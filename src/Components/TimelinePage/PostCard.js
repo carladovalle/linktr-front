@@ -165,7 +165,7 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
                 </LinkCard>
             </span>
         </Container>
-        <Comments id={id} userImg={userImg} />
+        <Comments id={id} userImg={userImg} whoPosted={userId} />
         </>
     )
 }

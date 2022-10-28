@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { IoPaperPlaneOutline } from "react-icons/io5";
 import { addCommentPost, getCommentPost } from "../../services/linktrAPI.js";
 
-export default function Comments ({id, userImg}) {
+export default function Comments ({id, userImg, whoPosted}) {
 
     const style = { color: "white", fontSize: "18px", margin: "0 3px" }
     const [comment, setComment] = useState("");
@@ -58,14 +58,14 @@ export default function Comments ({id, userImg}) {
                 {!comments ? '' :
                 (comments.map(c => 
                     <Comment>
-                                imagem
+                                <img src={c.image} />
                                 <div>
                                     <h4>
                                         <span>
-                                            autor
+                                            {c.author}
                                         </span>
-                                        <p> se é autor ou nao </p>
-                                        <p> se é seguidor ou nao </p> 
+                                        <p> {whoPosted === c.userId ? `• post's author` : '' } </p>
+                                        <p> verifica se é seguir ou nao </p> 
                                     </h4>
                                         <p>{c.text}</p>
                                 </div>
