@@ -2,16 +2,16 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IoPaperPlaneOutline } from 'react-icons/io5';
 import { addCommentPost, getCommentPost } from '../../../services/linktrAPI.js';
+import { useNavigate } from 'react-router-dom';
 
 export default function Comments({ id, whoPosted }) {
-	const style = { color: 'white', fontSize: '18px', margin: '0 3px' };
 	const [comment, setComment] = useState('');
 	const [comments, setComments] = useState();
 	const userImg = localStorage.getItem("userImage")
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		const postId = id;
-
 		const promise = getCommentPost({ postId });
 
 		promise.then((response) => {
@@ -52,14 +52,14 @@ export default function Comments({ id, whoPosted }) {
 			<Scroller>
 				{!comments
 					? ''
-					: comments.map((c) => (
-							<Comment>
-								<img src={c.image} />
+					: comments.map((c, index) => (
+							<Comment key={index}>
+								<img src={c.image} alt="" onClick={() => navigate(`/user/${c.userId}`)}/>
 								<div>
 									<h4>
-										<span>{c.author}</span>
+										<span onClick={() => navigate(`/user/${c.userId}`)}>{c.author}</span>
 										<p> {whoPosted === c.userId ? `• post's author` : ''} </p>
-										<p> {c.profileUserId ? `• following` : ''} </p>
+										<p> {c.isFollowing ? `• following` : ''} </p>
 									</h4>
 									<p>{c.text}</p>
 								</div>
@@ -67,7 +67,7 @@ export default function Comments({ id, whoPosted }) {
 					  ))}
 			</Scroller>
 			<WriteComment>
-				<img src={userImg} />
+				<img src={userImg} alt ="" />
 				<input
 					type="text"
 					placeholder="write a comment..."
@@ -93,6 +93,7 @@ const ContainerComments = styled.div`
 		background: #1e1e1e;
 		border-radius: 0 0 16px 16px;
 		padding: 17px;
+		z-index: -1;
 	}
 	img {
 		width: 39px;
@@ -145,6 +146,16 @@ const Scroller = styled.div`
 	max-height: 200px;
 	overflow-y: auto;
 	overflow-x: hidden;
+
+	&::-webkit-scrollbar{
+		width: 10px;
+	}
+
+	&::-webkit-scrollbar-thumb{
+		background-color: black;
+		border-radius: 20px;
+		border: none
+	}
 
 	@media (max-width: 635px) {
 		width: 100%;
@@ -236,4 +247,9 @@ const ButtonSend = styled.div`
 	font-size: 18px;
 	right: 13px;
 	color: #f3f3f3;
+
+	&:hover{
+		cursor: pointer;
+		filter: brightness(0.85);
+	}
 `;

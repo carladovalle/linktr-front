@@ -45,10 +45,10 @@ export default function SearchBar() {
 				{searchResult.length === 0 ? (
 					<span>Sorry, there are no results for this search.</span>
 				) : (
-					searchResult.map(({ id, name, image, profileUserId }, index) => (
+					searchResult.map(({ id, name, image, isFollowing }, index) => (
 						<UserFound
 							name={name}
-							profileUserId={profileUserId}
+							isFollowing={isFollowing}
 							image={image}
 							key={index}
 							id={id}
@@ -61,7 +61,7 @@ export default function SearchBar() {
 	);
 }
 
-function UserFound({ id, name, image, profileUserId }) {
+function UserFound({ id, name, image, isFollowing }) {
 	const navigate = useNavigate();
 	const myId = Number(localStorage.getItem('id'));
 
@@ -74,7 +74,7 @@ function UserFound({ id, name, image, profileUserId }) {
 		>
 			<img src={image} alt="" />
 			<p>{name}</p>
-			{profileUserId ? (
+			{isFollowing ? (
 				<>
 					<BsFillCircleFill />
 					<span>following</span>

@@ -98,6 +98,11 @@ const Buttons = styled.div`
     @media (max-width: 610px) {
         gap: 10px;
     }
+
+    button:hover{
+        cursor: pointer;
+        filter: brightness(0.85);
+    }
 `;
 
 const ButtonAccept = styled.button`
@@ -110,6 +115,7 @@ const ButtonAccept = styled.button`
     border-radius: 5px;
     cursor: pointer;
     display: flex;
+    border: none;
     align-items: center;
     justify-content: center;
 `;
@@ -122,5 +128,6 @@ const ButtonRecuse = styled.button`
     color: #1877F2;
     background: #FFFFFF;
     border-radius: 5px;
+    border: none;
     cursor: pointer;
 `;

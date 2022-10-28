@@ -52,7 +52,17 @@ const GlobalStyle = createGlobalStyle`
 
   body{
     font-family: 'Lato', sans-serif;
-    background-color: #333333;  
+    background-color: #333333; 
+    
+    &::-webkit-scrollbar{
+		width: 10px;
+	}
+
+	&::-webkit-scrollbar-thumb{
+		background-color: #ffffff;
+		border-radius: 20px;
+		border: none
+	}
   }
 `;
 
