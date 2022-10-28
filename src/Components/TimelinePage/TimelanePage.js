@@ -15,6 +15,7 @@ export default function TimelinePage() {
 	const [ref, setRef] = useState(true);
 	const [postsOriginalSize, setPostsOriginalSize] = useState(0);
 	const [fIds, setFIds] = useState([]);
+	const userId = localStorage.getItem("id");
 
 	function hasMore(offset, item) {
 		if (offset !== 0 && item.length === 0) {
@@ -73,8 +74,9 @@ export default function TimelinePage() {
 			.then((res) => { console.log(res.data); for (let i=0; i < res.data.length; i++) {
 				followsHash[res.data[i].profileUserId] = true;
 				followsIds = [...followsIds, res.data[i].profileUserId];
-			}
-			})
+		}
+				followsHash[userId] = true;
+		})
 			.catch((err) => console.log("follows id not available"));
 
 
@@ -136,34 +138,43 @@ export default function TimelinePage() {
 						setRerender={setRerender}
 					/>
 
-					<NewPostNotification lastPostRendered={posts[0]} followsIds={fIds}/>
+					{	fIds.length === 0 ?
+						
+						<h6>You don't follow anyone yet. Search for new friends!</h6> : 
+						
+						<>
+						<NewPostNotification lastPostRendered={posts[0]} followsIds={fIds}/>
 
-					<InfiniteScroll loadMore={loadData} hasMore={more}>
-						{posts.length === 0 ? (
-							<h6>{message}</h6>
-						) : (
-							posts.map((item, index) => (
-								<PostCard
-									key={index}
-									id={item.id}
-									userImg={item.image}
-									name={item.name}
-									text={item.content}
-									urlInfos={item.urlInfos}
-									liked={item.liked}
-									rerender={rerender}
-									setRerender={setRerender}
-									posts={posts}
-									setMessage={setMessage}
-									userId={item.userId}
-									isrepost={item.isrepost}
-									reposterid={item.reposterid}
-									reposterName={item.reposterName}
-								/>
-							))
-						)}
-					</InfiniteScroll>
-					{more ? <></> : <h6>Yay! You have seen it all</h6>}
+						<InfiniteScroll loadMore={loadData} hasMore={more}>
+							{posts.length === 0 ? (
+								<h6>{message}</h6>
+							) : (
+								posts.map((item, index) => (
+									<PostCard
+										key={index}
+										id={item.id}
+										userImg={item.image}
+										name={item.name}
+										text={item.content}
+										urlInfos={item.urlInfos}
+										liked={item.liked}
+										rerender={rerender}
+										setRerender={setRerender}
+										posts={posts}
+										setMessage={setMessage}
+										userId={item.userId}
+										isrepost={item.isrepost}
+										reposterid={item.reposterid}
+										reposterName={item.reposterName}
+									/>
+								))
+							)}
+						</InfiniteScroll>
+						{more ? <></> : <h6>Yay! You have seen it all</h6>}
+						</>
+						}
+
+					
 				</div>
 				<HashtagList />
 			</Container>
