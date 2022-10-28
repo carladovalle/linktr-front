@@ -11,101 +11,57 @@ export default function TimelinePage() {
 	const [posts, setPosts] = useState([]);
 	const [message, setMessage] = useState('Loading...');
 	const [rerender, setRerender] = useState(false);
-	const [more, setMore] = useState(true)
-	
-
+	const [more, setMore] = useState(true);
+	const [ref, setRef] = useState(true);
+	const [postsOriginalSize, setPostsOriginalSize] = useState(0);
+	const [fIds, setFIds] = useState([]);
 
 	function hasMore(offset, item) {
-		if(offset !== 0 && item.length === 0){
-			setMore(false)
-			
+		if (offset !== 0 && item.length === 0) {
+			setMore(false);
+		}
+	}
+
+	function att() {
+		if (ref) {
+			setRef(false);
+		} else {
+			setRef(true);
 		}
 	}
 
 	function loadData() {
-		const promise2 = getLikes();
-		const promise3 = getFollows(); //retorna array com ids dos usuarios seguidos pelo user
-		let likes = [];
-		let postsLike = [];
-		let postsNoLike = [];
-		let followsHash = {};
-		let followedPosts = [];
-		const offset = posts.length
 
-		promise2
+		const offset = postsOriginalSize;		
+		const promise1 = getPost(offset);
+		
+		promise1
 			.then((res) => {
-				likes = res.data;
+				hasMore(offset, res.data);
+				setPosts([...posts, ...res.data]);
+				if (posts.length < 1) {
+					setMessage('There are no post yet');
+				}
+				att();
 			})
-			.catch((err) => console.log('likes not available'));
-
-		promise3
-			.then((res) => { for (let i=0; i < res.data.length; i++) {
-				followsHash[res.data[i].profileUserId] = true;
-			}
-			console.log(followsHash)
+			.catch((err) => {
+				setMessage(
+					'An error occured while trying to fetch the posts, please refresh the page'
+				);
 			});
-
-		function fetchData() {
-			const promise1 = getPost(offset);
-			promise1
-				.then((res) => {
-					postsNoLike = res.data;
-					for (let i=0; i < postsNoLike.length; i++) {
-						if (followsHash[postsNoLike[i].userId]) {
-							followedPosts.push(postsNoLike[i]);
-						}
-					}
-
-					if (likes.length !== 0) {
-						for (let i = 0; i < followedPosts.length; i++) {
-							for (let j = 0; j < likes.length; j++) {
-								if (followedPosts[i].id === likes[j].postId) {
-									const newItem = { ...followedPosts[i], liked: true };
-									postsLike.push(newItem);
-									break;
-								}
-
-								if (j === likes.length - 1) {
-									const newItem = { ...followedPosts[i], liked: false };
-									postsLike.push(newItem);
-								}
-							}
-						}
-					} else {
-						for (let i = 0; i < followedPosts.length; i++) {
-							const newItem = { ...followedPosts[i], liked: false };
-							postsLike.push(newItem);
-						}
-					}
-					console.log("has more")
-					console.log(offset)
-					console.log(more)
-					console.log(posts.length)
-					hasMore(offset, res.data)
-					setPosts([...posts, ...postsLike]);
-					if (posts.length < 1) {
-						setMessage('There are no post yet');
-					}
-				})
-				.catch((err) => {
-					setMessage(
-						'An error occured while trying to fetch the posts, please refresh the page'
-					);
-				});
-		}
-		setTimeout(fetchData, 300);
 	}
 
 
 	useEffect(() => {
 
 		const promise2 = getLikes();
-		const promise3 = getFollows(); //retorna array com ids dos usuarios seguidos pelo user
+		const promise3 = getFollows();
 		let likes = [];
 		let postsLike = [];
 		let postsNoLike = [];
 		let followsHash = {};
 		let followedPosts = [];
+		let followsIds = [];
 
 		promise2
 			.then((res) => {
@@ -114,20 +70,25 @@ export default function TimelinePage() {
 			.catch((err) => console.log('likes not available'));
 
 		promise3
-		.then((res) => { for (let i=0; i < res.data.length; i++) {
-			followsHash[res.data[i].followedUserId] = true;
-		}
-		});
+			.then((res) => { console.log(res.data); for (let i=0; i < res.data.length; i++) {
+				followsHash[res.data[i].profileUserId] = true;
+				followsIds = [...followsIds, res.data[i].profileUserId];
+			}
+			})
+			.catch((err) => console.log("follows id not available"));
+
+
 
 		function fetchData() {
+			postsNoLike = posts;
 
-					postsNoLike = posts;
-
+				console.log(followsHash);
 					for (let i=0; i < postsNoLike.length; i++) {
 						if (followsHash[postsNoLike[i].userId]) {
 							followedPosts.push(postsNoLike[i]);
 						}
 					}
+					console.log(followedPosts);
 
 					if (likes.length !== 0) {
 						for (let i = 0; i < followedPosts.length; i++) {
@@ -150,15 +111,19 @@ export default function TimelinePage() {
 							postsLike.push(newItem);
 						}
 					}
+
+					setPostsOriginalSize(posts.length);
+					setFIds(followsIds);
 					setPosts(postsLike);
+					console.log(posts[0])
 					if (posts.length < 1) {
 						setMessage('There are no post yet');
 					}
-				
-		}
-		setTimeout(fetchData, 300);
-	}, [rerender]);
+				}
 		
+			setTimeout(fetchData, 300);
+	}, [rerender, ref]);
+
 	return (
 		<>
 			<Container>
@@ -171,34 +136,30 @@ export default function TimelinePage() {
 						rerender={rerender}
 						setRerender={setRerender}
 					/>
-          
-					<NewPostNotification lastPostRendered = {posts[0]}/>
-          
-					<InfiniteScroll
-					loadMore={loadData}
-              		hasMore={more}
-					>
-          
-					{posts.length === 0 ? (
-						<h6>{message}</h6>
-					) : (
-						posts.map((item, index) => (
-							<PostCard
-								key={item.id}
-								id={item.id}
-								userImg={item.image}
-								name={item.name}
-								text={item.content}
-								urlInfos={item.urlInfos}
-								liked={item.liked}
-								rerender={rerender}
-								setRerender={setRerender}
-								posts={posts}
-								setMessage={setMessage}
-								userId={item.userId}
-							/>
-						))
-					)}
+
+					<NewPostNotification lastPostRendered={posts[0]} followsIds={fIds}/>
+
+					<InfiniteScroll loadMore={loadData} hasMore={more}>
+						{posts.length === 0 ? (
+							<h6>{message}</h6>
+						) : (
+							posts.map((item, index) => (
+								<PostCard
+									key={index}
+									id={item.id}
+									userImg={item.image}
+									name={item.name}
+									text={item.content}
+									urlInfos={item.urlInfos}
+									liked={item.liked}
+									rerender={rerender}
+									setRerender={setRerender}
+									posts={posts}
+									setMessage={setMessage}
+									userId={item.userId}
+								/>
+							))
+						)}
 					</InfiniteScroll>
 					{more ? <></> : <h6>Yay! You have seen it all</h6>}
 				</div>
@@ -213,7 +174,6 @@ const Container = styled.div`
 	align-items: flex-start;
 	justify-content: center;
 	margin-top: 125px;
-	
 
 	.content {
 		width: 611px;

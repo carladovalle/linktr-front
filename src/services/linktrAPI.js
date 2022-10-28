@@ -103,8 +103,9 @@ function editThePost(postId, content) {
     return promise;
 }
 
-function getLastPostId(){
-	const promise = axios.get(`${BASE_URL}/haveNewPost`)
+function getLastPostId(followsIds){
+	console.log(followsIds)
+	const promise = axios.post(`${BASE_URL}/haveNewPost`, followsIds)
 	return promise
 }
 
