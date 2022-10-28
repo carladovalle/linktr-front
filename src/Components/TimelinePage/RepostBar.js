@@ -27,4 +27,8 @@ const Bar = styled.div`
     strong{
         font-weight: bolder;
     }
+
+    @media (max-width: 675px){
+        border-radius: 0px;
+    }
 `

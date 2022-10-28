@@ -285,8 +285,8 @@ const Container = styled.div`
 		&& {
 			border-radius: 0px;
 			padding: 9px 15px 15px 15px;
-			margin-bottom: 16px;
 		}
+		
 		img {
 			width: 40px;
 			height: 40px;
