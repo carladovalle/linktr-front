@@ -15,6 +15,7 @@ export default function TimelinePage() {
 	const [ref, setRef] = useState(true);
 	const [postsOriginalSize, setPostsOriginalSize] = useState(0);
 	const [fIds, setFIds] = useState([]);
+	const userId = localStorage.getItem("id");
 
 	function hasMore(offset, item) {
 		if (offset !== 0 && item.length === 0) {
@@ -73,8 +74,9 @@ export default function TimelinePage() {
 			.then((res) => { console.log(res.data); for (let i=0; i < res.data.length; i++) {
 				followsHash[res.data[i].profileUserId] = true;
 				followsIds = [...followsIds, res.data[i].profileUserId];
-			}
-			})
+		}
+				followsHash[userId] = true;
+		})
 			.catch((err) => console.log("follows id not available"));
 
 
