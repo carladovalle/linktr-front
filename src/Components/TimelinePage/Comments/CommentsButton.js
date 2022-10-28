@@ -1,13 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { AiOutlineComment } from 'react-icons/ai';
+import { getCommentsQtd } from '../../../services/linktrAPI';
 
-export default function CommentButton({ openedComments, setOpenedComments }) {
+export default function CommentButton({
+	openedComments,
+	setOpenedComments,
+	id,
+}) {
+	const [commentsAmount, setCommentsAmount] = useState(0);
+
+	useEffect(() => {
+		const promise = getCommentsQtd(id);
+		promise.then((res) => setCommentsAmount(res.data));
+	}, []);
+
 	return (
 		<>
 			<CommentsSection>
 				<AiOutlineComment onClick={() => setOpenedComments(!openedComments)} />
-				<span>3 comments</span>
+				<span>{commentsAmount} comments</span>
 			</CommentsSection>
 		</>
 	);

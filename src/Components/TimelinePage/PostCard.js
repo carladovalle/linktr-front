@@ -111,7 +111,7 @@ export default function PostCard({
 	}
 
 	return (
-		<>
+		<Wrapper>
 			<Container>
 				{showConfirmScreen && (
 					<ConfirmScreen
@@ -133,7 +133,7 @@ export default function PostCard({
 						rerender={rerender}
 						setRerender={setRerender}
 					/>
-					<CommentButton openedComments={openedComments} setOpenedComments={setOpenedComments}/>
+					<CommentButton id={id} openedComments={openedComments} setOpenedComments={setOpenedComments} />
 				</span>
 
 				<span className="infos">
@@ -190,9 +190,15 @@ export default function PostCard({
 				</span>
 			</Container>
             {openedComments ? <Comments id={id} userImg={userImg} whoPosted={userId} /> : ""}
-		</>
+		</Wrapper>
 	);
 }
+
+const Wrapper = styled.section`
+    margin-bottom: 32px;
+    display: flex;
+    flex-direction: column;
+`
 
 const Container = styled.div`
 	&& {
@@ -203,6 +209,8 @@ const Container = styled.div`
 		background: #171717;
 		border-radius: 16px;
 		padding: 17px;
+        margin-bottom: -15px;
+        z-index: 1;
 	}
 	img {
 		width: 50px;
