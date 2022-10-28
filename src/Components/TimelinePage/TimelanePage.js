@@ -45,6 +45,7 @@ export default function TimelinePage() {
 					'An error occured while trying to fetch the posts, please refresh the page'
 				);
 			});
+			console.log(posts)
 	}
 
 	useEffect(() => {
@@ -125,6 +126,9 @@ export default function TimelinePage() {
 									posts={posts}
 									setMessage={setMessage}
 									userId={item.userId}
+									isrepost={item.isrepost}
+									reposterid={item.reposterid}
+									reposterName={item.reposterName}
 								/>
 							))
 						)}

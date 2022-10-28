@@ -12,7 +12,7 @@ import Comments from "./Comments";
 import RepostBar from "./RepostBar";
 import RepostPostCard from "./RepostPostCard";
 
-export default function PostCard({id, userImg, name, text, urlInfos, liked, rerender, setRerender, userId, posts}){
+export default function PostCard({id, userImg, name, text, urlInfos, liked, rerender, setRerender, userId, posts, isrepost, reposterid, reposterName}){
     const idLocalStorage = Number(localStorage.getItem('id'))
     const style = { color: "white", fontSize: "18px", margin: "0 3px" }
     const [showConfirmScreen, setShowConfirmScreen] = useState(false);
@@ -98,7 +98,11 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
     
     return(
         <>
-        <RepostBar></RepostBar>
+        <RepostBar
+        isrepost={isrepost}
+        reposterid={reposterid}
+        reposterName={reposterName}
+        />
         <Container>
                     {showConfirmScreen && (
                         <ConfirmScreen 
