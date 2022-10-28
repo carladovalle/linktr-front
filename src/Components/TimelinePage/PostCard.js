@@ -9,6 +9,8 @@ import { AiFillDelete } from 'react-icons/ai';
 import { deletePost, editThePost } from "../../services/linktrAPI.js";
 import ConfirmScreen from "./ConfirmScreen.js";
 import Comments from "./Comments";
+import RepostBar from "./RepostBar";
+import RepostPostCard from "./RepostPostCard";
 
 export default function PostCard({id, userImg, name, text, urlInfos, liked, rerender, setRerender, userId, posts}){
     const idLocalStorage = Number(localStorage.getItem('id'))
@@ -96,6 +98,7 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
     
     return(
         <>
+        <RepostBar></RepostBar>
         <Container>
                     {showConfirmScreen && (
                         <ConfirmScreen 
@@ -108,6 +111,7 @@ export default function PostCard({id, userImg, name, text, urlInfos, liked, rere
             <span className="leftSide">
                 <img src={userImg} alt="profile-img"  onClick={() => navigate(`/user/${userId}`)}/>
                 <LikesPostCard id={id} liked={liked} rerender={rerender} setRerender={setRerender}/>
+                <RepostPostCard/>
             </span>
             
             <span className="infos">
