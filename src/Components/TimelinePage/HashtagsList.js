@@ -8,7 +8,7 @@ function Hashtag({name}){
     const navigate = useNavigate()    
 
     return(
-        <li onClick={() => navigate(`/hashtag/${params}`)}>{name}</li>
+        <li onClick={() => {navigate(`/hashtag/${params}`)}}>{name}</li>
     )
 }
 

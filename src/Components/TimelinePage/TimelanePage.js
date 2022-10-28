@@ -4,14 +4,51 @@ import PostCard from './PostCard';
 import { getPost, getLikes } from '../../services/linktrAPI';
 import SubmitBox from './SubmitBox';
 import HashtagList from './HashtagsList';
+import NewPostNotification from './NewPostsNotification';
+import InfiniteScroll from 'react-infinite-scroller';
 
 export default function TimelinePage() {
 	const [posts, setPosts] = useState([]);
 	const [message, setMessage] = useState('Loading...');
 	const [rerender, setRerender] = useState(false);
+	const [more, setMore] = useState(true);
+	const [ref, setRef] = useState(true);
+
+	function hasMore(offset, item) {
+		if (offset !== 0 && item.length === 0) {
+			setMore(false);
+		}
+	}
+
+	function att() {
+		if (ref) {
+			setRef(false);
+		} else {
+			setRef(true);
+		}
+	}
+
+	function loadData() {
+		const offset = posts.length;
+		const promise1 = getPost(offset);
+		promise1
+			.then((res) => {
+				hasMore(offset, res.data);
+				setPosts([...posts, ...res.data]);
+				if (posts.length < 1) {
+					setMessage('There are no post yet');
+				}
+				att();
+			})
+			.catch((err) => {
+				setMessage(
+					'An error occured while trying to fetch the posts, please refresh the page'
+				);
+			});
+	}
 
 	useEffect(() => {
-		const promise1 = getPost();
+		console.log('useEffect');
 		const promise2 = getLikes();
 		let likes = [];
 		let postsLike = [];
@@ -23,43 +60,37 @@ export default function TimelinePage() {
 			})
 			.catch((err) => console.log('likes not available'));
 
-		promise1
-			.then((res) => {
-				postsNoLike = res.data;
+		function fetchData() {
+			postsNoLike = posts;
 
-				if (likes.length !== 0) {
-					for (let i = 0; i < postsNoLike.length; i++) {
-						for (let j = 0; j < likes.length; j++) {
-							if (postsNoLike[i].id === likes[j].postId) {
-								const newItem = { ...postsNoLike[i], liked: true };
-								postsLike.push(newItem);
-								break;
-							}
+			if (likes.length !== 0) {
+				for (let i = 0; i < postsNoLike.length; i++) {
+					for (let j = 0; j < likes.length; j++) {
+						if (postsNoLike[i].id === likes[j].postId) {
+							const newItem = { ...postsNoLike[i], liked: true };
+							postsLike.push(newItem);
+							break;
+						}
 
-							if (j === likes.length - 1) {
-								const newItem = { ...postsNoLike[i], liked: false };
-								postsLike.push(newItem);
-							}
+						if (j === likes.length - 1) {
+							const newItem = { ...postsNoLike[i], liked: false };
+							postsLike.push(newItem);
 						}
 					}
-				} else {
-					for (let i = 0; i < postsNoLike.length; i++) {
-						const newItem = { ...postsNoLike[i], liked: false };
-						postsLike.push(newItem);
-					}
 				}
-
-				setPosts(postsLike);
-				if (posts.length < 1) {
-					setMessage('There are no post yet');
+			} else {
+				for (let i = 0; i < postsNoLike.length; i++) {
+					const newItem = { ...postsNoLike[i], liked: false };
+					postsLike.push(newItem);
 				}
-			})
-			.catch((err) => {
-				setMessage(
-					'An error occured while trying to fetch the posts, please refresh the page'
-				);
-			});
-	}, [rerender]);
+			}
+			setPosts(postsLike);
+			if (posts.length < 1) {
+				setMessage('There are no post yet');
+			}
+		}
+		setTimeout(fetchData, 300);
+	}, [rerender, ref]);
 
 	return (
 		<>
@@ -73,28 +104,34 @@ export default function TimelinePage() {
 						rerender={rerender}
 						setRerender={setRerender}
 					/>
-					{posts.length === 0 ? (
-						<h6>{message}</h6>
-					) : (
-						posts.map((item, index) => (
-							<PostCard
-								key={index}
-								id={item.id}
-								userImg={item.image}
-								name={item.name}
-								text={item.content}
-								urlInfos={item.urlInfos}
-								liked={item.liked}
-								rerender={rerender}
-								setRerender={setRerender}
-								posts={posts}
-								setMessage={setMessage}
-								userId={item.userId}
-							/>
-						))
-					)}
+
+					<NewPostNotification lastPostRendered={posts[0]} />
+
+					<InfiniteScroll loadMore={loadData} hasMore={more}>
+						{posts.length === 0 ? (
+							<h6>{message}</h6>
+						) : (
+							posts.map((item, index) => (
+								<PostCard
+									key={item.id}
+									id={item.id}
+									userImg={item.image}
+									name={item.name}
+									text={item.content}
+									urlInfos={item.urlInfos}
+									liked={item.liked}
+									rerender={rerender}
+									setRerender={setRerender}
+									posts={posts}
+									setMessage={setMessage}
+									userId={item.userId}
+								/>
+							))
+						)}
+					</InfiniteScroll>
+					{more ? <></> : <h6>Yay! You have seen it all</h6>}
 				</div>
-				<HashtagList/>
+				<HashtagList />
 			</Container>
 		</>
 	);
@@ -105,7 +142,6 @@ const Container = styled.div`
 	align-items: flex-start;
 	justify-content: center;
 	margin-top: 125px;
-	width: 100vw;
 
 	.content {
 		width: 611px;
@@ -122,7 +158,7 @@ const Container = styled.div`
 	}
 
 	h6 {
-		margin-bottom: 7px;
+		margin-bottom: 30px;
 		font-style: normal;
 		font-weight: 400;
 		font-size: 19px;

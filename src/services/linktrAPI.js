@@ -13,9 +13,9 @@ function createHeaders() {
 	return config;
 }
 
-function getPost() {
+function getPost(offset) {
 	const config = createHeaders();
-	const promise = axios.get(`${BASE_URL}/posts`, config);
+	const promise = axios.get(`${BASE_URL}/posts/?offset=${offset}&limit=10`, config);
 	return promise;
 }
 
@@ -55,9 +55,22 @@ function removeLike(postId) {
 	return promise;
 }
 
-function getHashtagPost(hashtag) {
+function isFollowed(followedId) {
 	const config = createHeaders();
-	const promise = axios.get(`${BASE_URL}/hashtags/${hashtag}`, config);
+	const promise = axios.get(`${BASE_URL}/follows/${followedId}`, config);
+	return promise;
+}
+
+function changeFollow(followedId, followed) {
+	const config = createHeaders();
+	const body = { followedId, followed }
+	const promise = axios.post(`${BASE_URL}/follows`, body, config);
+	return promise;
+}
+
+function getHashtagPost(hashtag, offset) {
+	const config = createHeaders();
+	const promise = axios.get(`${BASE_URL}/hashtags/${hashtag}/?offset=${offset}&limit=10`, config);
 	return promise;
 }
 
@@ -67,9 +80,9 @@ function getHashtags() {
 	return promise;
 }
 
-function getUserPosts(id) {
+function getUserPosts(id, offset) {
 	const config = createHeaders();
-	const promise = axios.get(`${BASE_URL}/user/${id}`, config);
+	const promise = axios.get(`${BASE_URL}/user/${id}/?offset=${offset}&limit=10`, config);
 	return promise;
 }
 
@@ -97,6 +110,11 @@ function getCommentPost(postId) {
     return promise;
 }
 
+function getLastPostId(){
+	const promise = axios.get(`${BASE_URL}/haveNewPost`)
+	return promise
+}
+
 export {
 	getPost,
 	publishPost,
@@ -107,9 +125,12 @@ export {
     getLikesQtd,
     addLike,
     removeLike,
+	isFollowed,
+	changeFollow,
 	deletePost, 
 	editThePost,
 	getUserPosts,
 	addCommentPost,
-	getCommentPost
+	getCommentPost,
+	getLastPostId
 };
