@@ -37,6 +37,7 @@ export default function PostCard({
 		fontWeight: 'bold',
 		cursor: 'pointer',
 	};
+    const [openedComments, setOpenedComments] = useState(false)
 
 	function hashtag(name) {
 		const params = name.slice(1);
@@ -132,7 +133,7 @@ export default function PostCard({
 						rerender={rerender}
 						setRerender={setRerender}
 					/>
-					<CommentButton />
+					<CommentButton openedComments={openedComments} setOpenedComments={setOpenedComments}/>
 				</span>
 
 				<span className="infos">
@@ -188,7 +189,7 @@ export default function PostCard({
 					</LinkCard>
 				</span>
 			</Container>
-			<Comments id={id} userImg={userImg} whoPosted={userId} />
+            {openedComments ? <Comments id={id} userImg={userImg} whoPosted={userId} /> : ""}
 		</>
 	);
 }
@@ -200,7 +201,7 @@ const Container = styled.div`
 		justify-content: flex-start;
 		width: 100%;
 		background: #171717;
-		border-radius: 16px 16px 0 0;
+		border-radius: 16px;
 		padding: 17px;
 	}
 	img {
