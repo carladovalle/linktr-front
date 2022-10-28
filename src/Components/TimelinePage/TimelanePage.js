@@ -17,6 +17,10 @@ export default function TimelinePage() {
 	const [fIds, setFIds] = useState([]);
 	const userId = localStorage.getItem("id");
 
+	useEffect(() => {
+		loadData()
+	}, [])
+
 	function hasMore(offset, item) {
 		if (offset !== 0 && item.length === 0) {
 			setMore(false);
