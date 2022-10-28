@@ -123,7 +123,6 @@ function getCommentsQtd(postId) {
 }
 
 function getLastPostId(followsIds){
-	console.log(followsIds)
 	const promise = axios.post(`${BASE_URL}/haveNewPost`, followsIds)
 	return promise
 }

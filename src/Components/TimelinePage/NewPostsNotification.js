@@ -7,13 +7,11 @@ import { getLastPostId } from "../../services/linktrAPI";
 export default function NewPostNotification({lastPostRendered, followsIds}){
     const [ newPostsQt, setNewPostsQt ] = useState(0)
     let lastPostId
-    console.log(followsIds);
 
     useInterval(() => {
         let promise = getLastPostId(followsIds)
             .then((res) => {
                 lastPostId = res.data.id
-                console.log(lastPostId)
 
                 if(lastPostRendered && lastPostRendered.id < lastPostId){
                     const numberOfNewPosts = lastPostId - lastPostRendered.id
