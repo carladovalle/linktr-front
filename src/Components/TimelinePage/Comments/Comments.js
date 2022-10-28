@@ -59,7 +59,7 @@ export default function Comments({ id, whoPosted }) {
 									<h4>
 										<span>{c.author}</span>
 										<p> {whoPosted === c.userId ? `• post's author` : ''} </p>
-										<p> {c.profileUserId ? `• following` : ''} </p>
+										<p> {c.isFollowing ? `• following` : ''} </p>
 									</h4>
 									<p>{c.text}</p>
 								</div>
@@ -145,6 +145,16 @@ const Scroller = styled.div`
 	max-height: 200px;
 	overflow-y: auto;
 	overflow-x: hidden;
+
+	&::-webkit-scrollbar{
+		width: 10px;
+	}
+
+	&::-webkit-scrollbar-thumb{
+		background-color: black;
+		border-radius: 20px;
+		border: none
+	}
 
 	@media (max-width: 635px) {
 		width: 100%;
