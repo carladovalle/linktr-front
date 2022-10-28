@@ -118,7 +118,7 @@ export default function TimelinePage() {
 					setFIds(followsIds);
 					setPosts(postsLike);
 					if (posts.length < 1) {
-						setMessage('There are no post yet');
+						setMessage('No post found from your friends');
 					}
 				}
 		
