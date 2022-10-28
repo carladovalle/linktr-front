@@ -3,10 +3,11 @@ import styled from 'styled-components';
 import { IoPaperPlaneOutline } from 'react-icons/io5';
 import { addCommentPost, getCommentPost } from '../../../services/linktrAPI.js';
 
-export default function Comments({ id, userImg, whoPosted }) {
+export default function Comments({ id, whoPosted }) {
 	const style = { color: 'white', fontSize: '18px', margin: '0 3px' };
 	const [comment, setComment] = useState('');
 	const [comments, setComments] = useState();
+	const userImg = localStorage.getItem("userImage")
 
 	useEffect(() => {
 		const postId = id;
@@ -21,7 +22,7 @@ export default function Comments({ id, userImg, whoPosted }) {
 			alert(
 				'There was an error comment post.\nPlease, review the link field and then try again.'
 			);
-		});
+		});	
 	}, []);
 
 	async function addComment(e) {
@@ -58,7 +59,7 @@ export default function Comments({ id, userImg, whoPosted }) {
 									<h4>
 										<span>{c.author}</span>
 										<p> {whoPosted === c.userId ? `• post's author` : ''} </p>
-										<p> verifica se é seguir ou nao </p>
+										<p> {c.profileUserId ? `• following` : ''} </p>
 									</h4>
 									<p>{c.text}</p>
 								</div>
@@ -110,9 +111,12 @@ const ContainerComments = styled.div`
 		margin-left: 14px;
 		border-color: #252525;
 		border-radius: 8px;
+		border: none;
 
 		&::placeholder {
 			font-size: 14px;
+			font-style: italic;
+			font-weight: 400;
 			color: #575757;
 		}
 	}
@@ -192,13 +196,16 @@ const Comment = styled.div`
 		width: 100%;
 	}
 `;
+
 const WriteComment = styled.div`
-	height: 83px;
+	height: 40px;
 	width: 95%;
 	padding-left: 33px;
 	position: relative;
 	display: flex;
 	align-items: center;
+	margin: 19px 0 8px 0;
+
 	input {
 		width: 600px;
 		padding: 0 40px 0 11px;
@@ -206,6 +213,7 @@ const WriteComment = styled.div`
 		background-color: #252525;
 		border-radius: 8px;
 		color: #acacac;
+		outline: none;
 	}
 	&::placeholder {
 		color: #575757;
@@ -224,6 +232,8 @@ const WriteComment = styled.div`
 `;
 const ButtonSend = styled.div`
 	position: absolute;
-	top: 32px;
-	right: 5px;
+	top: calc(50% - 9px);
+	font-size: 18px;
+	right: 13px;
+	color: #f3f3f3;
 `;
