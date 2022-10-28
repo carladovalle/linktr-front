@@ -45,11 +45,9 @@ export default function TimelinePage() {
 					'An error occured while trying to fetch the posts, please refresh the page'
 				);
 			});
-			console.log(posts)
 	}
 
 	useEffect(() => {
-		console.log('useEffect');
 		const promise2 = getLikes();
 		let likes = [];
 		let postsLike = [];

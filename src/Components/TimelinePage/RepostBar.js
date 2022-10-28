@@ -35,16 +35,19 @@ export default function RepostBar({isrepost, reposterid, reposterName}){
 
 const Bar = styled.div`
     width: 100%;
-    height: 35px;
+    height: 70px;
     border-radius: 16px 16px;
     background-color:#1E1E1E;
+    margin-bottom: -32px;
+    padding-top: 8px;
 
     display: flex;
-    align-items: center;
+    align-items: flex-start;
 
     span{
         color:#FFFFFF;
         margin-left: 6px;
+        margin-top: 4px;
     }
 
     strong{

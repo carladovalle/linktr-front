@@ -6,12 +6,13 @@ import { useState, useRef } from 'react';
 import LikesPostCard from './LikesPostCard';
 import { BiEditAlt } from 'react-icons/bi';
 import { AiFillDelete } from 'react-icons/ai';
-import { deletePost, editThePost } from '../../services/linktrAPI.js';
+import { deletePost, editThePost, repost } from '../../services/linktrAPI.js';
 import ConfirmScreen from './ConfirmScreen.js';
 import Comments from './Comments/Comments.js';
 import RepostBar from './RepostBar';
 import RepostPostCard from './RepostPostCard';
 import CommentButton from './Comments/CommentsButton';
+import ConfirmRepost from './ConfirmRepost';
 
 export default function PostCard({
 	id,
@@ -44,6 +45,8 @@ export default function PostCard({
 		cursor: 'pointer',
 	};
 	const [openedComments, setOpenedComments] = useState(false);
+	const [confirmRepost, setConfirmRepost] = useState(false);
+	const [loading, setLoading] = useState(false);
 	let isUserId = userId
 	if(isrepost){
 		isUserId = reposterid
@@ -117,6 +120,14 @@ export default function PostCard({
 		}
 	};
 
+	function repostPost() {
+        const postId = id;
+        const promise = repost({ postId });
+        promise.then(res => {setRerender(!rerender); setConfirmRepost(false)})
+        .catch(err => {console.log("repost not available")
+		setConfirmRepost(false)})
+    }
+
 	if (!urlInfos.image) {
 		urlInfos.image = notImage;
 	}
@@ -149,7 +160,12 @@ export default function PostCard({
 						rerender={rerender}
 						setRerender={setRerender}
 					/>
-					<RepostPostCard />
+					<RepostPostCard 
+					id={id}
+					rerender={rerender}
+					setRerender={setRerender}
+					loading={loading}
+					setConfirmRepost={setConfirmRepost}/>
 					<CommentButton
 						id={id}
 						openedComments={openedComments}
@@ -218,6 +234,14 @@ export default function PostCard({
 			) : (
 				''
 			)}
+			{confirmRepost ? 
+					<ConfirmRepost
+						setConfirmRepost={setConfirmRepost}
+						repostPost={repostPost}
+					/>
+					:
+					<></>
+				}
 		</Wrapper>
 	);
 }
