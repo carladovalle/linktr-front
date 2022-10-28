@@ -45,7 +45,7 @@ export default function TimelinePage() {
 				}
 				att();
 			})
-			.catch((err) => {
+			.catch(() => {
 				setMessage(
 					'An error occured while trying to fetch the posts, please refresh the page'
 				);
@@ -68,7 +68,7 @@ export default function TimelinePage() {
 			.then((res) => {
 				likes = res.data;
 			})
-			.catch((err) => console.log('likes not available'));
+			.catch(() => console.log('likes not available'));
 
 		promise3
 			.then((res) => { console.log(res.data); for (let i=0; i < res.data.length; i++) {
@@ -77,7 +77,7 @@ export default function TimelinePage() {
 		}
 				followsHash[userId] = true;
 		})
-			.catch((err) => console.log("follows id not available"));
+			.catch(() => console.log("follows id not available"));
 
 
 
