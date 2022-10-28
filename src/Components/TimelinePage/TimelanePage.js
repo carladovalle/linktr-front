@@ -135,7 +135,7 @@ export default function TimelinePage() {
 					</InfiniteScroll>
 					{more ? <></> : <h6>Yay! You have seen it all</h6>}
 				</div>
-				<HashtagList />
+				<span className='hashtagList'><HashtagList/></span>
 			</Container>
 		</>
 	);
@@ -169,6 +169,12 @@ const Container = styled.div`
 		line-height: 23px;
 		color: #ffffff;
 		word-break: break-word;
+	}
+
+	@media (max-width: 990px) {
+		.hashtagList{
+			display:none
+		}
 	}
 
 	@media (max-width: 675px) {

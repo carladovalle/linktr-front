@@ -205,7 +205,7 @@ const WriteComment = styled.div`
 	display: flex;
 	align-items: center;
 	margin: 19px 0 8px 0;
-
+	
 	input {
 		width: 600px;
 		padding: 0 40px 0 11px;
@@ -226,7 +226,7 @@ const WriteComment = styled.div`
 		margin-right: 18px;
 		object-fit: cover;
 	}
-	@media (max-width: 635px) {
+	@media (max-width: 675px) {
 		width: 95%;
 	}
 `;
