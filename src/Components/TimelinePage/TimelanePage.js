@@ -116,7 +116,7 @@ export default function TimelinePage() {
 					setFIds(followsIds);
 					setPosts(postsLike);
 					if (posts.length < 1) {
-						setMessage('There are no post yet');
+						setMessage('No post found from your friends');
 					}
 				}
 		
@@ -136,34 +136,43 @@ export default function TimelinePage() {
 						setRerender={setRerender}
 					/>
 
-					<NewPostNotification lastPostRendered={posts[0]} followsIds={fIds}/>
+					{	fIds.length === 0 ?
+						
+						<h6>You don't follow anyone yet. Search for new friends!</h6> : 
+						
+						<>
+						<NewPostNotification lastPostRendered={posts[0]} followsIds={fIds}/>
 
-					<InfiniteScroll loadMore={loadData} hasMore={more}>
-						{posts.length === 0 ? (
-							<h6>{message}</h6>
-						) : (
-							posts.map((item, index) => (
-								<PostCard
-									key={index}
-									id={item.id}
-									userImg={item.image}
-									name={item.name}
-									text={item.content}
-									urlInfos={item.urlInfos}
-									liked={item.liked}
-									rerender={rerender}
-									setRerender={setRerender}
-									posts={posts}
-									setMessage={setMessage}
-									userId={item.userId}
-									isrepost={item.isrepost}
-									reposterid={item.reposterid}
-									reposterName={item.reposterName}
-								/>
-							))
-						)}
-					</InfiniteScroll>
-					{more ? <></> : <h6>Yay! You have seen it all</h6>}
+						<InfiniteScroll loadMore={loadData} hasMore={more}>
+							{posts.length === 0 ? (
+								<h6>{message}</h6>
+							) : (
+								posts.map((item, index) => (
+									<PostCard
+										key={index}
+										id={item.id}
+										userImg={item.image}
+										name={item.name}
+										text={item.content}
+										urlInfos={item.urlInfos}
+										liked={item.liked}
+										rerender={rerender}
+										setRerender={setRerender}
+										posts={posts}
+										setMessage={setMessage}
+										userId={item.userId}
+										isrepost={item.isrepost}
+										reposterid={item.reposterid}
+										reposterName={item.reposterName}
+									/>
+								))
+							)}
+						</InfiniteScroll>
+						{more ? <></> : <h6>Yay! You have seen it all</h6>}
+						</>
+						}
+
+					
 				</div>
 				<HashtagList />
 			</Container>
