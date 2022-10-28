@@ -105,4 +105,9 @@ const Wrapper = styled.aside`
     width: 300px;
     height: 100vh;
 	min-height: 105px;
+
+	@media (max-width: 1025px) {
+		display: none;
+	}
+
 `;

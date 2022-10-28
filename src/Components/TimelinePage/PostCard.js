@@ -44,6 +44,10 @@ export default function PostCard({
 		cursor: 'pointer',
 	};
 	const [openedComments, setOpenedComments] = useState(false);
+	let isUserId = userId
+	if(isrepost){
+		isUserId = reposterid
+	}
 
 	function hashtag(name) {
 		const params = name.slice(1);
@@ -157,8 +161,10 @@ export default function PostCard({
 					<div className="firstLine">
 						<h4 onClick={() => navigate(`/user/${userId}`)}>{name}</h4>
 
-						{userId === idLocalStorage ? (
-							<div className="actions">
+						{isUserId === idLocalStorage ? (
+							<div className="actions">{
+								isrepost ? <></>
+								:
 								<Edit>
 									{isEditing ? (
 										<BiEditAlt
@@ -169,6 +175,7 @@ export default function PostCard({
 										<BiEditAlt style={style} onClick={() => editPost()} />
 									)}
 								</Edit>
+							}
 								<AiFillDelete style={style} onClick={() => screenToDelete()} />
 							</div>
 						) : (
