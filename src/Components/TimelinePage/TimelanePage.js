@@ -48,7 +48,6 @@ export default function TimelinePage() {
 	}
 
 	useEffect(() => {
-		console.log('useEffect');
 		const promise2 = getLikes();
 		let likes = [];
 		let postsLike = [];
@@ -125,6 +124,9 @@ export default function TimelinePage() {
 									posts={posts}
 									setMessage={setMessage}
 									userId={item.userId}
+									isrepost={item.isrepost}
+									reposterid={item.reposterid}
+									reposterName={item.reposterName}
 								/>
 							))
 						)}

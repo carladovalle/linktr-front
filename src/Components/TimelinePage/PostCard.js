@@ -6,12 +6,13 @@ import { useState, useRef } from 'react';
 import LikesPostCard from './LikesPostCard';
 import { BiEditAlt } from 'react-icons/bi';
 import { AiFillDelete } from 'react-icons/ai';
-import { deletePost, editThePost } from '../../services/linktrAPI.js';
+import { deletePost, editThePost, repost } from '../../services/linktrAPI.js';
 import ConfirmScreen from './ConfirmScreen.js';
 import Comments from './Comments/Comments.js';
 import RepostBar from './RepostBar';
 import RepostPostCard from './RepostPostCard';
 import CommentButton from './Comments/CommentsButton';
+import ConfirmRepost from './ConfirmRepost';
 
 export default function PostCard({
 	id,
@@ -24,6 +25,10 @@ export default function PostCard({
 	setRerender,
 	userId,
 	posts,
+	isrepost,
+	reposterid,
+	reposterName
+
 }) {
 	const idLocalStorage = Number(localStorage.getItem('id'));
 	const style = { color: 'white', fontSize: '18px', margin: '0 3px' };
@@ -40,6 +45,12 @@ export default function PostCard({
 		cursor: 'pointer',
 	};
 	const [openedComments, setOpenedComments] = useState(false);
+	const [confirmRepost, setConfirmRepost] = useState(false);
+	const [loading, setLoading] = useState(false);
+	let isUserId = userId
+	if(isrepost){
+		isUserId = reposterid
+	}
 
 	function hashtag(name) {
 		const params = name.slice(1);
@@ -109,13 +120,27 @@ export default function PostCard({
 		}
 	};
 
+	function repostPost() {
+		setLoading(true)
+        const postId = id;
+        const promise = repost({ postId });
+        promise.then(res => {setRerender(!rerender); setConfirmRepost(false); setLoading(false)})
+        .catch(err => {console.log("repost not available")
+		setConfirmRepost(false)
+		setLoading(false)})
+    }
+
 	if (!urlInfos.image) {
 		urlInfos.image = notImage;
 	}
 
 	return (
 		<Wrapper>
-			<RepostBar></RepostBar>
+			<RepostBar
+			isrepost={isrepost}
+			reposterid={reposterid}
+			reposterName={reposterName}
+			></RepostBar>
 			<Container>
 				{showConfirmScreen && (
 					<ConfirmScreen
@@ -137,7 +162,13 @@ export default function PostCard({
 						rerender={rerender}
 						setRerender={setRerender}
 					/>
-					<RepostPostCard />
+					<RepostPostCard 
+					id={id}
+					rerender={rerender}
+					setRerender={setRerender}
+					loading={loading}
+					setLoading={setLoading}
+					setConfirmRepost={setConfirmRepost}/>
 					<CommentButton
 						id={id}
 						openedComments={openedComments}
@@ -149,8 +180,10 @@ export default function PostCard({
 					<div className="firstLine">
 						<h4 onClick={() => navigate(`/user/${userId}`)}>{name}</h4>
 
-						{userId === idLocalStorage ? (
-							<div className="actions">
+						{isUserId === idLocalStorage ? (
+							<div className="actions">{
+								isrepost ? <></>
+								:
 								<Edit>
 									{isEditing ? (
 										<BiEditAlt
@@ -161,6 +194,7 @@ export default function PostCard({
 										<BiEditAlt style={style} onClick={() => editPost()} />
 									)}
 								</Edit>
+							}
 								<AiFillDelete style={style} onClick={() => screenToDelete()} />
 							</div>
 						) : (
@@ -203,6 +237,15 @@ export default function PostCard({
 			) : (
 				''
 			)}
+			{confirmRepost ? 
+					<ConfirmRepost
+						setConfirmRepost={setConfirmRepost}
+						repostPost={repostPost}
+						loading={loading}
+					/>
+					:
+					<></>
+				}
 		</Wrapper>
 	);
 }
@@ -285,8 +328,8 @@ const Container = styled.div`
 		&& {
 			border-radius: 0px;
 			padding: 9px 15px 15px 15px;
-			margin-bottom: 16px;
 		}
+		
 		img {
 			width: 40px;
 			height: 40px;

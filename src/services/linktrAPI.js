@@ -121,6 +121,17 @@ function getLastPostId(){
 	return promise
 }
 
+function repost(postId) {
+	const config = createHeaders();
+	const promise = axios.post(`${BASE_URL}/repost`, postId, config);
+	return promise;
+}
+function getRepostQtd(postId) {
+    const promise = axios.get(`${BASE_URL}/repostNumber/${postId}`)
+    return promise;
+}
+
+
 export {
 	getPost,
 	publishPost,
@@ -139,5 +150,7 @@ export {
 	addCommentPost,
 	getCommentPost,
 	getLastPostId,
-	getCommentsQtd
+	getCommentsQtd,
+	repost,
+	getRepostQtd
 };
