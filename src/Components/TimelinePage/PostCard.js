@@ -233,7 +233,7 @@ export default function PostCard({
 				</span>
 			</Container>
 			{openedComments ? (
-				<Comments id={id} userImg={userImg} whoPosted={userId} />
+				<Comments id={id} userImg={userImg} whoPosted={userId} userId={userId}/>
 			) : (
 				''
 			)}
@@ -266,7 +266,6 @@ const Container = styled.div`
 		border-radius: 16px;
 		padding: 17px;
 		margin-bottom: -15px;
-		z-index: 1;
 	}
 	img {
 		width: 50px;
@@ -323,6 +322,11 @@ const Container = styled.div`
 		line-height: 20px;
 		color: #b7b7b7;
 		word-break: break-word;
+	}
+
+	svg:hover{
+		cursor: pointer;
+		filter: brightness(0.85);
 	}
 	@media (max-width: 675px) {
 		&& {

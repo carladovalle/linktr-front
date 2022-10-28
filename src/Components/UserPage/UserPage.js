@@ -137,6 +137,7 @@ export default function UserPage() {
 						<header>
 							<img src={image} alt="profile" />
 							<h1>{name}'s posts</h1>
+							
 							<button
 								onClick={toFollow}
 								disabled={disabled}
