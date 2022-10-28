@@ -24,6 +24,10 @@ export default function PostCard({
 	setRerender,
 	userId,
 	posts,
+	isrepost,
+	reposterid,
+	reposterName
+
 }) {
 	const idLocalStorage = Number(localStorage.getItem('id'));
 	const style = { color: 'white', fontSize: '18px', margin: '0 3px' };
@@ -115,7 +119,11 @@ export default function PostCard({
 
 	return (
 		<Wrapper>
-			<RepostBar></RepostBar>
+			<RepostBar
+			isrepost={isrepost}
+			reposterid={reposterid}
+			reposterName={reposterName}
+			></RepostBar>
 			<Container>
 				{showConfirmScreen && (
 					<ConfirmScreen
