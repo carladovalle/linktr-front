@@ -125,7 +125,6 @@ export default function UserPage() {
 			})
 			.catch((err) => alert('follow/unfollow unavailable'));
 	}
-
 	return (
 		<>
 			<Container>
@@ -155,19 +154,22 @@ export default function UserPage() {
 							) : (
 								posts.map((item, index) => (
 									<PostCard
-										key={item.id}
-										id={item.id}
-										userImg={item.image}
-										name={item.name}
-										text={item.content}
-										urlInfos={item.urlInfos}
-										liked={item.liked}
-										rerender={rerender}
-										setRerender={setRerender}
-										posts={posts}
-										setMessage={setMessage}
-										userId={item.userId}
-									/>
+									key={index}
+									id={item.id}
+									userImg={item.image}
+									name={item.name}
+									text={item.content}
+									urlInfos={item.urlInfos}
+									liked={item.liked}
+									rerender={rerender}
+									setRerender={setRerender}
+									posts={posts}
+									setMessage={setMessage}
+									userId={item.userId}
+									isrepost={item.isrepost}
+									reposterid={item.reposterid}
+									reposterName={name}
+								/>
 								))
 							)}
 						</InfiniteScroll>

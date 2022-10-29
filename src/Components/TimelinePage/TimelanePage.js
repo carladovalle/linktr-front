@@ -7,121 +7,62 @@ import HashtagList from './HashtagsList';
 import NewPostNotification from './NewPostsNotification';
 import InfiniteScroll from 'react-infinite-scroller';
 
-export default function TimelinePage() {
-	const [posts, setPosts] = useState([]);
-	const [message, setMessage] = useState('Loading...');
-	const [rerender, setRerender] = useState(false);
-	const [more, setMore] = useState(true);
-	const [ref, setRef] = useState(true);
-	const [postsOriginalSize, setPostsOriginalSize] = useState(0);
-	const [fIds, setFIds] = useState([]);
+export default function TimelinePage({fIds,
+	posts,
+	message,
+	setMessage,
+	rerender,
+	setRerender,
+	setPosts}) 
+	{
+	const [more, setMore] = useState(false);
+	const itemsPerPage = 10;
+  	const [records, setrecords] = useState(itemsPerPage);
+	let test = []
 
-	function hasMore(offset, item) {
-		if (offset !== 0 && item.length === 0) {
-			setMore(false);
-		}
-	}
+	useEffect(() =>{
+		setMore(true)
 
-	function att() {
-		if (ref) {
-			setRef(false);
+	}, [posts])
+
+	const loadData = () => {
+		if (records > posts.length && posts[-1] == test[-1]) {
+		setMore(false);
 		} else {
-			setRef(true);
+		setTimeout(() => {
+			setrecords(records + itemsPerPage);
+			//(posts.length-records)>10? setrecords(records + 10):setrecords(records+15);
+		}, 1000);
 		}
-	}
+	};
 
-	function loadData() {
-
-		const offset = postsOriginalSize;		
-		const promise1 = getPost(offset);
-		
-		promise1
-			.then((res) => {
-				hasMore(offset, res.data);
-				setPosts([...posts, ...res.data]);
-				if (posts.length < 1) {
-					setMessage('There are no post yet');
-				}
-				att();
-			})
-			.catch((err) => {
-				setMessage(
-					'An error occured while trying to fetch the posts, please refresh the page'
-				);
-			});
-	}
-
-
-	useEffect(() => {
-
-		const promise2 = getLikes();
-		const promise3 = getFollows();
-		let likes = [];
-		let postsLike = [];
-		let postsNoLike = [];
-		let followsHash = {};
-		let followedPosts = [];
-		let followsIds = [];
-
-		promise2
-			.then((res) => {
-				likes = res.data;
-			})
-			.catch((err) => console.log('likes not available'));
-
-		promise3
-			.then((res) => { console.log(res.data); for (let i=0; i < res.data.length; i++) {
-				followsHash[res.data[i].profileUserId] = true;
-				followsIds = [...followsIds, res.data[i].profileUserId];
+	const showItems = item => {
+		let items = [];
+		for (let i = 0; i < records; i++) {
+			if(item[i]){
+				items.push(<PostCard
+					key={i}
+					id={item[i].id}
+					userImg={item[i].image}
+					name={item[i].name}
+					text={item[i].content}
+					urlInfos={item[i].urlInfos}
+					liked={item[i].liked}
+					rerender={rerender}
+					setRerender={setRerender}
+					posts={posts}
+					setMessage={setMessage}
+					userId={item[i].userId}
+					isrepost={item[i].isrepost}
+					reposterid={item[i].reposterid}
+					reposterName={item[i].reposterName}
+				/>)
 			}
-			})
-			.catch((err) => console.log("follows id not available"));
-
-
-
-		function fetchData() {
-			postsNoLike = posts;
-
-				console.log(followsHash);
-					for (let i=0; i < postsNoLike.length; i++) {
-						if (followsHash[postsNoLike[i].userId]) {
-							followedPosts.push(postsNoLike[i]);
-						}
-					}
-					console.log(followedPosts);
-
-					if (likes.length !== 0) {
-						for (let i = 0; i < followedPosts.length; i++) {
-							for (let j = 0; j < likes.length; j++) {
-								if (followedPosts[i].id === likes[j].postId) {
-									const newItem = { ...followedPosts[i], liked: true };
-									postsLike.push(newItem);
-									break;
-								}
-
-								if (j === likes.length - 1) {
-									const newItem = { ...followedPosts[i], liked: false };
-									postsLike.push(newItem);
-								}
-							}
-						}
-					} else {
-						for (let i = 0; i < followedPosts.length; i++) {
-							const newItem = { ...followedPosts[i], liked: false };
-							postsLike.push(newItem);
-						}
-					}
-
-					setPostsOriginalSize(posts.length);
-					setFIds(followsIds);
-					setPosts(postsLike);
-					if (posts.length < 1) {
-						setMessage('There are no post yet');
-					}
-				}
-		
-			setTimeout(fetchData, 300);
-	}, [rerender, ref]);
+		  ;
+		test.push(item[i])
+		}
+		return items;
+	  };
 
 	return (
 		<>
@@ -141,29 +82,10 @@ export default function TimelinePage() {
 					<InfiniteScroll loadMore={loadData} hasMore={more}>
 						{posts.length === 0 ? (
 							<h6>{message}</h6>
-						) : (
-							posts.map((item, index) => (
-								<PostCard
-									key={index}
-									id={item.id}
-									userImg={item.image}
-									name={item.name}
-									text={item.content}
-									urlInfos={item.urlInfos}
-									liked={item.liked}
-									rerender={rerender}
-									setRerender={setRerender}
-									posts={posts}
-									setMessage={setMessage}
-									userId={item.userId}
-									isrepost={item.isrepost}
-									reposterid={item.reposterid}
-									reposterName={item.reposterName}
-								/>
-							))
-						)}
+						) : <>
+						{showItems(posts)}
+						</>}
 					</InfiniteScroll>
-					{more ? <></> : <h6>Yay! You have seen it all</h6>}
 				</div>
 				<HashtagList />
 			</Container>

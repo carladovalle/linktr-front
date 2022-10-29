@@ -133,7 +133,6 @@ export default function PostCard({
 	if (!urlInfos.image) {
 		urlInfos.image = notImage;
 	}
-
 	return (
 		<Wrapper>
 			<RepostBar
@@ -142,14 +141,6 @@ export default function PostCard({
 			reposterName={reposterName}
 			></RepostBar>
 			<Container>
-				{showConfirmScreen && (
-					<ConfirmScreen
-						posts={posts}
-						deletePost={deletePosts}
-						setShow={setShowConfirmScreen}
-						isLoading={isLoading}
-					/>
-				)}
 				<span className="leftSide">
 					<img
 						src={userImg}
@@ -246,6 +237,17 @@ export default function PostCard({
 					:
 					<></>
 				}
+				{showConfirmScreen && (
+					<Test>
+					<ConfirmScreen
+						posts={posts}
+						deletePost={deletePosts}
+						setShow={setShowConfirmScreen}
+						isLoading={isLoading}
+					/>
+					</Test>
+					
+				)}
 		</Wrapper>
 	);
 }
@@ -266,6 +268,7 @@ const Container = styled.div`
 		border-radius: 16px;
 		padding: 17px;
 		margin-bottom: -15px;
+		z-index: 1;
 	}
 	img {
 		width: 50px;
@@ -460,3 +463,10 @@ const EditText = styled.textarea`
 		line-height: 18px;
 	}
 `;
+
+const Test = styled.div`
+	width: 100vw;
+	height: 100vh;
+	position: fixed;
+	z-index: 100;
+`

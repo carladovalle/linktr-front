@@ -93,7 +93,7 @@ const ContainerComments = styled.div`
 		background: #1e1e1e;
 		border-radius: 0 0 16px 16px;
 		padding: 17px;
-		z-index: -1;
+		z-index: 0;
 	}
 	img {
 		width: 39px;

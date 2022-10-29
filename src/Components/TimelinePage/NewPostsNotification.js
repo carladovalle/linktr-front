@@ -9,7 +9,8 @@ export default function NewPostNotification({lastPostRendered, followsIds}){
     let lastPostId
 
     useInterval(() => {
-        let promise = getLastPostId(followsIds)
+        if (followsIds.length !== 0) {
+            let promise = getLastPostId(followsIds)
             .then((res) => {
                 lastPostId = res.data.id
 
@@ -19,6 +20,7 @@ export default function NewPostNotification({lastPostRendered, followsIds}){
                 }
             })
             .catch((error) => console.log(error))
+        }
 
     }, 5000)
 
