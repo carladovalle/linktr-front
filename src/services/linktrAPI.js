@@ -15,7 +15,7 @@ function createHeaders() {
 
 function getPost(offset) {
 	const config = createHeaders();
-	const promise = axios.get(`${BASE_URL}/posts/?offset=${offset}&limit=10`, config);
+	const promise = axios.get(`${BASE_URL}/posts`, config);
 	return promise;
 }
 

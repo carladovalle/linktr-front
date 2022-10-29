@@ -6,8 +6,10 @@ import LoginPage from '../LoginPage/LoginPage.js';
 import RegisterPage from '../LoginPage/RegisterPage.js';
 import UserPage from '../UserPage/UserPage';
 import PrivatePage from '../PrivatePage';
+import RenderPage from '../TimelinePage/RenderPage';
 
 export default function App() {
+	
 	return (
 		<>
 			<Reset />
@@ -20,7 +22,7 @@ export default function App() {
 						path="/timeline"
 						element={
 							<PrivatePage>
-								<TimelinePage />
+								<RenderPage/>
 							</PrivatePage>
 						}
 					/>
