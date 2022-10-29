@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PostCard from './PostCard';
-import { getPost, getLikes, getFollows } from '../../services/linktrAPI';
 import SubmitBox from './SubmitBox';
 import HashtagList from './HashtagsList';
 import NewPostNotification from './NewPostsNotification';
@@ -28,12 +27,14 @@ export default function TimelinePage({fIds,
 	const loadData = () => {
 		if (records > posts.length && posts[-1] == test[-1]) {
 		setMore(false);
+
 		} else {
 		setTimeout(() => {
 			setrecords(records + itemsPerPage);
 			//(posts.length-records)>10? setrecords(records + 10):setrecords(records+15);
 		}, 1000);
 		}
+    
 	};
 
 	const showItems = item => {
@@ -86,6 +87,7 @@ export default function TimelinePage({fIds,
 						{showItems(posts)}
 						</>}
 					</InfiniteScroll>
+
 				</div>
 				<HashtagList />
 			</Container>
