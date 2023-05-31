@@ -14,7 +14,24 @@
   <img src="https://user-images.githubusercontent.com/97575616/176689432-f2b7c83f-a727-411f-8bd2-492e668168df.png" alt="mockup">
 </div>
 
-Você pode visualizar o repositório do front-end <a href="https://github.com/carladovalle/linktr-back">aqui</a>.</p>
+</br>
+
+<p align="justify">Principais funcionalidades:
+
+- Cadastro e login de usuário;
+- Um usuário pode publicar um link válido de sua preferência, através da caixa de postagem localizada na página principal, podendo ou não adicionar uma descrição/comentário. Essa descrição pode conter ou não hashtags que figurarão, possivelmente, na lista à direita;
+- Página principal com a listagem de todos os posts realizados pelos usuários que você segue;
+- Caso ainda não siga nenhum usuário, o usuário pode pesquisar pelo nome, por meio da barra de pesquisa situada no topo da página, que fará a busca no banco de dados, caso o usuário fique 500ms sem digitar nenhum outro caractere. Outro modo, é acessar a página de alguma hashtag do seu interesse e encontrar novos usuários por lá;
+- Botão Follow/Unfollow, situado na página de cada usuário (menos na sua própria página), através do qual é possível seguir/deixar de seguir um usuário e, assim, ver os posts criados ou repostados por ele;
+- Like/unlike nos posts, com a possibilidade de o usuário saber quem curtiu aquela postagem ao passar o mouse sobre a quantidade de curtidas;
+- Compartilhamento de posts, por meio do ícone de repost, situado na parte esquerda de cada post. O post repostado fica com uma barra informativa na parte superior de um post;
+- Comentários nas publicações, seção acessada através do botão "comentários", abaixo do botão repost;
+- Acessar a página de um usuaŕio específico, clicando em seu nome ou foto. Nela, é possível ver todos os posts feitos pelo usuário ou repostados por ele;
+- Acessar a página de uma hashtag específica, clicando sobre ela, em um post ou em lista própria localizada nas páginas da aplicação;
+- É permitido, apenas ao usuário que publicou um post, deletá-lo ou editá-lo, através dos botões localizados na parte superior do post;
+- E muitas outras funcionalidades! </p>
+
+Você pode visualizar o repositório do front-end <a href="https://github.com/carladovalle/linktr-front">aqui</a>.</p>
 
 ## ⚙️ Como rodar a aplicação
 
