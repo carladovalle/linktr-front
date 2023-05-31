@@ -31,7 +31,7 @@
 - É permitido, apenas ao usuário que publicou um post, deletá-lo ou editá-lo, através dos botões localizados na parte superior do post;
 - E muitas outras funcionalidades! </p>
 
-Você pode visualizar o repositório do front-end <a href="https://github.com/carladovalle/linktr-front">aqui</a>.</p>
+Você pode visualizar o repositório do back-end <a href="https://github.com/carladovalle/linktr-back">aqui</a>.</p>
 
 ## ⚙️ Como rodar a aplicação
 
